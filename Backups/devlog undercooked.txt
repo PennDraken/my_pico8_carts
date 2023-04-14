@@ -1,0 +1,169 @@
+29 august
+sprite artwork
+movement and collisions
+
+30 august
+-rewrote marker code so it would snap to blocks correctly/ be reusable for other functions
+-wrote a food object which allows for picking up and placing food
+-TODO chopping meat, frying meat, combining food, picking up plates, renaming food objects to obj as i will use type for frying pan and plates etc
+
+31 august
+-refactored food to obj and reused it for pan
+-food can't be placed on top of other food unless they are compatible and combine
+-chopping meat and cheeze is possible with the implementation of nextid()
+-frying meat is possible (but requires manual input) to produce burger_cooked
+-combining food is now possible (you can now create an hamburger from bun and pan_meat_cooked, as well as hamburger_cheeze)
+-When dropping food intro trash can it disappears
+-Fixed disappearing frying pan using two if-statements as you want frying pan to remain stationary in hand or in obj_arr
+
+TODO
+-AFK frying
+-One press on action key allows you to cut entire product instead of multiple
+-Plates
+-Order list
+-Points
+-2-players
+-sprite compression using flipped tiles
+-Washing dishes and dirty dishes
+-throwing food
+
+1 september
+-Restructured draw_p_inventory() so that it is drawn differently based on player direction.
+-One button press to cook and chop food using p-acting. Cook food is still not possible afk but doesn't require multiple keypresses. Solve by using action states?
+-Added a timer and score
+-Added double cheeze burger
+-Added afk cooking
+-Added music
+-Added sfx although frying sfx is not working right now. Will need to implement a SFX manager
+
+2 september
+-Attempted to create a git repo
+-Tokens before refactoring = 2093
+-Started working on revamping code. Created an id function that will alow for easier sprite rendering and id checking. Used to mirror sprites for instance.
+-Id was previously a single number. Now it is a function instead
+-p-inv now holds id instead of a single tile number. will redo so player holds an object instead.
+-Tokens after removal and rework of g_id = 2040 phase 1
+-Phase 2: 2038
+-Smoothed out progress bar when cooking (8 steps instead of 4)
+-Made some more detailed pixel art but decided it didn't fit the style of the game (saved as .p8 with fidelity in title)
+-Started working on the throwing mechanic, which requires some rewriting of rendering of ids. Ids can't be rendered at the 8x8 grid.
+-Update id's can be rendered with the same renderer. x and y will contain decimal values instead which will be multiplied
+-Throwing sort of works but there are different throwing speeds in different directions
+
+3 september
+-Added a map function which can be used to load different maps. Stores map x,y values and player values etc.
+-Buggy when loading different coordinates. Pans don't load in correct place. Player collision doesn't work. Need to make offset value to fix. Can't be bothered to fix now.
+-Added double hamburger without cheeze
+-Added nicer ui for orders using sprite stretching
+-Cut clock sprite size in half
+-Timer text is now automatically centered on clock
+-Added some more shade to burgers (red color)
+-Made a burger with lettuce sprite
+-Altered time controls slightly
+-Made a lettuce sprite
+-Changed color of progressbar to reflect temperature of meat (cold to hot ie blue to red to yellow)
+-Bug with throwing food fast upwards is connected to qntz_y which always get triggered on flag condition?
+-Because p_inv carries id and not objects progress is reset when player picks up an object
+-Fix will be changing p_inv to carry objects, this will simplify throwing mechanics hopefully
+-p_inv now carries objects instead of ids
+-p_inv no longer shows progress of object picked up, solution is ugly and a bit too manual
+-better progress bar when pan_burger_cooked is on stove goes from checkmark to warning sign
+-bought pico-8
+-published demo online, it is currently too difficult. should introduce more levels.
+-fixed map scaling by introducing map offsets using m.x and m.y to all mget and fget functions
+-level table now works
+-removed time increases on succesful delivery (no longer arcade but more similar to original)
+-token count: 2588
+-bug found where if you drop food from pan next time you use pan it duplicates
+-removed map_based start coordinates for p_x & p_y now game automatically finds suitable position
+-added bun_cheeze to allow for easier prepping of food
+-added outlines for levels
+
+4 september
+-Added level outlines for all levels
+-Ui for orders look a bit weird because it is obviously scaled
+-Just realized marker and map use the same abbreviation :/ m.x vs m_x. This is confusing af.
+-Because pans are not throwable there might be a need for a major refactor
+-Throwing now works, but objects duplicate when thrown and landing in pan
+-Fixed duplication glitch
+-Player movement wonky when you want to throw. Will fix it by adding one keytap to change direction
+-Added one keytap to change direction but still feels wonky, fix by disabling movement when holding throw button?
+-Disabled movement when holding throw button, still looks weird lol. Had a lot o issues with double tapping. Fixed it with a toogle bool called pcklast. Maybe force user to hold down button to hold item?
+-Made it less wonky as you can now throw it immediatly after pickup by holding down button and releasing
+-Bug: Pan duplicates when throwing food
+-When a burger_raw sits on pan_burger_cooked, and player picks up pan_burger_cooked a new pan is created
+-Bug: All food dissapears when placed on deliver shelf.
+-Fixed bug: All food dissapears when placed on deliver shelf.
+-Code is currently super messy, decided to refactor code. 2984 tokens before
+-Trash can swallows pan now
+-Fixed trash can swallows pan
+-Progress bars are always drawn over player now
+-21:56 2954 tokens
+-22:16 2949 tokens
+-22:27 2933 tokens
+-22:42 2919 tokens
+-22:45 2880 tokens
+-There is now a glitch where bun glitches out when holding bun, probably related to throwing mechanic, and change of rendering for p_inv
+-Kind of a sad development session :( So many bugs and glitches
+-Made a first prototype of level selection screen with ufo theme.
+
+5 september
+-Decided to start over from scratch. The game had gotten too complex and required many major structural changes to become viable as a larger game.
+-Started testing on object types and their information stored to minimize and simplify creation and debugging of object interaction.
+-After a lot of work I decided to use a recipe book as the original idea of having each object store their combinations made things confusing and difficult as they often referenced undeclared objects.
+
+6 september
+-Added draw functions to objects
+-Added a player object
+-Added all recipes
+-Tested recipe combinations
+-Added update functions
+-Added movement
+-Out of memory bug related to pobjs??!!!
+-Related to pobj_arr draws
+-Pobj replaced the draw function in obj which meant that the self-referential nature wasn't working
+-Pobj_arr all have the same x and y values for same obj type
+-Researching inheritance in lua
+
+7 september
+-Rewrote pobj function to avoid linkage to food objects
+-Player animations now work
+-Added collision detection
+-Added simple drawing of marker in player object
+-Changed player drawing to account for position (maybe only when collides?)
+-Player changing position looked bad wven when accounting for collides(it made movement confusing and code illegible)
+-Added p.pickup()
+-Added inventory draw function that accounts for position TODO flip pan
+TODO
+-p.drop()
+
+8 september
+-Added p.drop()
+-Experimented with smooth player movement (looked weird)
+-Experiment used a offset value which moved player slowly when moving
+-Fixed bug with p.inv.draw(x,y) tiles not rendering correctly
+-Added flip value to drawing of objects
+-Chopping first draft, bug when moving currently
+-Chopping added. Difficult at first setting object to next object internally. Used pobj for this
+
+23 september
+-Long break from programming, lost a lot of motivation on the project
+-Started working on the menu and order system
+-Objects have defined time a customer is willing to wait for
+-Dishes are objects with added TTL (time to live value which decrements on dish.update()
+-Copied menu system over from previous version of game
+-Banners and food now work, although rnd(lvl.menu) returns a nil value
+-lvl.menu wasn't working because there was no initialization for the different menus
+-number of tokens is now 2290, not a huge amount of tokens saved :(
+-Still no throwing mechanic :(
+-Still no score or timer
+-score and timer added: token count 2428
+-game over screen added: token count 2470
+-TODO level selct screen
+-Level selection screen now works
+-Added ship movement smoothing
+-Added new level with many corridors
+-TODO multiplayer mode
+-TODO fix bug where you can chop any object on any material
+
+
