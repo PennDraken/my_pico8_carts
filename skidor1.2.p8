@@ -240,6 +240,7 @@ function move_player()
 end
 
 --player collision logic
+bv=2--block velocity
 function collision_check()
  if p_crash==true then return end
  prev_tile=tile--used to ensure trigger on rising edge
@@ -258,22 +259,22 @@ function collision_check()
   shake=0.05
   sfx(7)
   p_angle=0.75
-  p_speed=2*p_maxspeed
+  p_speed=2*bv
  elseif tile==43 then
   shake=0.05
   sfx(7)
   p_angle=0.75
-  p_speed=-1*p_maxspeed
+  p_speed=-1*bv
  elseif tile==58 then
   shake=0.05
   sfx(7)
   p_angle=0.5
-  p_speed=2*p_maxspeed
+  p_speed=2*bv
  elseif tile==59 then
   shake=0.05
   sfx(7)
   p_angle=1
-  p_speed=2*p_maxspeed
+  p_speed=2*bv
  end
  
  --checkpoint
