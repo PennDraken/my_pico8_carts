@@ -245,22 +245,24 @@ function collision_check()
  mx=flr((p_x+4)/8)+flr((p_y+4)/limy)*16
  my=flr((p_y+4)/8)%64
  --accelerate
- if mget(mx,my)==42 then
+ 
+ tile=mget(mx,my)
+ if tile==42 then
   shake=0.05
   sfx(7)
   p_angle=0.75
   p_speed=2*p_maxspeed
- elseif mget(mx,my)==43 then
+ elseif tile==43 then
   shake=0.05
   sfx(7)
   p_angle=0.75
   p_speed=-1*p_maxspeed
- elseif mget(mx,my)==58 then
+ elseif tile==58 then
   shake=0.05
   sfx(7)
   p_angle=0.5
   p_speed=2*p_maxspeed
- elseif mget(mx,my)==59 then
+ elseif tile==59 then
   shake=0.05
   sfx(7)
   p_angle=1
@@ -268,8 +270,7 @@ function collision_check()
  end
  
  --checkpoint
- if fget(mget(mx,my),1) then
-  tile=mget(mx,my)
+ if fget(tile,1) then
   shake=0.1
   sfx(0)
   checkpoint_particles(p_x,p_y-cy)
@@ -287,13 +288,14 @@ function collision_check()
 	  p_strty = flr(p_y/8)*8
   end
  --obstacle
- elseif not fget(mget(mx,my),0) then
+ elseif not fget(tile,0) then
   shake=0.1
   sfx(1)
   p_crash = true
   blood_particles(p_x,p_y-cy)
  end
 end
+
 
 
 
