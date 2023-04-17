@@ -3,7 +3,9 @@ version 41
 __lua__
 function _init()
 	--music(0)
+	reading=false--for textboxes
 	init_camera()
+	init_signs()
 	init_particles()
 	_set_fps(60)
 end
@@ -75,6 +77,9 @@ function draw_game()
 	draw_score()
 	draw_deaths()
 	move_camera()
+	print(mx)
+	print(my)
+	?(#signs)
 	--print(stat(1))--cpu perf
 end
 
@@ -177,7 +182,11 @@ end
 -->8
 --update game
 function _update60()
-	update_game()
+ if sign_on==nil then
+  update_game()
+ else
+  sign_input()
+ end
 end
 
 t=0
@@ -283,6 +292,15 @@ function collision_check()
   return
  end
  
+  --sign collision
+ for sign in all(signs) do
+	 if mx==sign.mx and
+	    my==sign.my then
+	    sign_on=sign
+	  return
+	 end
+ end
+ 
  --jumping block
  if tile==112 or tile==113 then
   p_jumping=true
@@ -336,6 +354,7 @@ function collision_check()
   p_crash = true
   blood_particles(p_x,p_y-cy)
  end
+
 end
 
 
@@ -452,11 +471,25 @@ end
 --tutorial pop-ups
 function new_sign(mx,my,txt,inp)
  sign={}
- sign.mx=
- sign.my=
+ sign.mx=mx
+ sign.my=my
  sign.txt=txt
  sign.inp=inp
+ return sign
 end
+
+function init_signs()
+ signs={}
+ sign_on=nil
+ 
+ add(signs,new_sign(8,9,"press ➡️\nto turn",➡️))
+end
+
+--waits for player input to continue
+function sign_input(sign)
+ 
+end
+--text boxes
 __gfx__
 777777777777777700000003300000000aaa00000000aaa000000000000000000000003333300000000000bbbbb0000000000000000000000000000000000000
 707777077777777700000033330000000999aaaaaaaa99900000000000000000000033333333300000000bbbbbbbb00002000000000002000000000000000000
