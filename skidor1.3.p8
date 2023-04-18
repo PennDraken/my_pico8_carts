@@ -176,7 +176,7 @@ function draw_time(x,y)
  secs=flr(t/60)
  msecs=flr(t/60*10)-secs*10
  print(pad(""..secs,3),x+8,y+2,13)
- print(msecs,x+5*4,y+2,6)
+ print(msecs,x+5*4,y+2,1)
 end
 
 function pad(string,length)
