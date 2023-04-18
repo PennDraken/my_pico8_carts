@@ -75,16 +75,15 @@ function draw_game()
 	if not p_jumping then
 	 draw_player()
 	end
-	palt(7,true)
 	draw_w()
 	if p_jumping then
 	 draw_player()
 	end
-	palt()
 	camera()--reset camera
 	draw_deaths(1,0)
 	draw_time(128-25,0)
 	draw_warning()--shows upcoming obstacles
+	draw_position()
 	move_camera()
 	--print(mx)
 	--print(my)
@@ -96,6 +95,7 @@ end
 screen=0
 limy=64*8
 function draw_w()
+	palt(7,true)
  mod_cy=cy%(limy)
  m1x=flr(cy/limy)*16
  m1y=flr(mod_cy/8)
@@ -108,6 +108,7 @@ function draw_w()
   map(m2x,0,0,8*(remtiles+1)+ofsy,16,16)
  end
  map(m1x,m1y,0,ofsy,16,remtiles+1)
+ palt()
 end
 
 function draw_player()
@@ -174,15 +175,15 @@ end
 
 function draw_deaths(x,y)
  spr(31,x,y)
- print(pad(""..p_deaths,3),x+8,y+2,13)
+ print(pad(""..p_deaths,3),x+8,y+2,1)
 end
 
 function draw_time(x,y)
  spr(15,x,y)
  secs=flr(t/60)
  msecs=flr(t/60*10)-secs*10
- print(pad(""..secs,3),x+8,y+2,13)
- print(msecs,x+5*4,y+2,1)
+ print(pad(""..secs,3),x+8,y+2,1)
+ print(msecs,x+5*4,y+2,13)
 end
 
 function pad(string,length)
@@ -201,7 +202,7 @@ end
 
 --draws lines to warn for upcoming obstacles
 function draw_warning()
- fwd=4--how many rows from cam to warn
+ fwd=8--how many rows from cam to warn
  arr={}
  posxarr={}
  --find all obstacles
@@ -222,6 +223,23 @@ function draw_warning()
 	  line(i*8,128,i*8+6,128,arr[i])
 	 end
 	end
+end
+
+--draws position of player on side
+--of the screen
+function draw_position()
+ x1=32
+ y1=2
+ x2=128-x1
+ y2=y1
+ 
+ line(x1,y1,x2,y2,6)
+ p=(p_y/limy)/(8)--percentage complete
+ dx=x2-x1
+ dy=y2-y1
+ x=dx*p+x1
+ y=dy*p+y1
+ circfill(x,y,0,1)--currpos
 end
 
 --used to find map coords
