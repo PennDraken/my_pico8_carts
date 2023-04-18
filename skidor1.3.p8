@@ -205,22 +205,33 @@ function draw_warning()
  fwd=8--how many rows from cam to warn
  arr={}
  posxarr={}
- --find all obstacles
- for j=0,fwd do
+ --loop to find
+ for j=fwd,0,-1 do
 	 for i=0,15 do
 	  mpos=get_mpos(cx+i*8,cy+128+j*8)
 	  add(posxarr,mpos.x)
+	  --obstacle
 	  if not fget(mget(mpos.x,mpos.y),0) then
-	   arr[i]=3
+	   arr[i]=8
+	  --checkpoint
+	  elseif mget(mpos.x,mpos.y)==12 then
+	  	arr[i]=12
+	  	arr[i+1]=12
+	  --jump
+	  elseif mget(mpos.x,mpos.y)==96 then
+	  	arr[i]=11
+	  	arr[i+1]=11
 	  end
 	 end
 	end
 	--draw warning
-	rectfill(0,126,128,128,1)
+	y=126--where to draw warnings
+	--rectfill(0,126,128,128,1)
 	for i=0,15 do
 	 if arr[i]!=nil then
-	  line(i*8,127,i*8+6,127,arr[i])
-	  line(i*8,128,i*8+6,128,arr[i])
+	  w=8	  
+	  line(i*8,y,i*8+w,y,arr[i])
+	  line(i*8,y+1,i*8+w,y+1,arr[i])
 	 end
 	end
 end
@@ -228,18 +239,22 @@ end
 --draws position of player on side
 --of the screen
 function draw_position()
- x1=32
- y1=2
+ x1=0
+ y1=0
  x2=128-x1
  y2=y1
  
  line(x1,y1,x2,y2,6)
  p=(p_y/limy)/(8)--percentage complete
- dx=x2-x1
- dy=y2-y1
- x=dx*p+x1
- y=dy*p+y1
+ x=(x2-x1)*p+x1
+ y=(y2-y1)*p+y1
  circfill(x,y,0,1)--currpos
+ p=(p_strty/limy)/(8)--percentage complete
+ x=(x2-x1)*p+x1
+ y=(y2-y1)*p+y1
+ if p>0.1 then
+  line(x1,y1,x,y,11)
+ end
 end
 
 --used to find map coords
