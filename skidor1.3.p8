@@ -110,8 +110,6 @@ function draw_w()
  map(m1x,m1y,0,ofsy,16,remtiles+1)
 end
 
-
-
 function draw_player()
 	if p_crash then
 		spr(79,p_x,p_y-cy)
@@ -194,15 +192,44 @@ end
 
 function draw_tombs()
  for tomb in all(tombs) do
-  if tomb.y-cy>0 and tomb.y-cy<128 then
+  if tomb.y-cy+12>0 and tomb.y-cy-12<128 then
    circfill(tomb.x,tomb.y-cy,10,8)
    spr(31,tomb.x,tomb.y-cy)  
   end
  end
 end
 
+--draws lines to warn for upcoming obstacles
 function draw_warning()
+ fwd=4--how many rows from cam to warn
+ arr={}
+ posxarr={}
+ --find all obstacles
+ for j=0,fwd do
+	 for i=0,15 do
+	  mpos=get_mpos(cx+i*8,cy+128+j*8)
+	  add(posxarr,mpos.x)
+	  if not fget(mget(mpos.x,mpos.y),0) then
+	   arr[i]=3
+	  end
+	 end
+	end
+	--draw warning
+	rectfill(0,126,128,128,1)
+	for i=0,15 do
+	 if arr[i]!=nil then
+	  line(i*8,127,i*8+6,127,arr[i])
+	  line(i*8,128,i*8+6,128,arr[i])
+	 end
+	end
+end
 
+--used to find map coords
+function get_mpos(x,y)
+ pos={}
+ pos.x=flr(x/8)+flr(y/limy)*16
+ pos.y=flr(y/8)%64
+ return pos
 end
 -->8
 --update game
@@ -212,6 +239,7 @@ function _update60()
  else
   update_game()
  end
+ update_particles()
 end
 
 t=0
@@ -226,12 +254,11 @@ function update_game()
 	 input()
 	end
 	move_player()
-	update_particles()
 	score=p_y/16
 	t+=1
 end
 
-k = 8
+k  = 8
 ts = 0.01 --turn speed
 maxangle=0.25
 function input()
@@ -406,18 +433,15 @@ end
 function doshake()
  local shakex=16-rnd(32)
  local shakey=16-rnd(32)
-
  shakex*=shake
  shakey*=shake
- 
  camera(shakex,shakey)
- 
  shake = shake*0.95
  if (shake<0.05) shake=0
 end
 
 function move_camera()
- b = p_y-10-p_height
+ b  = p_y-p_height-5
  cy = lerp(cy,b,0.1)
 end
 
