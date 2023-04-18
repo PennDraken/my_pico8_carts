@@ -144,12 +144,28 @@ function draw_player()
  end
  --shadow when jumping
  if p_jumping then
-  spr(87,p_x,p_y-cy)
+  draw_shadow()
  end
  --speed particles
  if p_speed>=p_maxspeed*0.95 then
  	speed_particles(p_x,p_y-cy)
  end
+end
+
+--recolors shadow based on pixels under
+function draw_shadow()
+ p=pget(p_x,p_y-cy)
+ if p==7 then
+  pal(6,6)
+ elseif p==11 then--lime
+  --3=dark green
+  pal(6,3)
+ elseif p==3 then--dark green
+  --1=dark blue
+  pal(6,1)
+ end
+ spr(87,p_x,p_y-cy)
+ pal()
 end
 
 function draw_trail(trail)
@@ -284,7 +300,7 @@ t=0
 function update_game()
 	if p_crash then
 		p_speed *= 0.9
-		if p_speed<0.1 then
+		if p_speed<0.2 then
 		 add(tombs,{x=p_x,y=p_y})
 		 reset_player()
 		end
@@ -361,6 +377,7 @@ function move_player()
    p_jvel=0
    p_speed*=0.8
    p_trail={}
+   landing_particles(p_x,p_y-cy)
    sfx(9)
   end
   return
@@ -529,7 +546,7 @@ function landing_particles(x,y)
 		 x+4,y+4,rnd(4)-2,-rnd(4)-2,
 		 --life     ,r,g, ,shrink
 		 rnd(20)+4+1,7,0.1,0.4,
-		 {7,7,7,7,7,7,6,6,6,6,6,5,5,9,9,10,10,10,10,10,8,8,8,8})
+		 {6,6,6,6,6,7,7,7})
  end
 end
 
