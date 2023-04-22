@@ -18,7 +18,7 @@ function _draw()
  print("⬅️ ➡️ select channel to mute",8,110,1)
  print("❎ mute/unmute",8,120,1,1)
  x1=20
- y =64
+ y=64
  x2=128-x1
  for i=1,4 do
   spr(14-2*carr[i],x1+(i-1)*(x2-x1)/4,y,2,2)
