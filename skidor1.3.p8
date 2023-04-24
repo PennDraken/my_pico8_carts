@@ -109,7 +109,7 @@ function draw_game()
 	--print(my)
 	--?(#signs)
 	tb_draw()
-	print("♥",stat(32),stat(33))
+	print("♥",stat(32),40)
 	--print(stat(1))--cpu perf
 end
 
@@ -373,7 +373,7 @@ function input()
 	--mouse input/touch
 	x=stat(32)
 	y=stat(33)
-	p_angle=atan2((x-p_x),(y-p_y+cy))
+	p_angle=atan2((x-p_x),(40-p_y+cy))
 end
 
 function move_player()
