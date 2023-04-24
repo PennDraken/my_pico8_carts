@@ -335,7 +335,7 @@ function update_game()
 end
 
 k  = 8
-ts = 0.01 --turn speed
+ts = 0.008 --turn speed
 maxangle=0.25
 function input()
  if p_jumping then return end
@@ -494,7 +494,7 @@ function collision_check()
 end
 
 -->8
---win screen
+--win screen/crash screen
 function draw_win()
  cls(7)
 	doshake()
@@ -532,6 +532,14 @@ function update_win()
 		t+=1
 	end
 	update_particles()
+end
+
+function draw_crash()
+
+end
+
+function update_crash()
+
 end
 -->8
 --camera
