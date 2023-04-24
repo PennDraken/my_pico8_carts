@@ -2,6 +2,14 @@ pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
 function _init()
+ cls()
+ pic=".a155.criecriec.a91.cratzmoecbghcb.a86.cratzmoeymghymoe.a84.cratzmgtz[oecratdr.a39.ro.a42.ritzmgtzmghcvofcri.a38.rkfmwob.a33.riaaaieymgtzmgtzrar{viec.a36.qi)mvi)mglb.a30.iecriecbgtzmgtzmoek]}xcri.a35.iungtfaf)zmglxcb.a27.riecriqzmgtzmoec[iek]iecr.a31.qivngt]mnae(xtzmgtz(b.a26.criecmgtzmgtzmgtzmoecriecri.a26.qizmgtzmxtfaaiyohtzmgtzmvi.a23.iecratzmgtzmgtzmgtzmghcbgtz[iecnlb.a17.rivngtzmg)]mfaaaqw]ogtzmgtzmwohc.a20.riecmgtzmgtzmoqzmg)y[iqzmgtzratnw.a14.cro)mgtzmgtzmhlhaaaacn)]mgtzmgtzmgtvlv.a15.qiecrgtzmgtzmgtzmgtdmgtzmgtzmghcmwvb.a10.ekvwzmgtzmgtzmw)]mb.a5.e(x)zmgtzmgtzmgtzmglxcr.a9.ecrieymgtzmgtzra)mgoqzmgtzmgtz[atnw.a7.riu)gtzmgtzmgtzmgtzohl.a7.iymhtzmgtzmgtzmgtzmgtzm]oxcaaaariu(vieymgtzmghmx)]mbgtzmgtzmghcmtvcaae(]o)mgtzmgtzmgtzmgtzmw)zk.a8.qi)ohtzmgtzmgtzmgtzmgtzmgtzmglhcfswcriqzmgtzr{zmxtfymgtzmoecriqnwwzmgtzmgtzmgtzmgtzmgtzmg)]mwc.a10.rw]ogtzmgtzmgtzmgtzmgtzmgtz(rivv(key[atzmounxoupwatzmgtdriecmwvdgtzmgtzmgtzmgtzmgtzmgtzohlh.a13.ft]mgtzmgtzmgtzmgtzmgtzmwoec](}lratdmgtzr{]kq(zcmgtzmoec]oqz[iungtzmgtzmgtzmgtzmgtzmw)z(b.a14.cn)zmgtzmgtzmgtzmgtzmgtvdrkxkvohcglhcboemxlbchlqzmgtzrw]oggxcri)mgtzmgtzmgtzmgtzmg)]mwc.a16.e(w)zmgtzmgtzmgtzmgtzmwie(}kumwoupwiecr{]ofi[(bgtzmoqnx)]o]khcrwzmgtzmgtzmgtzmgtzohlh.a19.umw)zmgtzmgtzmgtzmgtvdrskjukxcr{]kaiumx)vablhymgtzbgxngtzk]ke(gtzmgtzmgtzmgtzmw)z(b.a20.iunxtzmgtzmgtzmgtzm]iuukvkv]ie(wldcw)]oxou)]wzymghcr{]oxlx{viungtzmgtzmgtzmgt]mwc.a22.qi)oxtzmgtzmgtzmgtfcbskvkvwcriupxk]ox)]ogl)ox)vz[iqng)]o]sklrqzmgtzmgtzmgt]ohlh.a25.qk)ohtzmgtzmgtzm]iuukvkvviaars]ogtzox)]mptzohlhy[jxnw)vlkffcntzmgtzmgtzmxtzkb.a21.u(viecri)mgtzmgtzmgtfcbskvknfcaaacrkz{}xz{}}}nv(}n]atd])zmwgjv(kemgtzmgtzmgtz(raecrkxb.a16.qszmglxlvwzmgtzmgtzm]iuukvkjviaaaiuaqa].}7.x{}lfcmo)ogg)(kvkjri)mgtzmgtzmwoxkntzmhd.a17.cw)zmgtzmgtzmgtzmgtvdbskvknfc.a7.eu.}7.]{})riec[gtzmljvkvwcbtzmgtzmgtzmgtzmg)zk.a18.umxtzmgtzmgtzmgtzmwoeukvkvvi.a6.rc].}6.p}}}oecriqhmwzkfvkv(kemgtzmgtzmgtzmgt]owg.a19.izmhtzmgtzmgtzmgtzcrskvknfc.a7.kecj.}6.xvcriec[btnwouukvklri)mgtzmgtzmgtzmxtvd.a20.qi)ohtzmgtzmgtzmwoe(wklvvi.a9.eecr{}}tkriecra)(dg)crajnflhcbtzmgtzmgtzmg)zmf.a23.rw]ohtzmgtzmgtz(rqvcrohc.a12.criecivcmgtdntvd]oecflfkwkemgtzmgtzmgt]owo.a26.f)]ohtzmgtzmglhcwkv(]i.a13.ecrq[pltzmgh(gtz(riumvkzkrqzmgtzmgt]oxtvd.a27.cn)]ohtzmgtzmrijvkfvcb.a8.qieecriu}}pmgtz[ie(]kacrijvjffcntzmgtzmx)zmf.a29.ekn)]oxtzmglhcevkv(i.a9.eebr{.}5.)rzmghcnlbaaaecevkv(iungtzmx)]m]k.a33.cnt]oxtzm]iivkvkdb.a8.i)ju.}5.]ogoqz[i]}naaaqiqukvkdrwzmx)]mwoe.a29.qk.a5.cvwzoxtvdbvkvkne.a8.i}hj.}5.x)vzrahc]}haaaacbskvkne(g)]mwof.a5.rk.a25.cntvlvkvkntzmwoeukvkvr.a7.q(}ju.}7.xohcri]}faaaaieikvkvri)mgtvlvkvkntzk.a26.e(wtzmgtzmgtz(rqkvkvgc.a6.iiecriecriecrecrieecb.a5.rajvkvgcntzmgtzmgt]ow.a28.iunx)zmgtzmglhcpfrieriecrieecrieecricriiesiecrieriecrieecru}kungtzmgtzohlh.a30.iyox)]ogtz(crqiecrieecriesiecbriecjecbrieriecriecriieriecrecj)mht]ox)zkb.a31.qivnx)]mfbries)]oxtqiecj{ox)nxdrisu)nbresoxfcqu)nbbricz]{wxjebvpx)zmv.a36.iumwwiqiekeviec]grqijxdriecnbbfrieccbecriiariecces[]iecrktiejzm]iukviaaq.a33.eecccrsiey[iecbbjcriecrieccsecmoeaqiecbbec[iiicjhyriecbbseskaaqkxavozk.a33.qiiiekcmgtdriaasirz]iecmoh(]atz[jacmghkqatzbbfcmghcroheisi.a5.nauinkb.a33.cbbrejtzmoacvkvdmgharkfy[ivhmgtzbiqz[kdgmgh(]atz]kfcbbbjcbaaaauaqkacf.a33.iecs}n]wzm]ov(hlzmbizowszcrotzmgtdbgxlnitz[khcmoxphtzmosie.a45.be(]wvdriv)]cunrkhcw)vc]oe(ftv)ntvnwkubftzk]iunf)]o]ox)bq.a45.erie(glxlqsikaqvbaizmvsaaqidkfaukvkvkvgukvkudqifmhlbc]iecc.a44.qecr(vlecriecvaglriucriekbk]criqcriecv(acrivoeivkvkvk](raie.a44.vie(wcftzmgvusy]e(ltzm{]fqvj(ebaumgtzkbi(usibifjecriuwfcrkb.a43.ucriekpvkv(pxacesec(}}ukaeeb]}nau(}})eci}}psiaa(lvk]xdriekc.a40.qiaccu]cbaiecvaaqqqicjeaaaacbreaaaec.a5.iaaaaecsaaacriaqi(wijecr.a33.ecbrieriiabbresiecrunexqinhje]iv)okz(fbv)flx(rkv(nru)eriecriiiesecsiiecjec.a24.riecccriesecbjeiecriecrekl{nlx)abz)woxdvozk]kxmvqvn]ov(]kxeeecriecrisqicbbriecjerie.a19.eeecriecricjecbbriecriecjerxk]oleepv(]ovm]ov)wsvkwkxlvovk]wariecriecrcrieeecriecris.a20.iiiecrieriecjeeecriecresieciecfrieajekfijacjvavceacbieajveccbriecriekeccrieecriese.a22.iiecz]{xgterqqiecjcraaaieccrqiecriecriecriecriecriesicraaaariiiecrirqij]}]ocrieb.a24.]}x)]{(msiccjec.a7.riekuuk}gt]}gtz{}}}}kv{}kvgjviec.a7.ecbreckgv})]o}hb.a25.q(]ox)ltjsie.a11.criuu(pvcrkxcrjxlvkvnvkvvkffcr.a12.qieuu{px)](.a27.(x)]opngjcr.a13.criz(]oe(roe([ix)n{e(]s])vi.a13.ecbft(}]oxlh.a25.qs]ox)]}kcbaab.a12.ecrzmc]gh(ratd]ixztiq)]kec.a13.baaekk}x)]oxc.a24.emx)]{pcre.a18.ec]ix)rixdboud]ihcrix)b.a18.eec]}x)]mf.a24.()]ebrier.a19.iudrihc[iqzroud]iec]kb.a18.qiiecjioxxb.a22.iiecrqiesec.a19.roe(riq)rbh(]oudriecb.a19.cbbriesies.a23.ccriecrisi.a19.e([oecroxdriecrgtzmoh.a19.ieeecriecreb.a20.iqiecriecjcb.a19.iecriecriecriecriecb.a20.rqiiecriecjc.a19.cccriecrer.a63.rqiiecriek.a19.iiierec.a70.ecbrqis.a19.rie.a77.rie.a1156.qkvaaiukfaakvkbaaivaaaukb.a12.ivkaaeaaiaarkvaaivkbaakvaaabae.a35.uiecvaecriqcriucqiecbaecrk.a11.kecrkacbkeiqiekbkecraacrieirkfkb.a34.ssi(cijfcbk(ebaacrkfiqivk.a11.ijtecaiea]baajbaaa{eae{earaevgvf.a34.kkvskavs{fijteaakvcraqkrif.a11.fnsibaraefaauhaaaytaqytaecqujvw.a34.irkbaaieavafcrifiriecaiecv.a11.uiecvaecriaauiaaaaucaaecrkqcbkuc.a34.qaaaaiaaqaacvkbaaieaaauk.a13.ivcaaaaraaaaiaaaaeaaaacfaaabae.a963.e(]aaavgu(]gu(]gu(.a14.u(]ca(]oxaqkxlaae(f.a51.vox)faamqkhmqkf(aih.a13.]cakrqfaaaukaieaqkxb.a50.ulwkubaidk]wbk]wba].a13.e(]obcwohaqkbcbaumvob.a49.qkx)]caanaaanaacnaud.a12.qkaa]kycaaakvivlalxkw.a51.rohaaauaaauaaauaqc.a14.voxaqox)fau(]cakaau.a2893"
+ pic2scr(pic)
+ upd=update_title
+ drw=draw_title
+end
+
+function init_game()
  init_music()
 	reading=false--for textboxes
 	init_camera()
@@ -261,7 +269,7 @@ function draw_warning()
 	end
 	--draw warning
 	y=126--where to draw warnings
-	rectfill(0,y,128,128,1)
+	rectfill(0,y,128,128,6)
 	
 	for i=0,15 do
 	 if arr[i]!=nil then
@@ -758,7 +766,7 @@ function init_music()
 	       {nil,0b1000},
 	       {nil,0b1000},
 	       {nil,0b1000},
-	       {1,0b1100},}
+	       {nil,0b0000},}
  my_music()
 end
 
@@ -793,6 +801,85 @@ function set_bit(num,n,x)
  end
  return num
 end
+-->8
+--title screen
+function draw_title()
+ 
+end
+
+function updat_title()
+
+end
+
+-- optimized picture to screen
+-- by dw817 lexaloffle.com/bbs/?tid=27892
+
+set="abcdefghijklmnopqrstuvwxyz()[]{}"
+
+function pic2scr(p)
+  cls()
+  s=dot2str(p)
+  str2mem(s,24576)
+  repeat
+    flip()
+  until btnp(4) or btnp(5)
+end--pic2scr
+
+function str2mem(t,m)
+local b1,b2,c,n,p=0,0,0,0,1
+  repeat
+    if b1==0 then
+      n=instr(set,sub(t,p,p))-1
+    end
+    if band(n,2^b1)>0 then
+      c+=2^b2
+    end
+    b1+=1
+    if (b1==5) b1=0 p+=1
+    b2+=1
+    if b2==8 or p>#t then
+      poke(m,c)
+      b2=0 c=0 m+=1
+    end
+  until p>=#t
+end--str2mem
+
+-- decompress dots to string
+function dot2str(t)
+local i,c,ch,n1,n2
+local r,l1="",0
+  i=1 while i<=#t do
+    c=sub(t,i,i)
+    if c=="." then
+      i+=1
+      ch=sub(t,i,i)
+      repeat
+        i+=1
+        c=sub(t,i,i)
+        if (c!=".") l1=l1..c 
+      until c=="." or i==#t
+      l2=l1+0 --clumsy!
+      for j=1,l2 do
+        r=r..ch
+      end
+      l1=""
+    else
+      r=r..c
+    end
+  i+=1 end--wend
+  return r
+end--dots2str
+
+-- return pos # of str b in a
+function instr(a,b)
+local i,r=0,0
+  for i=1,#a-#b+1 do
+    if (sub(a,i,i+#b-1)==b) r=i
+  end
+  return r
+end--instr
+
+--main() -- allow at top
 __gfx__
 777777777777777700000003300000000aaa00000000aaa000000000000000000000003333300000000000bbbbb0000000000000000000000000000000000000
 707777077777777700000033330000000999aaaaaaaa99900000000000000000000033333333300000000bbbbbbbb00002000000000002000000000000ddd000
@@ -843,20 +930,20 @@ dddddddd777777770000066666600000000000000000000000000000000000000000066666600000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000099999990000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-06777777777777600999999999999990000999999999900000000000000000000000000000000000000000000000000000000000000000000000000000000000
-07777777777777700999977777779990000999999199900000011111111110000001111111111000000000000000000000000000000000000000000000000000
-06777777777777600999976777679480000449911999400000011166111110000001111166111000000000000000000000000000000000000000000000000000
-07777777777777700448977777779990000991191999900000011116611110000001111661111000000000000000000000000000000000000000000000000000
-06777777777777600999977777779990000999919919900000011111661110000001116611111000000000000000000000000000000000000000000000000000
-06777777777777600999977777779990000999919199900000011111166110000001166111111000000000dddd00000000000000000000000000000000000000
-0677777777777760099997777777884000099999199990000001111166111000000111661111100000000dddddd0000000000000000000000000000000000000
-067777777777776008849777777799900004999199944000000111166111100000011116611110000000dddddddd000000000000000000000000000000000000
-067777777777776009999999999999900009991999999000000111661111100000011111661110000000dddddddd00000000000dd00000000000000000000000
-066666666666666009999991100000000009999999999000000111111111100000011111111110000000dddddddd0000000000dddd0000000000000000000000
-0dddddddddddddd000000005500000000000000100000000000000055000000000000005500000000000dddddddd0000000000dddd0000000000000000000000
-0dddddddddddddd0000000005500000000000005000000000000006556000000000000655600000000000dddddd000000000000dd00000000000000000000000
-0dddddddddddddd00000000055000000000006656600000000000665566000000000066556600000000000dddd00000000000000000000000000000000000000
-0dddddddddddddd00000666556666000000666655666000000000066660000000000006666000000000000000000000000000000000000000000000000000000
+67777777777777760999999999999990000999999999900000000000000000000000000000000000000000000000000000000000000000000000000000000000
+77777777777777770999977777779990000999999199900000011111111110000001111111111000000000000000000000000000000000000000000000000000
+67777777777777760999976777679480000449911999400000011166111110000001111166111000000000000000000000000000000000000000000000000000
+77777777777777770448977777779990000991191999900000011116611110000001111661111000000000000000000000000000000000000000000000000000
+67777777777777760999977777779990000999919919900000011111661110000001116611111000000000000000000000000000000000000000000000000000
+67777777777777760999977777779990000999919199900000011111166110000001166111111000000000dddd00000000000000000000000000000000000000
+6777777777777776099997777777884000099999199990000001111166111000000111661111100000000dddddd0000000000000000000000000000000000000
+677777777777777608849777777799900004999199944000000111166111100000011116611110000000dddddddd000000000000000000000000000000000000
+677777777777777609999999999999900009991999999000000111661111100000011111661110000000dddddddd00000000000dd00000000000000000000000
+666666666666666609999991100000000009999999999000000111111111100000011111111110000000dddddddd0000000000dddd0000000000000000000000
+dddddddddddddddd00000005500000000000000100000000000000055000000000000005500000000000dddddddd0000000000dddd0000000000000000000000
+dddddddddddddddd000000005500000000000005000000000000006556000000000000655600000000000dddddd000000000000dd00000000000000000000000
+dddddddddddddddd0000000055000000000006656600000000000665566000000000066556600000000000dddd00000000000000000000000000000000000000
+dddddddddddddddd0000666556666000000666655666000000000066660000000000006666000000000000000000000000000000000000000000000000000000
 00000000000000000000006666000000000006666600000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 10101010101010101010101010101010203020302030101010101010101010101010101010101010101010101010101080901010100210101080908090108191
 809081911010101010021010101080901010101010101010100210101010101020302030203010100616a0b0213181917210c0d0c0d080908191809081911010
