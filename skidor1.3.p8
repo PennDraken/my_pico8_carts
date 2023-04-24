@@ -2,15 +2,19 @@ pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
 function _init()
- poke(0x5f2d, 1)--mouse listener
+ if mouse_enabled then 
+  poke(0x5f2d, 1)--mouse listener
+ end
  cls()
  pic="mgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ymgtzmgtzmgtzmgtzmgtpmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzmgtzmgtzmgtzmgtz[)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtpmgtzmgtzmgtzmgtzmgtzhgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzm{]oxdtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]omgtzmgtzmgtzmgtzmgtzmgtzmgtzx)]ox)]ox)]ox)rzmgtzmg}ymgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]oxdtzm{]ox)]ox)rzmgtzmgtzmgtzmgtzm{]ox)]ox)]ox)]ox)]oxdtzmgtzx)rzmgtzm{]omgtzx)]ox)rzmgtzmgtzmgtz[)]ox)]ohgtzx)]ox)rpxdtzmgtzmgtzmgtzmg}ox)]ox)]ox)rz[)]ox)]ohgtzmg}ohgtzmgtpx)]ym{]ox)]ox)]omgtzmgtzm{]ox)]ox)]omg}ox)]omg}ohgtzmgtzmgtzmgtzx)]ox)]ymgtzmgtzmgtpx)]omgtz[)]ymgtzm{]oxdtzx)]ox)]ox)]ymgtzmgtpx)]ymgtzmgtzmgtzmgtzm{]omgtzmgtzmgtzmg}ox)]omgtzmgtzmgtzm{]ox)rzmgtpxdtzmgtzx)]omg}ox)]ym{]ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzmgtzmgtzmgtz[)]oxdtzmgtzmgtzmgtzm{]oxdtz[)]ymgtzmgtpx)rzm{]oxdtzmgtphgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ohgtzmgtzmgtzmgtpx)]ymgtzmgtzmgtzmgtz[)]omgtpxdtzmgtzm{]ohgtzx)]omgtzmg}omgtzmgtzmgtzmgtpx)rzx)]oxdtpx)rzmgtzmgtzmgtzm{]oxdtzmgtzmgtzmgtzmgtpx)rz[)]ymgtzmgtzx)]ymg}ox)rzmgtz[)]ymgtpx)]ymgtzm{]ohg}ox)]ox)]omgtzmgtzmgtzmgtzx)]ymgtzmgtzmgtzmgtzm{]ohgtpxdtpmgtzmg}oxdtz[)]ohgtzmgtpxdtzm{]oxdtzmgtzx)]y[)]ox)]oxdtzmgtzmgtzmgtzmg}oxdtzmgtzmgtzmgtzmgtzx)]y[)]y[)]ymgtz[)]omgtpx)rzmgtzm{]omgtpx)]ymgtzmg}oxdtpx)]ox)rzhgtzmgtzmgtzmgtz[)]ohgtzmgtzm{]ox)rzmg}oxd}oxdtzhgtzmgtpx)rzm{]oxdtzmgtz[)]ym{]oxdtzmgtz[)]om{]ox)]ym{]omgtzmgtzmgtzmgtpx)]omgtpx)]ox)]oxdtz[)]o[)]ymgtzmgtzm{]ohgtzx)]omgtzmgtpxdtzx)]omgtzmgtpx)rzx)]ox)rz[dtzmgtzmgtzmgtzm{]ox)]ox)]ox)]ox)]omgtzx)]ox)]ymgtzmgtzx)]ymg}ox)rzmgtzm{]omg}ox)rzmgtzm{]ohg}ox)]oxdtzmgtzmgtzmgtzmgtz[)]ox)]ox)]ohgtpx)]ymg}ox)]ox)]ymgtzmg}oxdtz[)]ohgtzmgtzx)rz[)]ohgtzmgtzx)]y[)]oxd}ohgtzmgtzmgtzmgtzmgtzx)]ox)rzmgtzmg}oxdtz[)]om{]ox)rzmgtz[)]omgtpx)]ymgtzmg}ohgtpx)]ymgtzm{]ohgtpx)]om{]omgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ym{]omgtpx)]ymg}oxdtzmgtpx)rz[)]oxdtzmgtz[)]ym{]ox)rzmgtzx)]ym{]ox)rz[)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzx)rzmg}oxdtzmg}ohgtzm{]ohgtpx)]omgtzmgtpxdtzx)]ohgtzm{]oxdtzx)]ohgtpx)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtpmg}ohgtz[)]omgtzm{]oxdtzx)]ym{]ox)rzmgtzx)]ymgtpx)]omgtpx)]ymg}ox)]ymg}ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]ymgtpx)rzmgtz[)]ox)]oxdtzx)]ohgtzx)]ohgtzmg}ox)]ox)]ohgtz[)]oxdtzmg}oxdtzmgtzmgtzmgtzmgtzmgtzmgtzmg}oxdtzm{]oxdtzmgtzx)]ox)]omg}ox)]ox)]ox)rzmgtzm{]ox)]ox)rzmgtpx)]omgtzm{]omgtzmgtzmgtzmgtzmgtzmgtzmgtpx)]ymgtz[)]omgtzmgtpx)]ox)rzm{]ox)]ox)]ymgtzmgtz[)]ox)]omgtzm{]oxdtzmgtz[)]ymgtzmgtzmgtzmgtzmgtzmgtpx)]ohgtzmgtpx)rzmgtzmg}ox)]ohgtz[)]ox)]ymox)mgtzmgtzmgtzmgtzmgtzx)]omgtzmgtzx)rzmgtzmgtzmgtzmgtzx)]ox)]ox)rzmgtzmgtpmgtzmgtzmgtzmgtzmgtzx)rzmgt)]oxzmgtzmgtzmgtzmgtzmgtpx)rzmgtzmg}ohgtzmgtzmgtzmgtzx)]ox)]ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz]ox)]gtzmgtzmgtzmgtzhgtzmgtzmgtzmgtzm{rzmgtzmgtzmgtzm{]ox)]ox)rzmgtzmgx)]oxzmgtzmgtzmgtzmgtzmgtzmgtz]ox)]ox)mgtzmgtzmgtzm{]omgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]ymgtzmgtzmgtz]{v)]oxzmgtzmgtzmgtzmgtzmgtz]ox)]ox)]oxzmgtzmgtzmgtz[dtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmoxpxlx)]otzmgtzmgtzmgtzmox)]ox)]ox)]ox)]gtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgt)]{]o]ox)]gtzmgt)]ox)]ox)]ox)]ox)x)]m]ox)mgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[ox)x)v)]ox)]ox)]ox)]ox)]ox)]ox)x)]ox)v)]otzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgx)]{]o]ox)]ox)]o}ox)]ox)]o]{]ox)]ox)]oxox)ngtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgt)]ox)x)v)]ox)]ox)x)]ox)]ox)]ox)]ox)]ox)v)]oxzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmoxpx)]o]ox)]ox)xl}ox)]ox)]ox)]ox)]ox)z(]ox)]otzmgtzmgtzmgtzmgtzmgtzmgtzbgtzmgtzmgtzmgtzmgtzmgtzmgtzmgx)])]oxlx)]ox)]{]ox)]ox)]ox)]ox)]ox)]oxox)]ox)ngtzmgtzmgtzmgtzmgtzmgtzmoeymgtzmgtzmgtzmgtzmgtzmgtzmgt)]o}ox)]o]ox)]ox)x)]ox)]ox)]mw)]ogt]ox)](]ox)]oxzmgtzmgtzmgtzmgtzmgtzmgtd[atzmgtzmgtzmgtzmgtzmgtzmgtz]oxpx)]oxlx)]ox)]oxpx)]ox)]oxtzmgtzmx)]oxlx)]ox)]otzmgtzmgtzmgtzmgtzmgtzmoqdmgtzmgtzmgtzmgtzmgtzmgtz[ox)x)]ox)]o]ox)]ox)]o}ox)]ox)]ohtzmgtzox)]o]ox)]ox)ngtzmgtzmgtzmgtzmgtzmgtdtjqzmgtzmgtzmgtzmgtzmgtzmox)]{]ox)]ox)v)]ox)]ox)]o}ox)]mx)]mgtzmg)]ox)v)]ox)]oxzmgtzmgtzmgtzmgtzmgtzmomgbgtzmgtzmgtzmgtzmgtzmgt)]o}ox)]ox)]ox)v)]ox)]ox)]{]ogtzox)zmgtzmx)]oxox)]ox)]otzmgtzmgtzmgtzmgtzmgtdtjqzmgtzmgtzmgtzmgtzmgtz]oxpx)]ox)]ox)]ox)zm]ox)]ox)]o)mgt]ohtzmg)]ox)]o]ox)]ox)ngtzmgtzmgtzmgtzmgtzmomgbgtzmgtzmgtzmgtzmgtz[ox)x)]ox)]oxy]ox)]oxt](]ox)]ox)]wzmgt]ogtzmx)]ox)](]ox)]oxzmgtzmgtzmgtzmgtzmgtdtzeymgtzmgtzmgtzmgtz[ox)])]ox)]ox)]cr)]ox)]owtz(]ox)]ox)gtzmg)zmg)]oxlxpx)v)]ox)]otzmgtzmgtzmgtzmgtz[ymgtatzmgtzmgtzmgtzmox)])]ox)]ox)]oxleox)]oxtzmhtzm]ox)]oxngtzmwtzoht]m]ox)xox)]ox)ngtzmgtzmgtzmgtzmgtdtzmcmgtzmgtzmgtzmgt)]o}ox)]ox)]ox)]oxi[ox)]ogt]mgtzmwox)]oxngtzmw)zmgtv)]ox)]ox)]ox)]gtzmgtzmgtzmgtz[ymgtjqzmgtzmgtzmgtz[ox)x)]ox)]ox)]ox)]cty]ox)zmg)zmgtzm]lx)]o)mgtzmgtzmwox)]ox)]ox)]ox)]ox)mgtzmgtzm{ggtzmgbgtzmgtzmgtzmgx)]{]ox)]ox)]ox)]ohlmcr)]ohtzmhtzmgt]oxox)]wzmgtzmhtzm]wv)]ox)]ox)]ox)]ox)]gtzmgtx)ymgtzeymgtzmgtzmgtz]oxpx)]ox)]ox)]ohtzmrzeox)]mgtzogtzmg)zm]ox)gtzmg)]ogtzmglx)]ox)]ox)]ox)]ox)ngtzl)ggtzmgtatzmgtzmgtz[ox)])]ox)]ox)]oxtzmgtzctj[oxtzmg)zmgtzmgtzm]wzmgtzmwtzmgtzm]ox)]oxngtzm]ox)]oxzmtzmrzmgtzmcmgtzmgtzmgx)]o}ox)]ox)]ox)]mgtzmglmgr)]ogtzmwtzmgtzmgtzmgtzmgtzmgtzmgtz(]ox)]o)mgtzmgtzogd)mgtfcrzmgtqzm]gtzmgt)]ox)x)]ox)]ox)]ohtzmgtzmrzemxtzmgtzogtzmgtzmgtzmgtzmgtzmgtzmgtv)]ox)ntzmgtzmw)]mgtzmbtfgtzmcgtz(]ox)]gx)]{]ox)]ox)]ox)zmgtzmglmgtjymgtzmgt]mgtzmgtzmgtzmgtzmgtzmgtzmglx)]ox)gtzmgtzmx)zmgtzmrzmgtjymgtv)]ox)]oxpx)]ox)]ox)]mgtzmgtzmrzmgbtzmhtzoxtzmgtzmhtzmgtzm]wxngtzmgtzm]ox)]o)mgtzmgtzogtzmgtfgtzmgtqzmglx)]ox)])]ox)]ox)]oxtzmgtzmgtfgtzemg)]ow)]ohtzmgtzmgtv){w)]opxngtzmgtz(]ox)]wzmgtzmg)(mgtzmrzmgtzmcgtzmglx)]o}ox)]ox)]ox)]mgtzmgtzmrzmgtjymx)zox)]mgtzmgtzmn}}}{})]opx)gtzmgtz(]ox)g)zmgtzwgtzmglmgtzmgtzemgtzmgtzmx)]ox)]ox)]ohtzmgtzmg)egtzmgbtzog)]ox)zmgtzmgl)}ox)]ox)]oxxngtzmgtv)]o)oxtzmgtzmgtzmtzmgtzmgtjymgtzmgt]ox)]ox)]ox)zmgtzmgtzmrzmgtzemgtzmw)]mhtzmgtz({x)]ox)]ox)]op)mgtzmglx)nt]mgtzmgtzmglmgtzmgtzmgtqzmgtzmw)]ox)]ox)]ohtzmgtzmg)mgtzmgtjymgtzmgtzogtzmglx]]w)]ox)]np)]ntzmgtzmwo)mgtzmgtzggtzcrzmgtzmgtzmgbtzmgtzox)]ox)]ox)zmgtzmgtzgtzmgtzmcbtzmgtzmg)zmgtzmnpx]npx)]o)){wxngtzmgtzmgtzmgtzmgtzmwymgtzmgtzmgtzmcgtzmg)]ox)]ox)]oht]mgtzmwymgtzmgtzemriemgtzmwtzmgtv)]w)]ox)]opx]ctzmgtzmw)]mgtfcrqzmgtfgtzmgtzmgtzmgtzemgtzmx)]ox)]ox)zmx)zmgtngtzmgtzmgtje[opymgtzogtzmc}}}{x}]ox)]opxfgtzmg)]ox)zmbx)dbtzmrimgtzmgtzmgtjegtjymgt]ox)]ox)]ohtzogtzmrymgtzmgtzmgrq)]btzmgt]mgtj[ox)fcriecry]oxymgtzox)]ohle[oxhmgtndtzmgtzmgtzmgtiecgtzmw)]ox)]ox)]ogtzmglegtzmgtzmgtzecbpemgtzmwtzmgr)drihczmgc]iyfgtzmgt]ox)]mwiydrqzm)yegrymgtzegtzmcgtzmgtzoh)]ox)]ox)]mgtfcrzmgtzmgtzmgtje[btzmgtzmhtzmcjecbdg{bufcbrzmgtzmgt]ohtzmbpemwzggtjmgrzmgriegtjemgtzmgtzmx)]ox)zmhtzmrimgtzmgtzmgtzmcriydgtzmgt]mgtzmui{oo))[xlqectzmgtzmgtzmglydgtncrzmgtzmctjmgtjmgriymgtzmgtzox)]ohtzmgtfctzmgtzmgtzmgtqfmbpymgtzmg)zmgteej}]o})][zarecszmgtzmgtzmbpygrimgtzmgtzegrzmgtimcbtzmgtzmg)]ox)]mgtzmrymgtzmgtzmgtzmgrqzc{qzmgtzmhtzeeseto}h}opgfenctetzmgtzmglydwiegtzmgtzmgtjmgtzmgtzemgtzmgtzmx)]oxtzmglegtzmgtzmgtjegtjecblydgtzmgtzojmkjej{}}}}}jbrskmgjgtzmgtzmbpymrymgtzmgtzmgtzmgtzmgtqzmgtzmgt]ox)]ogtzcrimgrymgtzmcrzmgtiecwqhmgtzmg)br(msicz}}}xiiumcr(msmgtzmglydgtzmrymgtzmgtzmgtzmgtzmcbtzmgtzmg)]ox)zmgtfmwiectzmgtimgtzmgriyc{qzmgtzsyectzericrieecrsjmgvje(mgtzmbpymgtzcrzmgtzmgtzmgtzmgtzecgtzmgtzmg)]ohtzmgtzcrjmgtjectzmgtzmcrqf[btzmgegvjmgtecriecriumgfz[jtiuzmglydgtzmgtfctzmgtzmgtzmcrzmgtqzmgtzmgtzmx)]mgtzm)iegtyegtymgtzmgtjecwqhmgtfrz[ffzmgjecriekgtzuetzlgrgtzmbpymgtzmtiecrzmgtzmgtiecrzmcbtzmgtzmgt]oxtzmgtfcrzmcrymgtzmgtzmcriymbpymgmgvxuetzmgtidgtzmgtsmgv(mcnglydgtzmg)gctjegtimgtzmcryegtjemgtzmgtzmw)]ogtzmwiegtzecrzmgtzmgtjecgtf[btbrzugtsmgtzmcnymgtzmkqzmgtje(mbpymgtzmrymgtyecrymgtjmgtzmgrjymgtzmgtzox)zmgtzmrimgtjmgtzmgtzmgrqzmglydymgtzekszmgtjubtzmgtjbgtzugtilydgtzmgtfctzmcrzmctzmgrzmgrjmgrqzmgtzmgt]ohtzmgtzcrimctzmgtzmgtzecgtzmbpatjngtiectzmgrgmgtzmcfimgtzmcrbpymgtzmrzmgtjmgtzegtjegtzegrzmcbtzmgtzmgt]mgtzmwiectzmgtzmgtzmgriemgtzcymgtzmcfcmgtze(qzmgtzekqymgtze(dgtzmglmgtzmgtzmgtjmgrzmgtyegtzemgtzmgtzmhtzmgtzmrimgtzmgrzmgtzectiymglatzmgtiuiqzmgtjubtzmgtiratzmgjipymgtzctzmgtzmgtzmgtiegtzmgrzmgtiymgtzmgt]mgtzmglectzmgtzmctzmgrzmgtiymgmgtiecfmbgtzmgrgmgtzmcfmecrymcdgtzmwymgtzmgtzmgtzmgrymgtzegtzecgtzmgtzmhtzmgtzmrimgtzmgtzegtjegtzmgrqzqze{}pesfymgjje(qyeftjuur}}}rjmymgtzmrzmgtzmgtzmgtzmcrzmgtzmgrqzmgtzmgt]mgtzmgtfcrymgtzmgtjecrymgtzec]ocr})}}ywatjkgtidgtjkgrc[}}}}dr]ox)]oxdtzmgtzmgtzmgtzmgtzmgtjegto)mgtzmhtzmgtzmrimgtzmctzmgtzegtzmgrqvph[}}z}dpcmgjzmcnymgjzekq}[}{pe{ohtzmglegtzmgtzmgtzmgtzmgtzecrzmontzmgt]mgtzmglectzegtymgtzmgtzmgtiecx)]ozp{tp[jqjkgtjubtzmssibg}}pgrx)zmgtzcrimcrzmgtzmgtzmgtzmgrimgtz[mgtzmhtzmgtzmrimgtjegtzmgtzmgtzmcri[ox)b}}mcphbctzmgrgmgtzecfy}}tze{oxtzmwimctzmcriegtzmgtzmgtjegtzmgtrzmgt]mgtzmgtfcrymgtzmgtzmgtzmgtiecry]oxdgty)]eiectze(qzmgtiueqymgrx)]mglegtzmgtzmgriecriecriectzmgtzmggtzmhtzmgtzm]oecrymgtzmgtzmgtjecriecr)]ohe{ox)jqiecridcriecfqiyqi[]ohtzctzmgtzmgtzmgtzmgtzmgtzmgtzmgtzymgt]mgtzm]oxpxiecriegtzmgtzmcriegtjecr)]ox)]ohqiqiecriecrijacrtzox)zmwzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgdtzmhtzm]o}ox)]criecriegtzmgtjectzmgtiecx)]ox)]arqiecriecricraeox)]mgt]crzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmmgt]mwoxpx)]ox)ectiecrymgtzmcrzmgtzmgri[ox)]ohiec]iecriecroecqi[ohtzmx)fctzmgtzmgtzmgtzmgtzmgtzmgtzmgtrzmhtv)x)]ox)]gtzmgtzmgtzmgtzmgtzmgtzmcry]ox)]arihcriecriec]ohar)zmg)]oxlegtzmgtzmgtzmgtzmgtzmgtzmgtzmcgt](]{]ox)]oxymgtzmgtzmgtzmgtzmgtzmgtiecx)]ohiu)riecriecriecraaoxtzox)]oxiecrzmgtzmgtzmgtzmgtzmgtzmgryy(]{]ox)]ox)fgtzmgtzmgtzmgtzmgtzmgtzecry]ox)]ariecriaaaaecriecby]ox)]ox)]oriecrzmgtzmgtzmgtzmgtzmgtjeoxo}ox)]ox)]orzmgtzmgtzmgtzmgtzmgtzmgri[ox)]oxdecriecq)]ohiecriudq)]ox)]ox)]oxiecrymgtzmgtzmgtzmgtiecr)]ox)]ox)]ox)fctzmgtzmgtzmgtzmgtzmgtiecx)]ox)]arox)riaox)]arie(]odox)]ox)]ox)]oglecriecriegtzmcriecry]ox)]ox)]ox)]oxlectzmgtzmgtzmgtzmgtzecrq]ox)]oxdu)]ohcq)]ox)bcrix)na[ox)]ox)]ox)zmgtzmriecriecriecbt]ox)]ox)]ox)]ox)]oxiegtzmgtzmgtzmgtzecriemg)]ox)]arox)]aaox)]ohaec]oxdq)]ox)]ox)]ohtzmgtzmgtfcriemgtzmgtzox)]ox)]ox)]ox)]otimgtzmgtzmgtjecriecgtzox)]oxde(]ohcq)]ox)]oqie(]oaox)]ox)]ox)]ogtzmgtzmwiecrqzmgtzmgt]ox)]ox)]ox)]ox)]griecriecriecriecbtzmw)]ox)]oqiu)raaox)]ox)]ariecby]ox)]ox)]ox)]ohtzmgtzcvkvcgtzmgtzmw)]ox)]ox)]ox)]ox)]ogtfcriecriecbtzmgt]ox)]ox)bcriecq)]ox)]ox)bcrieax)]ox)]ox)]ox)]ohtzmwiukvkymgtzmgtzox)]ox)]ox)]ox)]oxtzmgtzmgtvkvkzmgtzmx)]ox)]ohiecraaox)]ox)]oxdecriaox)]ox)]ox)]ox)]ogtfcvkvkrqzmgtzmg)]ox)]ox)]ox)]ox)]mgtzmgtzmgtzmgtzmx)]ox)]ox)]ariecq)]ox)]ox)]ohiecby]ox)]ox)]ox)]ox)]mgtzkvkzmgtzmgtzox)]ox)]ox)]ox)]ox)zmgtzmgtzmgtzmg)]ox)]ox)]ohaecriacri[ox)]criearieaq)]ox)]ox)]ox)]ox)]mgtzkgtzmgtzmw)]ox)]ox)]ox)]ox)]ox)]ox)]ohtzmgtzox)]ox)]ox)faqieaax)]r)]ox)f[ohecriacx)]ox)]ox)]ox)]ox)zmgtzmgtzmg)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ormkbaae[op[ox)]oxly]qiecbigcx)]ox)]ox)]ox)]oxtzmgtzmg)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxlethngtzq)dx)]ox)]oxqdaraaskngox)]ox)]ox)]ox)]ox)zmgt]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]czmgtzmgc{y]ox)]ox)]obpaaqmgv(m[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxletzmgtrqhox)]ox)]ox)]c{ietzmktzy]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oriecriecr)]ox)]ox)]ox)fcrigtzmgdx)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)fcriecri[ox)]ox)]ox)]oxlecriecri[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxqhcriecx)]ox)]ox)]ox)]oxlecriecr)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxle[ox)]{y]ox)]ox)]ox)]ox)]oxiecri[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)][ox)]oxhox)]ox)]ox)]ox)]ox)]obx)]{y]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxq)]ox)]r)]ox)]ox)]ox)]ox)]ox)]cox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxle[ox)]op[ox)]ox)]ox)]ox)]ox)]ox)f[ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)fcox)]ox)dx)]ox)]ox)]ox)]ox)]ox)]oxly]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)zdbx)]ox)]{y]ox)]ox)]ox)]ox)]ox)]ox)]oxq)]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]orq)]ox)]oxhox)]ox)]ox)]ox)]ox)]ox)]ox)]obx)]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxiy]ox)]ox)]r)]ox)]ox)]ox)]ox)]ox)]ox)]ox)zdox)]ox)]ry]ox)]ox)]ox)]ox)]ox)]a"
  pic2scr(pic)
  print("press any key to continue",0,64,1)
- if btnp(❎) or btnp(🅾️) then
-  cls()
-  init_game()
+ 
+ while not (btnp(❎) or btnp(🅾️)) do
+ 
  end
+ cls()
+ init_game()
 end
 
 function init_game()
@@ -49,6 +53,7 @@ function reset_player()
 end
 
 --player variables
+mouse_enabled=false
 p_maxspeed = 2
 p_turnspeed = p_maxspeed/2
 p_n = 64
@@ -84,6 +89,8 @@ tombs={}
 
 -->8
 --draw game
+
+
 function draw_game()
 	cls(7)
 	doshake()
@@ -109,8 +116,10 @@ function draw_game()
 	--print(my)
 	--?(#signs)
 	tb_draw()
-	print("♥",stat(32),40)
-	--print(stat(1))--cpu perf
+	if mouse_enabled then
+	 print("♥",stat(32),40)
+	end
+ print(stat(1),0,16)--cpu perf
 end
 
 screen=0
@@ -209,7 +218,7 @@ function draw_trail(trail)
        pos.x +5,pos.y -cy+7,6)
  end
  --remove historic trails
- while #trail>50 do
+ while #trail>25 do
   deli(trail,1)
  end
 end
@@ -371,9 +380,11 @@ function input()
 	 --p_angle=lerp(p_angle%1,0.25,0.1)
 	end
 	--mouse input/touch
-	x=stat(32)
-	y=stat(33)
-	p_angle=atan2((x-p_x),(40-p_y+cy))
+	if mouse_enabled then
+		x=stat(32)
+		y=stat(33)
+		p_angle=atan2((x-p_x),(40-p_y+cy))
+	end
 end
 
 function move_player()
@@ -552,13 +563,6 @@ function update_win()
 	update_particles()
 end
 
-function draw_crash()
-
-end
-
-function update_crash()
-
-end
 -->8
 --camera
 function init_camera()
@@ -822,9 +826,9 @@ function pic2scr(p)
   cls()
   s=dot2str(p)
   str2mem(s,24576)
-  repeat
-    flip()
-  until btnp(4) or btnp(5)
+  --repeat
+  --  flip()
+  --until btnp(4) or btnp(5)
 end--pic2scr
 
 function str2mem(t,m)
@@ -881,36 +885,36 @@ local i,r=0,0
   return r
 end--instr
 __gfx__
-777777777777777700000003300000000aaa00000000aaa000000000000000000000003333300000000000bbbbb0000000000000000000000000000000000000
-707777077777777700000033330000000999aaaaaaaa99900000000000000000000033333333300000000bbbbbbbb00002000000000002000000000000ddd000
-7707707777777777000003333300000009999999999999900999999999999990003333333333333000bb0bbbbbbbbb000211111111111200000000000d676d00
-7770077777777777000033333330000009999999999999900aaaaaaaaaaaaaa003333333333333300bbbbbbbbbbbbbb0021114414411120000000000d66766d0
-77700777777777770000333333330000099999999999999009999999999999900333333333333333bbbbbbbbbbbbbbbb021114444411120000000000d66766d0
-7707707777777777000333333333300009999999999999900999999aa99999903333333333333333bbbbbbbbbbbbbbbb021111444111120000000000d66676d0
-707777077777777700333333333333000999a999a999a990099999a99a9999903333333333333333bbbbbbbbbbbbbbbb0211111411111200000000000d666d00
-77777777777777770333333333333330099aaa9aaa9aaa9009999a9889a9999033333333333333333bbbbbbbbbbbbbbb02111111111112000000000000ddd000
-dddddddd777777770333333333333330099ada9ada9ada90aaaaa988889aaaaa33333333333333330333bbbbbbbbbb3302000000000002000000000000000000
-dddddddd779777773333333333333333099d1d9d1d9d1d9099999681186999993333333333333333003353bbbbb3333002000000000002000000000000777000
-dddddddd797977773333333333333333099d1d9d1d9d1d9000688681186886003333333333333333000005333333300002000000000002000000000007ddd700
-dddddddd779777773333333333333333aaadddadddadddaa0068868888688600333333333333333300000505505000000200000000000200000000000dd6dd00
-dddddddd77777d77033333333333333099999999999999990068868118688600033333333333333000000055550000000200000000000200000000000d666d00
-dddddddd7777d7d7000333333333300000dd1ddd1ddd1d000068868118688600000333333333300000000665566000000200000000000200000000000dd6dd00
-dddddddd77777d77000066655666000000dd1ddddddddd00000dddddddddd000000066655666000000006665566600000200000000000200000000000dd6dd00
-dddddddd777777770000066666600000000000000000000000000000000000000000066666600000000006666660000002000000000002000000000000000000
+777777777777777700000003300000000aaa00000000aaa0000000000000000000000033333000000000003bbbb0000000000000000000000000000000000000
+707777077777777700000033330000000999aaaaaaaa9990000000000000000000003333333330000000033bbbbbb00002000000000002000000000000ddd000
+770770777777777700000133330000000999999999999990099999999999999000133333333333300033033bbbbbbb000211111111111200000000000d676d00
+7770077777777777000011333330000009999999999999900aaaaaaaaaaaaaa0011133333333333003333333bbbbbbb0021114414411120000000000d66766d0
+7770077777777777000013333333000009999999999999900999999999999990011333333333333333333bb33bbbbbbb021114444411120000000000d66766d0
+7707707777777777000131333333300009999999999999900999999aa99999901111333333333333333bbbbbbbbbbbbb021111444111120000000000d66676d0
+707777077777777700113333333333000999a999a999a990099999a99a9999901113333333333333333bbbbbbbbbbbbb0211111411111200000000000d666d00
+77777777777777770111333333333330099aaa9aaa9aaa9009999a9889a999901111333333333333133bbbbbbbb3bbbb02111111111112000000000000ddd000
+dddddddd777777770113133333333330099ada9ada9ada90aaaaa988889aaaaa11133333333333330113bbbbbbbb333302000000000002000000000000000000
+dddddddd779777771113333333333333099d1d9d1d9d1d909999968118699999111133333333333300111133bbb3333002000000000002000000000000777000
+dddddddd797977771113131333333333099d1d9d1d9d1d9000688681186886001113133333333333000001111333300002000000000002000000000007ddd700
+dddddddd779777771111313133333333aaadddadddadddaa0068868888688600111131313333333300000505505000000200000000000200000000000dd6dd00
+dddddddd77777d77011113133333333099999999999999990068868118688600011113133333333000000055550000000200000000000200000000000d666d00
+dddddddd7777d7d7006111313333360000dd1ddd1ddd1d000068868118688600006111113333360000006661566600000200000000000200000000000dd6dd00
+dddddddd77777d77006666655666660000dd1ddddddddd00000dddddddddd000006666655666660000066661566660000200000000000200000000000dd6dd00
+dddddddd777777770000666666660000000000000000000000000000000000000000666666600000000066666666000002000000000002000000000000000000
 77777777777773777777777777777777777777770000b00000000000003333000000300000000000000000000000000000000000000000000000000099999999
-7777777777777737775555555555555555555555000bb00000000000033333300003300000000000066666000667660000000000000000009999999999919999
-7777777777777737755555555555555557777775000bb00000000000333333330003300000000000676667606667666000000000000000009119199999919991
-777766777777377775555555555555555555555500bbb00000000600333333330033300000000000676667606676766000000000000000009199199111919991
-777766773773777775555aa5aaa5aaa55777777500bbbb0060006000333333330033330000000000667676606676766000000000000000009119199191919991
-76677777737377777555555555555555555555550bbbbbb006606000333333330333333000000000667676606766676000000000000000009919199191919191
-76677777737777777555555555555555577777750bbbbbb000060000033333300333333000000000666766606766676000000000000000009919119191911111
-7777777777777777775555555555555555555555bbbbbbbb00060000006556003333333300000000066766000666660000000000000000009119999111999999
-3333333311111111000000000000000000000000bbbbbbbb0006500000bbbb003333333300000000000000000000000000000000000000009999999999999999
-3333333311117777000000000000000000000000bbbbbbbb000660000bbdbbb03333333300000000066666000066666000000000000000009999999999999999
-7337777711117777000000000000000000000000bbbbbbbb00066060bbbbbbbb3333333300000000666677600677666600000000000000009999999110000000
-37733333111177770000000000000000000000003bbbbbb300056600bdbbbbbb3333333300000000667766600666776600000000000000000000000550000000
-333333337777111100000000000000000000000003333330000560003bbbbdb30333333000000000776666600666667700000000000000000000000055000000
-7773333377771111000000000000000000000000000550000006600033bbbb330065560000000000667766600666776600000000000000000000006655600000
+77777777777777377755555555555555555555550003b00000000000013333300003300000000000066666000667660000000000000000009999999999919999
+77777777777777377555555555555555577777750003b00000000000133333330003300000000000676667606667666000000000000000009119199999919991
+7777667777773777755555555555555555555555003bb00000000600113333330013300000000000676667606676766000000000000000009199199111919991
+777766773773777775555aa5aaa5aaa557777775003bbb0060006000131333330013330000000000667676606676766000000000000000009119199191919991
+7667777773737777755555555555555555555555033bbbb006606000113333330113333000000000667676606766676000000000000000009919199191919191
+766777777377777775555555555555555777777503bbbbb000060000011133300113333000000000666766606766676000000000000000009919119191911111
+777777777777777777555555555555555555555533bbbbbb00060000006556001131333300000000066766000666660000000000000000009119999111999999
+333333331111111100000000000000000000000033bbbbbb0006500000bbbb001113333300000000000000000000000000000000000000009999999999999999
+333333331111777700000000000000000000000033bbbbbb0006600003bdbbb01133333300000000066666000066666000000000000000009999999999999999
+7337777711117777000000000000000000000000333bbbbb0006606033bbbbbb1131333300000000666677600677666600000000000000009999999110000000
+37733333111177770000000000000000000000003333bbb3000566003dbbbbbb1113133300000000667766600666776600000000000000000000000550000000
+33333333777711110000000000000000000000000333333000056000333bbdb30111113000000000776666600666667700000000000000000000000055000000
+777333337777111100000000000000000000000000055000000660003333bb330065560000000000667766600666776600000000000000000000006655600000
 33377777777711110000000000000000000000000005500000005600033333300665566000000000666677600677666600000000000000000000666556666000
 33333333111111110000000000000000000000000005500000006600006556000066660000000000066666000066666000000000000000000000006666600000
 000ee0000000ee0000070ee000000ee000ee00000000ee00000ee0000000000000000700000700000000000000ee000000000000000000000000000000e00e00
@@ -929,26 +933,26 @@ dddddddd777777770000066666600000000000000000000000000000000000000000066666600000
 00000000000000000000000000000000000000000000000000000000006666000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00000000000000000000000099999990000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-67777777777777760999999999999990000999999999900000000000000000000000000000000000000000000000000000000000000000000000000000000000
-77777777777777770999977777779990000999999199900000011111111110000001111111111000000000000000000000000000000000000000000000000000
-67777777777777760999976777679480000449911999400000011166111110000001111166111000000000000000000000000000000000000000000000000000
-77777777777777770448977777779990000991191999900000011116611110000001111661111000000000000000000000000000000000000000000000000000
-67777777777777760999977777779990000999919919900000011111661110000001116611111000000000000000000000000000000000000000000000000000
-67777777777777760999977777779990000999919199900000011111166110000001166111111000000000dddd00000000000000000000000000000000000000
-6777777777777776099997777777884000099999199990000001111166111000000111661111100000000dddddd0000000000000000000000000000000000000
-677777777777777608849777777799900004999199944000000111166111100000011116611110000000dddddddd000000000000000000000000000000000000
-677777777777777609999999999999900009991999999000000111661111100000011111661110000000dddddddd00000000000dd00000000000000000000000
-666666666666666609999991100000000009999999999000000111111111100000011111111110000000dddddddd0000000000dddd0000000000000000000000
-dddddddddddddddd00000005500000000000000100000000000000055000000000000005500000000000dddddddd0000000000dddd0000000000000000000000
-dddddddddddddddd000000005500000000000005000000000000006556000000000000655600000000000dddddd000000000000dd00000000000000000000000
-dddddddddddddddd0000000055000000000006656600000000000665566000000000066556600000000000dddd00000000000000000000000000000000000000
-dddddddddddddddd0000666556666000000666655666000000000066660000000000006666000000000000000000000000000000000000000000000000000000
+000000000000000000000000aaaaaaa0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+677777777777777608aaaaaa999999a0000aaaaaaaaaa00000000000000000000000000000000000000000000000000000000000000000000000000000000000
+777777777777777708999777777799a0000499999199a000000dddddddddd000000dddddddddd000000000000000000000000000000000000000000000000000
+677777777777777608999767776794800004499119994000000111661111d000000111116611d000000000000000000000000000000000000000000000000000
+777777777777777704489777777799a0000491191999a000000111166111d000000111166111d000000000000000000000000000000000000000000000000000
+677777777777777608999777777799a0000499919919a000000111116611d000000111661111d000000000000000000000000000000000000000000000000000
+677777777777777608999777777799a0000499919199a000000111111661d000000116611111d000000000dddd00000000000000000000000000000000000000
+67777777777777760899977777778840000499991999a000000111116611d000000111661111d00000000dddddd0000000000000000000000000000000000000
+677777777777777608849777777799a00004999199944000000111166111d000000111166111d0000000dddddddd000000000000000000000000000000000000
+677777777777777608999999999999a0000499199999a000000111661111d000000111116611d0000000dddddddd00000000000dd00000000000000000000000
+66666666666666660899999110000000000444444444a000000111111111d000000111111111d0000000dddddddd0000000000dddd0000000000000000000000
+11dddddddddddddd00000005500000000000000100000000000000055000000000000005500000000000dddddddd0000000000dddd0000000000000000000000
+11dddddddddddddd000000005500000000000005000000000000006556000000000000655600000000000dddddd000000000000dd00000000000000000000000
+111ddddddddddddd0000000055000000000006656600000000000665566000000000066556600000000000dddd00000000000000000000000000000000000000
+1111111d11d11ddd0000666556666000000666655666000000000066660000000000006666000000000000000000000000000000000000000000000000000000
 00000000000000000000006666000000000006666600000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 10101010101010101010101010101010203020302030101010101010101010101010101010101010101010101010101080901010100210101080908090108191
-809081911010101010021010101080901010101010101010100210101010101020302030203010100616a0b0213181917210c0d0c0d080908191809081911010
+809081911010101010021010101080901010101010101010100210101010101020302030203010100616a0b02131819172101010101080908191809081911010
 10101010101010101010101010101010213121312131101010101010101010101010101010101010101010101010101081911010100202101081918191108090
-819110101010101002021010809081911010101010101010100210101010101021312131213106160717a1b1a0b080901010c1d1c1d181918090819110101010
+819110101010101002021010809081911010101010101010100210101010101021312131213106160717a1b1a0b0809010101010101081918090819110101010
 10101010101010101010101010101010203072102030101010101010101010101010101010101010101010101010101030809010101002021010809080908191
 8090101010101010021010108191809010101010101010101002101010101010203072102030071780908090a1b1819110101010101010108191101010101010
 10101010101010101010101010101010213110822131809010101010101010101010101010101010101010101010101031819110101010021010819181918090
