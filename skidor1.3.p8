@@ -54,7 +54,7 @@ end
 
 --player variables
 mouse_enabled=false
-p_maxspeed = 2
+p_maxspeed = 8
 p_turnspeed = p_maxspeed/2
 p_n = 64
 p_speed = 0
@@ -65,6 +65,7 @@ p_friction = 0.991
 p_acc = 0.02
 p_strtx = 128/2+4
 p_strty = 0
+p_turning = false
 --p_strty = 7.7*(8*64)
 p_x = p_strtx
 p_y = p_strty
@@ -153,7 +154,7 @@ function draw_player()
  end
  abs_angle = abs(p_angle - 0.75)
  jofs=0
- if p_jumping then
+ if p_jumping or p_turning then
   jofs=7
  end
  if abs_angle < 0.01 then
@@ -360,21 +361,26 @@ k  = 8
 ts = 0.008 --turn speed
 maxangle=0.25
 function input()
+ p_turning = false
  if p_jumping then return end
  --button input
 	if btn(⬅️) then
 	 if p_angle > 0.75-maxangle then
 	  p_angle -= ts
+	  p_turning=true
 	 end
 	elseif btn(➡️) then
 	 if p_angle < 0.75+maxangle then
 	  p_angle += ts
+	  p_turning=true
 	 end
 	elseif btn(⬇️) then
 	 if p_angle < 0.75 then
 			p_angle += ts
+			p_turning=true
 		elseif p_angle > 0.75 then
 			p_angle -= ts
+			p_turning=true
 		end
 	elseif btn(⬆️) then
 	 --p_angle=lerp(p_angle%1,0.25,0.1)
@@ -434,7 +440,7 @@ function move_player()
    p_jumping=false
    p_height=0
    p_jvel=0
-   p_speed*=1.5
+   --p_speed*=1.1
    p_trail={}
    landing_particles(p_x,p_y-cy)
    sfx(9)
