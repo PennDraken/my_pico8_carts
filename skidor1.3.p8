@@ -44,7 +44,7 @@ end
 --player variables
 function start_game()
 	mouse_enabled=false
-	p_maxspeed = 8
+	p_maxspeed = 4
 	p_turnspeed = p_maxspeed/2
 	p_n = 64
 	p_speed = 0
