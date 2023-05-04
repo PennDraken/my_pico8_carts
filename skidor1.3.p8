@@ -14,18 +14,7 @@ function _init()
  
  end
  cls()
- init_game()
-end
-
-function init_game()
- init_music()
-	reading=false--for textboxes
-	init_camera()
-	init_signs()
-	init_particles()
-	_set_fps(60)
-	upd=upd_game
-	drw=draw_game
+ start_game()
 end
 
 function _update60()
@@ -53,38 +42,52 @@ function reset_player()
 end
 
 --player variables
-mouse_enabled=false
-p_maxspeed = 8
-p_turnspeed = p_maxspeed/2
-p_n = 64
-p_speed = 0
-p_dx = 0
-p_dy = 0
-p_angle = 0.75
-p_friction = 0.991
-p_acc = 0.02
-p_strtx = 128/2+4
-p_strty = 0
-p_turning = false
---p_strty = 7.7*(8*64)
-p_x = p_strtx
-p_y = p_strty
-p_crash = false
-p_jvel  = 0
-p_jumping=false
-p_height =0
-p_width = 6
-p_trail={}
-p_deaths=0
-score = 0
---camera
-cx = 0
-cstrty = p_strty
-cy = cstrty
-cv = 0
-ca = 0.1
---tombstones
-tombs={}
+function start_game()
+	mouse_enabled=false
+	p_maxspeed = 8
+	p_turnspeed = p_maxspeed/2
+	p_n = 64
+	p_speed = 0
+	p_dx = 0
+	p_dy = 0
+	p_angle = 0.75
+	p_friction = 0.991
+	p_acc = 0.02
+	p_strtx = 128/2+4
+	p_strty = 0
+	p_turning = false
+	--p_strty = 7.7*(8*64)
+	p_x = p_strtx
+	p_y = p_strty
+	p_crash = false
+	p_jvel  = 0
+	p_jumping=false
+	p_height =0
+	p_width = 6
+	p_trail={}
+	p_deaths=0
+	score = 0
+	--camera
+	cx = 0
+	cstrty = p_strty
+	cy = cstrty
+	cv = 0
+	ca = 0.1
+	--tombstones
+	tombs={}
+	--timer
+	t = 0
+
+	init_music()
+	reading=false--for textboxes
+	init_camera()
+	init_signs()
+	init_particles()
+	_set_fps(60)
+	upd=upd_game
+	drw=draw_game
+end
+
 
 
 
@@ -120,7 +123,10 @@ function draw_game()
 	if mouse_enabled then
 	 print("♥",stat(32),40)
 	end
- print(stat(1),0,16)--cpu perf
+ --print(stat(1),0,16)--cpu perf
+ if tutorial then
+  print("you can turn with the arrow keys.")
+ end
 end
 
 screen=0
@@ -302,16 +308,17 @@ function draw_position()
  y1=0
  x2=127-x1
  y2=y1
- line(x1,y1,x2,y2,6)
+ line(x1,y1,x2,y2,6)--bg line
  p=(p_y/limy)/(8)--percentage complete
  x=(x2-x1)*p+x1
  y=(y2-y1)*p+y1
- circfill(x,y,0,1)--currpos
+ line(x1,y1,x,y,15)
+ circfill(x,y,0,1)--curr pos
  p=(p_strty/limy)/(8)--percentage complete
  x=(x2-x1)*p+x1
  y=(y2-y1)*p+y1
  if p>0.1 then
-  line(x1,y1,x,y,11)
+  line(x1,y1,x,y,11)--checkpoint line
  end
 end
 
@@ -552,9 +559,9 @@ function update_win()
 	 p_angle=0.75
 	 if p_dy>0.05 then
 	  p_dy*=0.97
-	 else
+	 elseif p_dy>0 then
 	  p_dy=0
-	  tb_init(7,{"yOU WON!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n"},{❎})
+	  tb_init(7,{"yOU WON!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
 	  tb.x=10
 	  tb.w=127-tb.x*2
 	  tb.h=40
@@ -562,11 +569,14 @@ function update_win()
 	  tb.col2=0
 	  tb.col3=0
 	  tb.y=p_y-cy+16
+	 else
+     -- restart game
+		start_game()
 	 end
 	 p_y+=p_dy
-		t+=1
+	 t+=1
 	end
-	update_particles()
+ update_particles()
 end
 
 -->8
