@@ -133,10 +133,10 @@ player =
 		
 		-- smoke particles
 		if on_ground and not this.was_on_ground then
-		 init_object(smoke,this.x,this.y+4)
+		 --init_object(smoke,this.x,this.y+4)
 		end
 
-		local jump = btn(k_jump) and not this.p_jump
+		local jump  = btn(k_jump) and not this.p_jump
 		this.p_jump = btn(k_jump)
 		if (jump) then
 			this.jbuffer=4
@@ -159,7 +159,7 @@ player =
 
 		this.dash_effect_time -=1
   if this.dash_time > 0 then
-   init_object(smoke,this.x,this.y)
+   --init_object(smoke,this.x,this.y)
   	this.dash_time-=1
   	this.spd.x=appr(this.spd.x,this.dash_target.x,this.dash_accel.x)
   	this.spd.y=appr(this.spd.y,this.dash_target.y,this.dash_accel.y)  
@@ -202,7 +202,7 @@ player =
 			if input!=0 and this.is_solid(input,0) and not this.is_ice(input,0) then
 		 	maxfall=0.4
 		 	if rnd(10)<2 then
-		 		init_object(smoke,this.x+input*6,this.y)
+		 		--init_object(smoke,this.x+input*6,this.y)
 				end
 			end
 
@@ -218,7 +218,7 @@ player =
 		  	this.jbuffer=0
 		  	this.grace=0
 					this.spd.y=-2
-					init_object(smoke,this.x,this.y+4)
+					--init_object(smoke,this.x,this.y+4)
 				else
 					-- wall jump
 					local wall_dir=(this.is_solid(-3,0) and -1 or this.is_solid(3,0) and 1 or 0)
@@ -228,7 +228,7 @@ player =
 			 		this.spd.y=-2
 			 		this.spd.x=-wall_dir*(maxrun+1)
 			 		if not this.is_ice(wall_dir*3,0) then
-		 				init_object(smoke,this.x+wall_dir*6,this.y)
+		 				--init_object(smoke,this.x+wall_dir*6,this.y)
 						end
 					end
 				end
@@ -239,7 +239,7 @@ player =
 			local d_half=d_full*0.70710678118
 		
 			if this.djump>0 and dash then
-		 	init_object(smoke,this.x,this.y)
+		 	--init_object(smoke,this.x,this.y)
 		 	this.djump-=1		
 		 	this.dash_time=4
 		 	has_dashed=true
@@ -281,7 +281,7 @@ player =
 		 	end	 	 
 			elseif dash and this.djump<=0 then
 			 psfx(9)
-			 init_object(smoke,this.x,this.y)
+			 --init_object(smoke,this.x,this.y)
 			end
 		
 		end
@@ -391,7 +391,7 @@ player_spawn = {
 				this.state=2
 				this.delay=5
 				shake=5
-				init_object(smoke,this.x,this.y+4)
+				--init_object(smoke,this.x,this.y+4)
 				sfx(5)
 			end
 		-- landing
@@ -435,7 +435,7 @@ spring = {
 				hit.spd.y=-3
 				hit.djump=max_djump
 				this.delay=10
-				init_object(smoke,this.x,this.y)
+				--init_object(smoke,this.x,this.y)
 				
 				-- breakable below us
 				local below=this.collide(fall_floor,0,1)
@@ -482,7 +482,7 @@ balloon = {
 			local hit = this.collide(player,0,0)
 			if hit~=nil and hit.djump<max_djump then
 				psfx(6)
-				init_object(smoke,this.x,this.y)
+				--init_object(smoke,this.x,this.y)
 				hit.djump=max_djump
 				this.spr=0
 				this.timer=60
@@ -491,7 +491,7 @@ balloon = {
 			this.timer-=1
 		else 
 		 psfx(7)
-		 init_object(smoke,this.x,this.y)
+		 --init_object(smoke,this.x,this.y)
 			this.spr=22 
 		end
 	end,
@@ -531,7 +531,7 @@ fall_floor = {
 				psfx(7)
 				this.state=0
 				this.collideable=true
-				init_object(smoke,this.x,this.y)
+				--init_object(smoke,this.x,this.y)
 			end
 		end
 	end,
@@ -552,7 +552,7 @@ function break_fall_floor(obj)
  	psfx(15)
 		obj.state=1
 		obj.delay=15--how long until it falls
-		init_object(smoke,obj.x,obj.y)
+		--init_object(smoke,obj.x,obj.y)
 		local hit=obj.collide(spring,0,-1)
 		if hit~=nil then
 			break_spring(hit)
@@ -697,11 +697,11 @@ fake_wall = {
 			sfx_timer=20
 			sfx(16)
 			destroy_object(this)
-			init_object(smoke,this.x,this.y)
-			init_object(smoke,this.x+8,this.y)
-			init_object(smoke,this.x,this.y+8)
-			init_object(smoke,this.x+8,this.y+8)
-			init_object(fruit,this.x+4,this.y+4)
+			--init_object(smoke,this.x,this.y)
+			--init_object(smoke,this.x+8,this.y)
+			--init_object(smoke,this.x,this.y+8)
+			--init_object(smoke,this.x+8,this.y+8)
+			--init_object(fruit,this.x+4,this.y+4)
 		end
 		this.hitbox={x=0,y=0,w=16,h=16}
 	end,
@@ -830,8 +830,8 @@ big_chest={
 				hit.spd.x=0
 				hit.spd.y=0
 				this.state=1
-				init_object(smoke,this.x,this.y)
-				init_object(smoke,this.x+8,this.y)
+				--init_object(smoke,this.x,this.y)
+				--init_object(smoke,this.x+8,this.y)
 				this.timer=60
 				this.particles={}
 			end
@@ -1290,20 +1290,8 @@ function _draw()
 		end
 	end)
 	
-	-- draw fg terrain 0.01
+	--draw fg terrain 0.01
 	--map(room.x*16,room.y*16,0,0,16,16,8)
-	
-	-- particles 0.02
-	foreach(particles, function(p)
-		p.x += p.spd
-		p.y += sin(p.off)
-		p.off+= min(0.05,p.spd/32)
-		rectfill(p.x,p.y,p.x+p.s,p.y+p.s,p.c)
-		if p.x>128+4 then 
-			p.x=-4
-			p.y=rnd(128)
-		end
-	end)
 	
 	-- dead particles
 	foreach(dead_particles, function(p)
@@ -1356,18 +1344,13 @@ function draw_object(obj)
 end
 
 function draw_time(x,y)
-
 	local s=seconds
 	local m=minutes%60
 	local h=flr(minutes/60)
 	
 	rectfill(x,y,x+32,y+6,0)
 	print((h<10 and "0"..h or h)..":"..(m<10 and "0"..m or m)..":"..(s<10 and "0"..s or s),x+1,y+1,7)
-
 end
-
-
-
 
 -->8
 --update
