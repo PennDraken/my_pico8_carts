@@ -22,8 +22,8 @@ function init_game()
  word=rnd(dict)
  sx=1--selected x tile (0-4)
  guesses=1--current row
- rows={{"c","o","o","l","s"},{""},{""},{""},{""}}
- chars="abcdefghijklmnopqrstuvwxyz"
+ rows={"cools",".....",".....",".....","....."}
+ chars=".abcdefghijklmnopqrstuvwxyz"
 end
 -->8
 --draw
@@ -45,7 +45,7 @@ function draw_tiles()
     letter=nil
    end
 			
-			if letter!=nil and y!=guesses-1 then
+			if letter!=nil and y<guesses+1 then
 				if letter==word[x] then
 				 spr(5,(x-1)*tw+28,(y-1)*tw,2,2)
 				elseif letter==word[x+1] then
@@ -71,27 +71,35 @@ end
 --update
 function update_game()
  if btnp(⬅️) then
-		sx=(sx-1)%5
+		sx=(sx+5-2)%5+1
  elseif btnp(➡️) then
- 	sx=(sx+1)%5
+ 	sx=(sx)%5+1
  end
  
- row=rows[guesses+1]
- letter=row[sx]
- 
+ str=rows[guesses+1]
+ letter=str[sx]
+	--find index of letter in alphabet
+	for i=0,#chars do
+	 c=sub(chars,i,i)
+	 if c==letter then
+	 	ci=i
+	 end
+	end
+	
+	new_c=letter
  if btnp(⬆️) then
-  if letter==nil then
-   rows[sx][guesses+1]="a"
-  else
-  
-  end
+  ci=(ci+#chars-2)%#chars+1
+		new_c=sub(chars,ci,ci)
  elseif btnp(⬇️) then
- 	if letter==nil then
-   rows[sx][guesses-1]="a"
-  else
-  
-  end
+  ci=(ci)%#chars+1
+		new_c=sub(chars,ci,ci)
  end
+ 
+ rows[guesses+1]=replace(str,sx,new_c)
+	
+	if btnp(❎) then
+		guesses+=1
+	end
 end
 -->8
 --dictionary
@@ -141,6 +149,21 @@ function contains(c,str)
   end
  end
  return false
+end
+
+--replace char at i with c
+--returns the new string
+function replace(str,i,c)
+ new_str=""
+ print(#str)
+ for j=1,#str do
+ 	if j==i then
+ 		new_str=new_str..c
+ 	else
+ 	 new_str=new_str..sub(str,j,j)
+ 	end
+ end
+ return new_str
 end
 __gfx__
 00000000777777777777777777777777777777777777777777777777777777777777777777777777777777770000000000000000000000000000000000000000
