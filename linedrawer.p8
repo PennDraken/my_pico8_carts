@@ -94,7 +94,7 @@ function new_node(x,y,prv,nxt)
    --this.nxt:draw()
    linefill(this.x,this.y,this.nxt.x,this.nxt.y,this.nxt.w,6)
   end
-  circ(this.x,this.y,this.w,7)
+  --circ(this.x,this.y,this.w,7)
  end
  
  
@@ -103,7 +103,7 @@ end
 
 --return node under mouse
 function node_collision(mx,my)
- p=2--pixels extra grab radius
+ p=1--pixels extra grab radius
  for n in all(nodes) do
   if mx>n.x-n.w-p and my>n.y-n.w-p and
  				mx<n.x+n.w+p and my<n.y+n.w+p then
