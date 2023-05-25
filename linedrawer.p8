@@ -52,10 +52,13 @@ function _update()
  --left click
  if mouse_held()==1 then
 	 if mouse_node==nil then
+	 	--create unconnected node
 	  _node=new_node(mx,my,prev_node,next_node)
 	 	add(nodes,_node)
 	 	prev_node=_node
 	 else
+	 	--connect two nodes with eachother
+	  mouse_node.nxt=prev_node
 	  prev_node=mouse_node
 	 end
  elseif mouse_held()>10 then
