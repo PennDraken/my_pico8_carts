@@ -190,17 +190,24 @@ end
 
 --recolors shadow based on pixels under
 function draw_shadow()
+	--get pixel color
  p=pget(p_x,p_y-cy)
- if p==7 then
+ _y=0--shadow offset
+ if p==7 then--white
   pal(6,6)
  elseif p==11 then--lime
   --3=dark green
   pal(6,3)
+  _y=16
  elseif p==3 then--dark green
   --1=dark blue
   pal(6,1)
+  _y=4
+ elseif p==8 then--red
+  --2=purple
+  pal(6,2)
  end
- spr(87,p_x,p_y-cy)
+ spr(87,p_x,p_y-cy-_y)
  pal()
 end
 
