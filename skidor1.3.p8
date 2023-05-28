@@ -413,6 +413,12 @@ function input()
 	elseif btn(⬆️) then
 	 --p_angle=lerp(p_angle%1,0.25,0.1)
 	end
+	--boost
+	if btnp(❎) and shake==0 then
+		p_speed*=1.5
+		shake+=0.1*p_speed/p_maxspeed
+	end
+	
 	--mouse input/touch
 	if mouse_enabled then
 		x=stat(32)
