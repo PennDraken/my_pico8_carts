@@ -44,7 +44,7 @@ end
 --player variables
 function start_game()
 	mouse_enabled=false
-	p_maxspeed = 4
+	p_maxspeed = 3
 	p_turnspeed = p_maxspeed/2
 	p_n = 64
 	p_speed = 0
@@ -438,7 +438,7 @@ function move_player()
   p_speed = p_speed+p_acc * sin(p_angle)
  else
   --travelling too fast
-  p_speed=lerp(p_speed,p_maxspeed,0.7)
+  p_speed=lerp(p_speed,p_maxspeed,0.9)
  end
  --update velocity direction
  if not p_jumping then
