@@ -150,7 +150,7 @@ function start_game()
 	init_camera()
 	init_signs()
 	init_particles()
-	tf=0.5--time factor
+	tf=1--time factor
 	_set_fps(60)
 	upd=upd_game
 	drw=draw_game
@@ -506,22 +506,22 @@ function input()
  
 	if btnl then
 	 if p_angle > 0.75-maxangle then
-	  p_angle -= ts
+	  p_angle -= ts*tf
 	  p_turning=true
 	 end
 	 pdir=⬅️
 	elseif btnr then
 	 if p_angle < 0.75+maxangle then
-	  p_angle += ts
+	  p_angle += ts*tf
 	  p_turning=true
 	 end
 	 pdir=➡️
 	elseif btn(⬇️) then
 	 if p_angle < 0.75 then
-			p_angle += ts
+			p_angle += ts*tf
 			p_turning=true
 		elseif p_angle > 0.75 then
-			p_angle -= ts
+			p_angle -= ts*tf
 			p_turning=true
 		end
 	elseif btn(⬆️) then
@@ -608,8 +608,40 @@ function move_player()
   end
   return--no collision
  end
- 
+
+ slow_mo_check()
  collision_check()
+end
+
+--checks if player is about to hit obstacle
+function slow_mo_check()
+	--search depth
+	iter=10
+	--future positions
+	x=p_x
+	y=p_y
+	for i=1,iter do
+		x+=p_dx
+		y+=p_dy
+		if obstacle_check(x,y) then
+			tf=lerp(tf,0.5,0.4)
+			return
+		end
+	end
+	tf=lerp(tf,1,0.25)--no obstacle
+end
+
+--returns true if crashable obstacle
+--in front of player
+function obstacle_check(x,y)
+	mx=flr((x+4)/8)+flr((x+4)/limy)*16
+ my=flr((y+4)/8)%64
+ tile=mget(mx,my)
+ if not fget(tile,0) then
+ 	return true--obstacle
+ else
+ 	return false--not obstacle
+ end
 end
 
 --player collision logic
@@ -619,6 +651,8 @@ function collision_check()
  prev_tile=tile--used to ensure trigger on rising edge
  mx=flr((p_x+4)/8)+flr((p_y+4)/limy)*16
  my=flr((p_y+4)/8)%64
+ --previous map x for player
+ --previous map y for player
  pmx=flr((p_x+4-p_dx)/8)+flr((p_y+4-p_dy)/limy)*16
  pmy=flr((p_y+4-p_dy)/8)%64
  tile=mget(mx,my)
