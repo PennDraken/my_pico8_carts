@@ -150,6 +150,7 @@ function start_game()
 	init_camera()
 	init_signs()
 	init_particles()
+	tf=0.5--time factor
 	_set_fps(60)
 	upd=upd_game
 	drw=draw_game
@@ -574,13 +575,14 @@ function move_player()
   	p_angle=0.9
   end
  end
- p_x += p_dx
- p_y += p_dy
+ --move player
+ p_x += p_dx*tf
+ p_y += p_dy*tf
  --height update
  if p_jumping then
  	_a=0.1
-  p_height+=p_jvel
-  p_jvel-=_a
+  p_height+=p_jvel*tf
+  p_jvel-=_a*tf
   --trick
   if p_trick then
   	p_angle=(p_angle+p_trickspeed)%1
@@ -768,7 +770,7 @@ function move_camera()
 	else
 		b  = p_y-p_height-cofs+p_dy*10
 	end
- cy = lerp(cy,b,0.06)
+ cy = lerp(cy,b,0.06*tf)
 end
 
 function lerp(a,b,amt)
