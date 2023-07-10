@@ -178,7 +178,7 @@ function draw_game()
 	end
 	camera()--reset camera
 	if slomo then
-		spr(50,dx,dy-cy)--danger obstacle
+		spr(50,tri_x,tri_y-cy)--danger obstacle
 	end
 	--ui
 	draw_borders()
@@ -585,6 +585,7 @@ function move_player()
  p_y += p_dy*tf
  
  slow_mo_check()
+
  --height update
  if p_jumping then
  	_a=0.1
@@ -615,7 +616,7 @@ function move_player()
   end
   return--no collision
  end
-
+ 
  collision_check()
 end
 
@@ -624,16 +625,28 @@ function slow_mo_check()
 	--search depth
 	iter=20
 	--future positions
-	x=p_x
-	y=p_y
+	local x=p_x
+	local y=p_y
 	for i=1,iter do
-		if x>127 or x<1 then break end
+		--increment check
 		x+=p_dx
 		y+=p_dy
+		--out of bounds or jumping
+		if x>127 or x<1 or p_jumping then 
+			break 
+		end
+		--jump check (no slomo)
+		mx=x_to_mx(x,y)
+		my=y_to_my(y)
+		tile=mget(mx,my)
+		if tile==96 or tile==97 then
+			break
+		end
+		--obstacle
 		if obstacle_check(x,y) then
-			tf=lerp(tf,0.25,0.7)
-			dx=flr(x/8)*8
-			dy=flr(y/8)*8
+			tf=lerp(tf,0.25,0.1)--time factor
+			tri_x=flr(x/8)*8--triangle location
+			tri_y=flr(y/8)*8
 			slomo=true
 			return
 		end
@@ -642,10 +655,19 @@ function slow_mo_check()
 	tf=lerp(tf,1,0.1)--no obstacle
 end
 
+--util coords converters
+function x_to_mx(x,y)
+	return flr((x)/8)+flr((y)/limy)*16
+end
+
+function y_to_my(y)
+	return flr((y)/8)%64
+end
+
 --returns true if crashable obstacle
 --in front of player
 function obstacle_check(x,y)
-	mx=flr((x+4)/8)+flr((x+4)/limy)*16
+	mx=flr((x)/8)+flr((y)/limy)*16
  my=flr((y)/8)%64
  tile=mget(mx,my)
  if not fget(tile,0) then
