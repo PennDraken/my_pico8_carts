@@ -47,10 +47,14 @@ end
 --draw
 function _draw()
 	cls(3)
-	p:draw()
-	for i=1,10 do
-		draw_arr(walls,8,1+i/100)
+	draw_player(p)--player
+	for i=1,5 do--walls
+		draw_arr(walls,8,1+i/75)
 	end
+	--selected square
+	draw_selection()
+	?p.dir
+	?p.dir_look
 end
 
 --draws objects with depth
@@ -58,38 +62,38 @@ end
 --depth=perspecive shift scale
 function draw_arr(arr,s,depth)
 	for o in all(arr) do
-		local x=depth*(s*o.x-c.x-64)+64
-		local y=depth*(s*o.y-c.y-64)+64		
+		local x=depth*(s*o.x-c.x-60)+60
+		local y=depth*(s*o.y-c.y-60)+60
 		spr(o.n,x,y)
 	end
+end
+
+--draws square in front of player
+function draw_selection()
+	local pos=p_look_square(p)
+	pos.x*=8
+	pos.y*=8
+	rect(pos.x-c.x,pos.y-c.y,pos.x+8-c.x,pos.y+8-c.y)
 end
 -->8
 --update
 function _update()
-	input(p)
-	p:update()
+	p.dir=get_dir(0)
+	update_player(p)
 	--camera snapping
 	c.x=p.x-64+4
 	c.y=p.y-64+4
 end
 
 --input for a given player
-function input(p)
-	if btnp(⬅️) then
-		p.dx=-1
-	elseif btnp(➡️) then
-		p.dx=1
-	else
-		p.dx=0
-	end
-		
-	if btnp(⬇️) then
-		p.dy=1
-	elseif btnp(⬆️) then
-		p.dy=-1
-	else
-		p.dy=0
-	end
+function get_dir(player_index)
+	local p=player_index
+ local dirs={nil,0.5,0,nil,0.25,0.375,0.125,nil,0.75,0.625,0.875,nil,nil,nil,nil,nil}
+ local dec=0
+ for i,b in ipairs({btn(⬅️,p),btn(➡️,p),btn(⬆️,p),btn(⬇️,p)}) do
+  dec+=b and (2^(i-1)) or 0
+ end
+ return dirs[dec+1]
 end
 -->8
 --player
@@ -97,31 +101,61 @@ function new_p(x,y)
 	p={}
 	p.x=x--position
 	p.y=y
-	p.dx=0--direction
-	p.dy=0
-	p.sx=0--speed/velocity
-	p.sy=0
-	p.maxs=1--maxspeed
-	p.a=0.3
-	
-	p.update=function(this)
-		local p=this
-		--speed calculation
-		--norm_speed=sqrt(p.sx^2+p.sy^2)
-		p.sx+=p.dx*p.a
-		p.sy+=p.dy*p.a
-		
-		--position calculation
-		p.x+=p.sx
-		p.y+=p.sy
-		this=p
-	end
-	
-	p.draw=function(this)
-		spr(128,this.x-c.x,this.y-c.y)
-	end
+	p.spdx=0--speed
+	p.spdy=0
+	p.spd=0
+	p.max_spd=1--maxspeed
+	p.dir=0
+	p.dir_last=0
+	p.dir_look=0
 	return p
 end
+
+function update_player(p)
+	p.spd=p.dir and p.max_spd or 0
+	p.spdx=p.spd*cos(p.dir)
+	p.spdy=p.spd*sin(p.dir)
+	--rounds only when changing dir
+	if p.dir~=p.dir_last then
+		p.x=round(p.x)
+		p.y=round(p.y)
+	end
+	
+	if p.spd>0 then
+		p.x+=p.spdx
+		p.y+=p.spdy
+	end
+	
+	--update dir look
+	if p.dir!=nil then
+		p.dir_look=p.dir
+	end
+	
+	p.dir_last=p.dir
+end
+
+function draw_player(p)
+	spr(128,p.x-c.x,p.y-c.y)
+end
+
+--returns coords where player is looking
+function p_look_square(p)
+	local x=round(p.x/8)
+	local y=round(p.y/8)
+	x+=round(1*cos(p.dir_look))
+	y+=round(1*sin(p.dir_look))
+	return {x=x,y=y}
+end
+-->8
+--util
+--rounds value up/down
+function round(n)
+ return (n%1<0.5) and flr(n) or ceil(n)
+end
+
+--converts pixel coords to map coords
+
+--
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
