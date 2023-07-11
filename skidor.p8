@@ -94,9 +94,11 @@ function reset_player()
  shake=0.07
  p_height=40
  p_landangle=p_angle
- --if we perform a jump trick
  p_trick=false
  p_jvel=0
+ 
+ --time
+ tf=1
 end
 
 --player variables
