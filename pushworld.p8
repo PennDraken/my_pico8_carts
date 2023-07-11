@@ -188,10 +188,12 @@ function input()
 	if btnp(❎) then
 		pos=p_look_square(p)
 		w=get_wall(walls,pos.x,pos.y)
-		if w!=nil then
+		while w!=nil do
 			local tx=pos.x+round(cos(p.dir_look))
 			local ty=pos.y+round(sin(p.dir_look))
 			start_move_block(w,tx,ty)
+			pos={x=tx,y=ty}--check next block
+			w=get_wall(walls,pos.x,pos.y)
 		end
 	end
 end
