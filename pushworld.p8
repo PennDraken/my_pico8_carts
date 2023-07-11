@@ -6,7 +6,8 @@ function _init()
 	--world
 	map_width=100
 	wall_pal={64,65}
-	walls=gen_world(map_width,100)
+	walls=gen_world(map_width,1000)
+	moving={}--moving blocks
 	--camera
 	c=new_cam(0,0)
 	--player
@@ -30,6 +31,16 @@ function new_wall(n,x,y)
 	return w
 end
 
+--creates a moving wall from a wall block
+function new_moving(o,tx,ty)
+	o.sx=o.x--start position
+	o.sy=o.y
+	o.tx=tx	--target x
+	o.ty=ty	--target y
+	o.p =0  --percentage
+	return o
+end
+
 --returns a table of walls with defined dimensions
 --w   = world width
 --num = num of walls
@@ -50,6 +61,7 @@ function _draw()
 	draw_player(p)--player
 	for i=1,5 do--walls
 		draw_arr(walls,8,1+i/75)
+		draw_arr(moving,8,1+i/75)
 	end
 	--selected square
 	draw_selection()
@@ -78,22 +90,34 @@ end
 -->8
 --update
 function _update()
-	p.dir=get_dir(0)
-	update_player(p)
 	--camera snapping
 	c.x=p.x-64+4
 	c.y=p.y-64+4
+	--player
+	input()
+	update_player(p)
+	--moving blocks
+	update_moving(moving)
 end
 
---input for a given player
-function get_dir(player_index)
-	local p=player_index
- local dirs={nil,0.5,0,nil,0.25,0.375,0.125,nil,0.75,0.625,0.875,nil,nil,nil,nil,nil}
- local dec=0
- for i,b in ipairs({btn(⬅️,p),btn(➡️,p),btn(⬆️,p),btn(⬇️,p)}) do
-  dec+=b and (2^(i-1)) or 0
- end
- return dirs[dec+1]
+--updates all moving blocks
+function update_moving(arr)
+	for o in all(arr) do
+		if o.p<1 then
+			--move wall forward
+			o.x=lerp(o.sx,o.tx,o.p)
+			o.y=lerp(o.sy,o.ty,o.p)
+			o.p+=0.1
+		else
+			--reached target round
+			o.x=o.tx
+			o.y=o.ty
+			--transfer back to walls
+			add(walls,new_wall(o.n,o.x,o.y))
+			--o=nil--delete old
+			del(moving,o)
+		end
+	end
 end
 -->8
 --player
@@ -112,6 +136,7 @@ function new_p(x,y)
 end
 
 function update_player(p)
+	--player movement
 	p.spd=p.dir and p.max_spd or 0
 	p.spdx=p.spd*cos(p.dir)
 	p.spdy=p.spd*sin(p.dir)
@@ -120,17 +145,14 @@ function update_player(p)
 		p.x=round(p.x)
 		p.y=round(p.y)
 	end
-	
 	if p.spd>0 then
 		p.x+=p.spdx
 		p.y+=p.spdy
 	end
-	
 	--update dir look
 	if p.dir!=nil then
 		p.dir_look=p.dir
 	end
-	
 	p.dir_last=p.dir
 end
 
@@ -146,6 +168,42 @@ function p_look_square(p)
 	y+=round(1*sin(p.dir_look))
 	return {x=x,y=y}
 end
+
+--dir input for a given player
+function get_dir(player_index)
+	local p=player_index
+ local dirs={nil,0.5,0,nil,0.25,0.375,0.125,nil,0.75,0.625,0.875,nil,nil,nil,nil,nil}
+ local dec=0
+ for i,b in ipairs({btn(⬅️,p),btn(➡️,p),btn(⬆️,p),btn(⬇️,p)}) do
+  dec+=b and (2^(i-1)) or 0
+ end
+ return dirs[dec+1]
+end
+
+--player input
+function input()
+	--set player direction
+	p.dir=get_dir(0)
+	--player push
+	if btnp(❎) then
+		pos=p_look_square(p)
+		w=get_wall(walls,pos.x,pos.y)
+		if w!=nil then
+			local tx=pos.x+round(cos(p.dir_look))
+			local ty=pos.y+round(sin(p.dir_look))
+			start_move_block(w,tx,ty)
+		end
+	end
+end
+
+--moves a block
+function start_move_block(w,tx,ty)
+	--add block to moving list
+	mw=new_moving(w,tx,ty)
+	add(moving,mw)
+	--remove block from walls
+	del(walls,mw)
+end
 -->8
 --util
 --rounds value up/down
@@ -155,7 +213,20 @@ end
 
 --converts pixel coords to map coords
 
---
+--smoothing function
+function lerp(tar,pos,perc)
+	return (1-perc)*tar + perc*pos;
+end
+
+--returns a wall block at x and y
+function get_wall(arr,x,y)
+	for o in all(arr) do
+		if o.x==x and o.y==y then
+			return o
+		end
+	end
+	return nil
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
