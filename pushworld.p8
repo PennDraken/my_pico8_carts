@@ -33,7 +33,11 @@ function new_wall(n,x,y)
 end
 
 --creates a moving wall from a wall block
-function new_moving(o,tx,ty)
+function new_moving(n,x,y,tx,ty)
+	o={}
+	o.n=n
+	o.x=x
+	o.y=y
 	o.sx=o.x--start position
 	o.sy=o.y
 	o.tx=tx	--target x
@@ -48,10 +52,14 @@ end
 function gen_world(w,perc)
 	local arr={}
 	for x=0,w do
+		arr[x]={}
 		for y=0,w do
 			if rnd(1)<perc and (x*8!=p.x and y*8!=p.y) then
 				local n=rnd(wall_pal)
-				add(arr,new_wall(n,x,y))
+				--add(arr,new_wall(n,x,y))
+				arr[x][y]=n
+			else
+				arr[x][y]=nil
 			end
 		end
 	end
@@ -64,21 +72,33 @@ function _draw()
 	circfill(64,64,64,3)--green
 	for i=1,5 do--walls
 		draw_arr(walls,8,1+i/75)
-		draw_arr(moving,8,1+i/75)
+		draw_moving(moving,8,1+i/75)
 	end
 	draw_player(p)--player
 	--selected square
-	--draw_selection()
+	draw_selection()
 end
 
 --draws objects with depth
 --s    =position scale
 --depth=perspecive shift scale
 function draw_arr(arr,s,depth)
+	for x=0,#arr-1 do
+		for y=0,#arr-1 do
+			if arr[x][y]!=nil then
+				local _x=depth*(s*x-c.x-60)+60
+				local _y=depth*(s*y-c.y-60)+60
+				spr(arr[x][y],_x,_y)
+			end
+		end
+	end
+end
+
+function draw_moving(arr,s,depth)
 	for o in all(arr) do
-		local x=depth*(s*o.x-c.x-60)+60
-		local y=depth*(s*o.y-c.y-60)+60
-		spr(o.n,x,y)
+		local _x=depth*(s*o.x-c.x-60)+60
+		local _y=depth*(s*o.y-c.y-60)+60
+		spr(o.n,_x,_y)
 	end
 end
 
@@ -122,8 +142,8 @@ function update_moving(arr)
 			o.x=o.tx
 			o.y=o.ty
 			--transfer back to walls
-			add(walls,new_wall(o.n,o.x,o.y))
-			--o=nil--delete old
+			--add(walls,new_wall(o.n,o.x,o.y))
+			walls[o.tx][o.ty]=o.n
 			del(moving,o)
 		end
 	end
@@ -142,7 +162,7 @@ function new_p(x,y)
 	p.max_spd=1--maxspeed
 	p.dir=0
 	p.dir_last=0
-	p.dir_look=0
+	p.dir_look=0--direction player is looking
 	return p
 end
 
@@ -152,7 +172,7 @@ function update_player(p)
 	p.spdx=p.spd*cos(p.dir)
 	p.spdy=p.spd*sin(p.dir)
 	--rounds only when changing dir
-	if p.dir~=p.dir_last then
+	if p.dir!=p.dir_last then
 		p.x=round(p.x)
 		p.y=round(p.y)
 	end
@@ -161,11 +181,15 @@ function update_player(p)
 		p.x+=p.spdx
 		p.y+=p.spdy
 		--if collision move player back
-		for o in all(walls) do
-			if box_hit(p.x+(8-p.w)/2,p.y+(8-p.h)/2,p.w,p.h,
-														o.x*8,o.y*8,8,8) then
-				p.x-=p.spdx
-				p.y-=p.spdy
+		for x=0,#walls-1 do
+			for y=0,#walls-1 do
+				if walls[x][y]!=nil then
+					if box_hit(p.x+(8-p.w)/2,p.y+(8-p.h)/2,p.w,p.h,
+																x*8,y*8,8,8) then
+						p.x-=p.spdx
+						p.y-=p.spdy
+					end
+				end
 			end
 		end
 	end
@@ -194,12 +218,12 @@ end
 --dir input for a given player
 function get_dir(player_index)
 	local p=player_index
- local dirs={nil,0.5,0,nil,0.25,0.375,0.125,nil,0.75,0.625,0.875,nil,nil,nil,nil,nil}
- local dec=0
- for i,b in ipairs({btn(⬅️,p),btn(➡️,p),btn(⬆️,p),btn(⬇️,p)}) do
-  dec+=b and (2^(i-1)) or 0
- end
- return dirs[dec+1]
+	local dirs={nil,0.5,0,nil,0.25,0.375,0.125,nil,0.75,0.625,0.875,nil,nil,nil,nil,nil}
+	local dec=0
+	for i,b in ipairs({btn(⬅️,p),btn(➡️,p),btn(⬆️,p),btn(⬇️,p)}) do
+	dec+=b and (2^(i-1)) or 0
+	end
+	return dirs[dec+1]
 end
 
 --player input
@@ -213,30 +237,30 @@ function input()
 	--player push
 	if btnp(❎) then
 		pos=p_look_square(p)
-		w=get_wall(walls,pos.x,pos.y)
-		while w!=nil do
+		n=walls[pos.x][pos.y]
+		while n!=nil do
 			local tx=pos.x+round(cos(p.dir_look))
 			local ty=pos.y+round(sin(p.dir_look))
-			start_move_block(w,tx,ty)
+			start_move_block(n,pos.x,pos.y,tx,ty)
 			pos={x=tx,y=ty}--check next block
-			w=get_wall(walls,pos.x,pos.y)
+			n=walls[pos.x][pos.y]
 		end
 	end
 end
 
 --moves a block
-function start_move_block(w,tx,ty)
+function start_move_block(n,x,y,tx,ty)
 	--add block to moving list
-	mw=new_moving(w,tx,ty)
+	mw=new_moving(n,x,y,tx,ty)
 	add(moving,mw)
 	--remove block from walls
-	del(walls,mw)
+	walls[x][y]=nil
 end
 -->8
 --util
 --rounds value up/down
 function round(n)
- return (n%1<0.5) and flr(n) or ceil(n)
+	return (n%1<0.5) and flr(n) or ceil(n)
 end
 
 --calculates offset by depth to position
@@ -250,10 +274,12 @@ function lerp(tar,pos,perc)
 end
 
 --returns a wall block at x and y
-function get_wall(arr,x,y)
-	for o in all(arr) do
-		if o.x==x and o.y==y then
-			return o
+function get_wall(arr,_x,_y)
+	for x=0,#arr-1 do
+		for y=0,#arr-1 do
+			if x==_x and y==_y then
+				return arr[x][y]
+			end
 		end
 	end
 	return nil
@@ -262,17 +288,17 @@ end
 --collision overlap function
 function box_hit(x1,y1,w1,h1,
  																x2,y2,w2,h2)
- hit=false
- local xd=abs((x1+(w1/2))-(x2+(w2/2)))
- local xs=w1*0.5+w2*0.5
- local yd=abs((y1+(h1/2))-(y2+(h2/2)))
- local ys=h1/2+h2/2
- if xd<xs and 
-    yd<ys then 
-  hit=true 
- end
- 
- return hit
+	hit=false
+	local xd=abs((x1+(w1/2))-(x2+(w2/2)))
+	local xs=w1*0.5+w2*0.5
+	local yd=abs((y1+(h1/2))-(y2+(h2/2)))
+	local ys=h1/2+h2/2
+	if xd<xs and 
+	yd<ys then 
+	hit=true 
+	end
+
+	return hit
 end
 
 --draws a sprite consisting of ids
