@@ -6,13 +6,17 @@ function _init()
 	--player
 	p=new_p(64,64)
 	--world
-	map_width=25
+	map_width=400
 	wall_pal={64,65,66,67,68,69}
 	walls=gen_world(map_width,0.5)
 	moving={}--moving blocks
+	--enemies
+	enemies={}
+	for i=0,30 do
+		add(enemies,new_zombie(flr(rnd(map_width)),flr(rnd(map_width))))
+	end
 	--camera
 	c=new_cam(0,0)
-	
 end
 
 --camera
@@ -69,22 +73,26 @@ end
 --draw
 function _draw()
 	cls(1)--blue
-	circfill(64,64,64,3)--green
+	--circfill(64,64,60,3)--green
+	circfill(p.x-c.x,p.y-c.y,60,3)--green
 	for i=1,5 do--walls
 		draw_arr(walls,8,1+i/75)
 		draw_moving(moving,8,1+i/75)
 	end
+	for e in all(enemies) do
+		draw_enemy(e)
+	end
 	draw_player(p)--player
-	--selected square
-	draw_selection()
+	--draw_selection()
 end
 
 --draws objects with depth
 --s    =position scale
 --depth=perspecive shift scale
 function draw_arr(arr,s,depth)
-	for x=0,#arr-1 do
-		for y=0,#arr-1 do
+	i=get_irange(c.x,c.y)--we dont want to iterate over entire map
+	for x=i.strtx,i.endx do
+		for y=i.strty,i.endy do
 			if arr[x][y]!=nil then
 				local _x=depth*(s*x-c.x-60)+60
 				local _y=depth*(s*y-c.y-60)+60
@@ -117,6 +125,10 @@ function _update60()
 	--player
 	input()
 	update_player(p)
+	--enemies
+	for e in all(enemies) do
+		update_enemy(e)
+	end
 	--moving blocks
 	update_moving(moving)
 end
@@ -181,12 +193,17 @@ function update_player(p)
 		p.x+=p.spdx
 		p.y+=p.spdy
 		--if collision move player back
-		for x=0,#walls-1 do
-			for y=0,#walls-1 do
+		i=get_irange(c.x,c.y)--we dont want to iterate over entire map
+		for x=i.strtx,i.endx do
+			for y=i.strty,i.endy do
 				if walls[x][y]!=nil then
-					if box_hit(p.x+(8-p.w)/2,p.y+(8-p.h)/2,p.w,p.h,
+					--allows movement along wall
+					if box_hit(p.x+(8-p.w)/2,p.y+(8-p.h)/2-p.spdy,p.w,p.h,
 																x*8,y*8,8,8) then
 						p.x-=p.spdx
+					end
+					if box_hit(p.x+(8-p.w)/2-p.spdx,p.y+(8-p.h)/2,p.w,p.h,
+																x*8,y*8,8,8) then
 						p.y-=p.spdy
 					end
 				end
@@ -235,7 +252,7 @@ function input()
 		p.dir=nil
 	end
 	--player push
-	if btnp(❎) then
+	if btnp(❎) and #moving==0 then
 		pos=p_look_square(p)
 		n=walls[pos.x][pos.y]
 		while n!=nil do
@@ -273,17 +290,6 @@ function lerp(tar,pos,perc)
 	return (1-perc)*tar + perc*pos;
 end
 
---returns a wall block at x and y
-function get_wall(arr,_x,_y)
-	for x=0,#arr-1 do
-		for y=0,#arr-1 do
-			if x==_x and y==_y then
-				return arr[x][y]
-			end
-		end
-	end
-	return nil
-end
 
 --collision overlap function
 function box_hit(x1,y1,w1,h1,
@@ -312,6 +318,17 @@ function draw_sprite(x,y,ids)
 		depth+=inc
 	end
 end
+
+--gets iteration range for performance
+function get_irange(x,y)
+	pos={}
+	pos.strtx=max(0,flr(c.x/8))
+	pos.endx =pos.strtx+16
+	pos.strty=max(0,flr(c.y/8))
+	pos.endy =pos.strty+16
+	
+	return pos
+end
 -->8
 --enemy
 function new_zombie(x,y)
@@ -321,12 +338,186 @@ function new_zombie(x,y)
 	e.nt=129
 	e.x=x
 	e.y=y
-	
+	e.w=4
+	e.h=4
+	e.spdx=0--speed
+	e.spdy=0
+	e.spd=0
+	e.max_spd=0.5--maxspeed
+	e.dir=0
+	e.dir_last=0
+	e.dir_look=0--direction player
+	e.path="init"
 	return e
 end
 
-function draw_zombie(e)
-	
+function draw_enemy(e)
+	draw_sprite(e.x,e.y,{e.nb,e.nm,e.nt})
+end
+
+function set_enemy_path(e)
+
+end
+
+function update_enemy(e)
+	--find path
+	--set_enemy_path(e)
+	e.dir=atan2(p.x-e.x,p.y-e.y)
+	--enemy movement
+	e.spd=e.dir and e.max_spd or 0
+	e.spdx=e.spd*cos(e.dir)
+	e.spdy=e.spd*sin(e.dir)
+	--rounds only when changing dir
+	if e.dir!=e.dir_last then
+		e.x=round(e.x)
+		e.y=round(e.y)
+	end
+	if e.spd>0 then
+		--move player
+		e.x+=e.spdx
+		e.y+=e.spdy
+		--if collision move player back
+		--i=get_irange(e.x-60,e.y-60)--we dont want to iterate over entire map
+		--i=get_irange(c.x,c.y)--we dont want to iterate over entire map
+		local i={}
+		i.strtx=max(0,round(e.x/8)-2)
+		i.endx =i.strtx+4
+		i.strty=min(0,round(e.y/8)-2)
+		i.endy =i.strty+4
+		for x=i.strtx,i.endx do
+			for y=i.strty,i.endy do
+				if walls[x][y]!=nil then
+					--allows movement along wall
+					if box_hit(e.x+(8-e.w)/2,e.y+(8-e.h)/2-e.spdy,e.w,e.h,
+																x*8,y*8,8,8) then
+						e.x-=e.spdx
+					end
+					if box_hit(e.x+(8-e.w)/2-e.spdx,e.y+(8-e.h)/2,e.w,e.h,
+																x*8,y*8,8,8) then
+						e.y-=e.spdy
+					end
+				end
+			end
+		end
+	end
+	--update dir look
+	if e.dir!=nil then
+		e.dir_look=e.dir--nil wont be stored
+	end
+	e.dir_last=e.dir
+end
+-->8
+--pathfinder
+function find_path
+(start,
+ goal,
+ estimate,
+ edge_cost,
+ neighbors, 
+ node_to_id, 
+ graph)
+ 
+ -- the final step in the
+ -- current shortest path
+ local shortest, 
+ -- maps each node to the step
+ -- on the best known path to
+ -- that node
+ best_table = {
+  last = start,
+  cost_from_start = 0,
+  cost_to_goal = estimate(start, goal, graph)
+ }, {}
+
+ best_table[node_to_id(start, graph)] = shortest
+
+ -- array of frontier paths each
+ -- represented by their last
+ -- step, used as a priority
+ -- queue. elements past
+ -- frontier_len are ignored
+ local frontier, frontier_len, goal_id, max_number = {shortest}, 1, node_to_id(goal, graph), 32767.99
+
+ -- while there are frontier paths
+ while frontier_len > 0 do
+
+  -- find and extract the shortest path
+  local cost, index_of_min = max_number
+  for i = 1, frontier_len do
+   local temp = frontier[i].cost_from_start + frontier[i].cost_to_goal
+   if (temp <= cost) index_of_min,cost = i,temp
+  end
+ 
+  -- efficiently remove the path 
+  -- with min_index from the
+  -- frontier path set
+  shortest = frontier[index_of_min]
+  frontier[index_of_min], shortest.dead = frontier[frontier_len], true
+  frontier_len -= 1
+
+  -- last node on the currently
+  -- shortest path
+  local p = shortest.last
+  
+  if node_to_id(p, graph) == goal_id then
+   -- we're done.  generate the
+   -- path to the goal by
+   -- retracing steps. reuse
+   -- 'p' as the path
+   p = {goal}
+
+   while shortest.prev do
+    shortest = best_table[node_to_id(shortest.prev, graph)]
+    add(p, shortest.last)
+   end
+
+   -- we've found the shortest path
+   return p
+  end -- if
+
+  -- consider each neighbor n of
+  -- p which is still in the
+  -- frontier queue
+  for n in all(neighbors(p, graph)) do
+   -- find the current-best
+   -- known way to n (or
+   -- create it, if there isn't
+   -- one)
+   local id = node_to_id(n, graph)
+   local old_best, new_cost_from_start =
+    best_table[id],
+    shortest.cost_from_start + edge_cost(p, n, graph)
+   
+   if not old_best then
+    -- create an expensive
+    -- dummy path step whose
+    -- cost_from_start will
+    -- immediately be
+    -- overwritten
+    old_best = {
+     last = n,
+     cost_from_start = max_number,
+     cost_to_goal = estimate(n, goal, graph)
+    }
+
+    -- insert into queue
+    frontier_len += 1
+    frontier[frontier_len], best_table[id] = old_best, old_best
+   end -- if old_best was nil
+
+   -- have we discovered a new
+   -- best way to n?
+   if not old_best.dead and old_best.cost_from_start > new_cost_from_start then
+    -- update the step at this
+    -- node
+    old_best.cost_from_start, old_best.prev = new_cost_from_start, p
+   end -- if
+  end -- for each neighbor
+  
+ end -- while frontier not empty
+
+ -- unreachable, so implicitly
+ -- return nil
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
