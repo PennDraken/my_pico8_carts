@@ -75,12 +75,12 @@ function _draw()
 	cls(1)--blue
 	--circfill(64,64,60,3)--green
 	circfill(p.x-c.x,p.y-c.y,60,3)--green
+	for e in all(enemies) do
+		draw_enemy(e)
+	end
 	for i=1,5 do--walls
 		draw_arr(walls,8,1+i/75)
 		draw_moving(moving,8,1+i/75)
-	end
-	for e in all(enemies) do
-		draw_enemy(e)
 	end
 	draw_player(p)--player
 	--draw_selection()
@@ -119,7 +119,7 @@ function draw_selection()
 end
 -->8
 --update
-function _update60()
+function _update()
 	--camera
 	update_camera()
 	--player
@@ -193,7 +193,13 @@ function update_player(p)
 		p.x+=p.spdx
 		p.y+=p.spdy
 		--if collision move player back
-		i=get_irange(c.x,c.y)--we dont want to iterate over entire map
+		--i=get_irange(p.x,p.y)--we dont want to iterate over entire map
+		i={}
+		local r=1--radius
+		i.strtx=max(0,flr(p.x/8)-r)
+		i.endx =i.strtx+r*2
+		i.strty=max(0,flr(p.y/8)-r)
+		i.endy =i.strty+r*2
 		for x=i.strtx,i.endx do
 			for y=i.strty,i.endy do
 				if walls[x][y]!=nil then
@@ -380,15 +386,17 @@ function update_enemy(e)
 		--i=get_irange(e.x-60,e.y-60)--we dont want to iterate over entire map
 		--i=get_irange(c.x,c.y)--we dont want to iterate over entire map
 		local i={}
-		i.strtx=max(0,round(e.x/8)-2)
-		i.endx =i.strtx+4
-		i.strty=min(0,round(e.y/8)-2)
-		i.endy =i.strty+4
+		local r=1--radius
+		i.strtx=max(0,round(e.x/8)-r)
+		i.endx =i.strtx+r*2
+		i.strty=max(0,round(e.y/8)-r)
+		i.endy =i.strty+r*2
 		for x=i.strtx,i.endx do
 			for y=i.strty,i.endy do
 				if walls[x][y]!=nil then
 					--allows movement along wall
-					if box_hit(e.x+(8-e.w)/2,e.y+(8-e.h)/2-e.spdy,e.w,e.h,
+					ofs=(8-e.w)/2
+					if box_hit(e.x+ofs,e.y+ofs-e.spdy,e.w,e.h,
 																x*8,y*8,8,8) then
 						e.x-=e.spdx
 					end
