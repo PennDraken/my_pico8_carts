@@ -9,11 +9,24 @@ function _init()
 	map_width=100
 	wall_pal={64,65,66,67,68,69}
 	walls=gen_world(map_width,0.5)
+	--path test
+	path=find_path(
+		
+		
+		
+	)
+	stop()
 	moving={}--moving blocks
 	--enemies
 	enemies={}
-	for i=0,30 do
-		add(enemies,new_zombie(flr(rnd(map_width)),flr(rnd(map_width))))
+	for i=0,100 do
+		local x=flr(rnd(map_width))
+		local y=flr(rnd(map_width))
+		if walls[x][y]==nil then
+			add(enemies,new_zombie(x*8,y*8))
+		else
+			i-=1
+		end
 	end
 	--camera
 	c=new_cam(0,0)
