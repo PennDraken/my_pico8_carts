@@ -68,7 +68,7 @@ function convolve(f1,f2,n)
 	end
 	
 	sum=0
-	for k=0,bign do
+	for k=1,bign do
 		--f1[n+k]
 		y1=f1[n+k]
 		--f2[bign-1-k]
@@ -150,7 +150,11 @@ function new_inpbox(x1,y1,x2,y2,f)
 				_y=b.f[_x] or 0
 				line(_x+b.x1,midy,
 									_x+b.x1,midy-_y,6)
-				pset(_x+b.x1,midy-_y,0,7)
+				if _y==0 then
+					pset(_x+b.x1,midy-_y,13)
+				else
+					pset(_x+b.x1,midy-_y,7)
+				end 
 			end
 		else
 			--find highest/lowest value
@@ -161,8 +165,7 @@ function new_inpbox(x1,y1,x2,y2,f)
 				_y=(_y/maxy)*(b.y2-b.y1)/2
 				line(_x+b.x1,midy,
 									_x+b.x1,midy-_y,6)
-													pset(_x+b.x1,midy-_y,0,7)
-
+				pset(_x+b.x1,midy-_y,7)
 			end
 		end
 	end
