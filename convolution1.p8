@@ -8,11 +8,12 @@ function _init()
 	poke(0x5f2d, 1)
 	f1=emptyfunc()
 	f2=emptyfunc()
-	--f1[1]=3
-	--f1[2]=5
-	--f1[3]=2
-	--f2[1]=4
-	--f2[2]=2
+	f1[1]=0
+	f1[2]=0
+	f1[3]=5
+	f1[4]=2
+	f2[1]=4
+	f2[2]=2
 	--?convolve({2,3,0,0},{3},0)
 	--?convolve({2,3,0,0},{3},1)
 	--?convolve({2,3,0,0},{3},2)
@@ -60,7 +61,7 @@ function convolve(f1,f2,n)
 	--find x of the biggest non zero value
 	bign=max(#f1,#f2)
 	while bign!=1 do
-		if f1[bign]==0 or f2[bign]==0 then
+		if f1[bign]==0 and f2[bign]==0 then
 			bign-=1
 		else
 			break
@@ -86,7 +87,7 @@ end
 --array
 function convarr(f1,f2)
 	f={}
-	for x=0,126 do
+	for x=-2,128 do
 		add(f,convolve(f1,f2,x))
 	end
 	return f
