@@ -672,7 +672,7 @@ function obstacle_check(x,y)
 	mx=flr((x)/8)+flr((y)/limy)*16
  my=flr((y)/8)%64
  tile=mget(mx,my)
- if not fget(tile,0) then
+ if not fget(tile,0) and mx<128 then
  	return true--obstacle
  else
  	return false--not obstacle
