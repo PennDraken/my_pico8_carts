@@ -98,8 +98,8 @@ function closest_color(r,g,b)
 		local r2=crgb[1]/f
 		local g2=crgb[2]/f
 		local b2=crgb[3]/f
-  local d=(r2-r1)^2+(g2-g1)^2+(b2-b1)^2
-  
+  --local d=(r2-r1)^2+(g2-g1)^2+(b2-b1)^2
+  local d=abs(r2-r1)+abs(g2-g1)+abs(b2-b1)
   if d<lowd then
   	cout=i-1
   	lowd=d
