@@ -31,6 +31,7 @@ end
 
 
 -->8
+--draw
 function _draw()
  cls(1)
 	--subspr(1,player0.x,player0.y)
@@ -38,6 +39,8 @@ function _draw()
 	--subspr(3,ball.x,ball.y)
 	--spr(3,ball.x+16,ball.y)
 	subsspr(48,0,16,16,ball.x,ball.y)
+ print(stat(2),7)
+
 end
 
 function test_draw()
@@ -115,16 +118,15 @@ end
 function subsspr(sx,sy,sw,sh,dx,dy)
 	--draws sprite n at position x and y
 	--whole pixels
-	local x1=flr(dx)
-	local y1=flr(dy)
+	local x1,y1=flr(dx),flr(dy)
 	for i=0,sw do
 		for j=0,sh do
 			local bgpixel=pget(x1+i,y1+j)
 			--pixels
-			local p1=getpixel(sx,sy,sw,sh,i-1,j-1)
-			local p2=getpixel(sx,sy,sw,sh,i,j-1)
-			local p3=getpixel(sx,sy,sw,sh,i-1,j)
-			local p4=getpixel(sx,sy,sw,sh,i,j)
+			local p1=getspixel(sx,sy,sw,sh,i-1,j-1)
+			local p2=getspixel(sx,sy,sw,sh,i,j-1)
+			local p3=getspixel(sx,sy,sw,sh,i-1,j)
+			local p4=getspixel(sx,sy,sw,sh,i,j)
 			--percenteages
 			local p4dx=x1+1-dx
 			local p4dy=y1+1-dy
@@ -145,7 +147,8 @@ function subsspr(sx,sy,sw,sh,dx,dy)
 			local p4rgb=getrgb(p4,p4perc,bgpixel)
 			local sum=sumrgb({p1rgb,p2rgb,p3rgb,p4rgb})
 			local c=closest_color(sum[1],sum[2],sum[3])			
-			pset(x1+i,y1+j,c)
+			--pset(x1+i,y1+j,c)
+			pset(x1+i,y1+j,7)
 		end
 	end
 end
@@ -194,11 +197,9 @@ end
 function getrgb(c,perc,bgc)
 	--c==0 insert color that is supposed to be transparent
 	if c==nil or c==0 then
-		local rgb=percrgb(perc,_rgb_arr[bgc+1])
-		return rgb
+		return percrgb(perc,_rgb_arr[bgc+1])
 	end
-	local rgb=percrgb(perc,_rgb_arr[c+1])
-	return rgb
+	return percrgb(perc,_rgb_arr[c+1])
 end
 
 function sumrgb(rgbarr)
@@ -228,7 +229,7 @@ function getpixel(n,i,j)
 end
 
 --returns pixel color of given sprite
-function getpixel(sx,sy,sw,sh,i,j)
+function getspixel(sx,sy,sw,sh,i,j)
 	if i<0 or j<0 or i>=sw or j>=sh then
 		return nil--transparent(out of bounds)
 	end
