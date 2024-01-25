@@ -87,22 +87,17 @@ _rgb_arr={{0,0,0},
 function closest_color(r,g,b)
 	local p=_rgb_arr--palette
 	local f=256
-	local r1=r/f
-	local g1=g/f
+	local r1=r/f--f doesnt impact performance
+	local g1=g/f--v much
 	local b1=b/f
-	
 	--find closest color
 	local cout=0--color out
 	local lowd=32767--lowest dist
-	
 	for i=1,#p do
 		local crgb=p[i]
 		local r2=crgb[1]/f
 		local g2=crgb[2]/f
 		local b2=crgb[3]/f
-		--local d=((avgr-r)*0.30)^2
-  --  +((avgg-g)*0.59)^2
-  --  +((avgb-b)*0.11)^2
   local d=(r2-r1)^2+(g2-g1)^2+(b2-b1)^2
   
   if d<lowd then
@@ -146,9 +141,10 @@ function subsspr(sx,sy,sw,sh,dx,dy)
 			local p3rgb=getrgb(p3,p3perc,bgpixel)
 			local p4rgb=getrgb(p4,p4perc,bgpixel)
 			local sum=sumrgb({p1rgb,p2rgb,p3rgb,p4rgb})
+			--closest color has high performance hit
 			local c=closest_color(sum[1],sum[2],sum[3])			
 			--pset(x1+i,y1+j,c)
-			pset(x1+i,y1+j,7)
+			pset(x1+i,y1+j,c)
 		end
 	end
 end
