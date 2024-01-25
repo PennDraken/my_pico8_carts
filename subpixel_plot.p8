@@ -86,18 +86,17 @@ _rgb_arr={{0,0,0},
 --finds closest color in palette
 function closest_color(r,g,b)
 	local p=_rgb_arr--palette
-	local f=256
-	local r1=r/f--f doesnt impact performance
-	local g1=g/f--v much
-	local b1=b/f
+	local r1=r--f doesnt impact performance
+	local g1=g--v much
+	local b1=b
 	--find closest color
 	local cout=0--color out
 	local lowd=32767--lowest dist
 	for i=1,#p do
 		local crgb=p[i]
-		local r2=crgb[1]/f
-		local g2=crgb[2]/f
-		local b2=crgb[3]/f
+		local r2=crgb[1]
+		local g2=crgb[2]
+		local b2=crgb[3]
   --local d=(r2-r1)^2+(g2-g1)^2+(b2-b1)^2
   local d=abs(r2-r1)+abs(g2-g1)+abs(b2-b1)
   if d<lowd then
