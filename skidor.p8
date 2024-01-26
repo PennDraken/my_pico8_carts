@@ -180,7 +180,7 @@ function draw_game()
 	 draw_player()
 	end
 	camera()--reset camera
-	if slomo then
+	if slomo and not p_crash then
 		spr(50,tri_x,tri_y-cy)--danger obstacle
 	end
 	--ui
@@ -497,7 +497,7 @@ function draw_shadows()
 			--object
 			if not fget(mget(mpos.x,mpos.y),0) then
 				--circfill(i*8,j*8,7,6)
-				sspr(96,46,16,16,i*8-10,-cy%8+j*8-16)
+				sspr(96,46,16,16,i*8-10,-cy%8+j*8-14)
 			end
 		end
 	end
