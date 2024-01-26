@@ -39,6 +39,7 @@ function _draw()
 	--subspr(3,ball.x,ball.y)
 	--spr(3,ball.x+16,ball.y)
 	subsspr(48,0,16,16,ball.x,ball.y)
+ sspr(48,0,16,16,ball.x+32,ball.y)
  print(stat(2),7)
 
 end
