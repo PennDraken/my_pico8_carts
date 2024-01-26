@@ -819,7 +819,7 @@ end
 function crash()
 	shake=0.3
  sfx(1)
- p_crash = true
+ p_crash=true
  blood_particles(p_x,p_y-cy)
  green_particles(p_x,p_y-cy)
 end
@@ -1006,8 +1006,8 @@ add(dust, {
 fade=_f,x=_x,y=_y,dx=_dx,dy=_dy,life=_l,orig_life=_l,rad=_s,col=0,grav=_g,p=_p,draw=function(self)
 pal()palt()circfill(self.x,self.y,self.rad,self.col)
 end,update=function(self)
-self.x+=self.dx self.y+=self.dy
-self.dy+=self.grav self.rad*=self.p self.life-=1
+self.x+=self.dx*tf self.y+=self.dy*tf
+self.dy+=self.grav*tf self.rad*=self.p self.life-=1*tf
 if type(self.fade)=="table"then self.col=self.fade[flr(#self.fade*(self.life/self.orig_life))+1]else self.col=self.fade end
 if self.life<0then del(dust,self)end end})
 end
