@@ -123,6 +123,7 @@ function start_game()
 	p_crash = false
 	p_jvel  = 0
 	p_jumping=false
+	p_inshadow=false
 	p_height =0
 	p_width = 6
 	p_trail={}
@@ -491,13 +492,26 @@ end
 --draws shadows of trees
 function draw_shadows()
 	--iterate through all tiles on screen
+	p_inshadow=false--reset on each frame
 	for i=0,15 do
 		for j=0,15 do
+			if cy+j*8<0 then break end
 			mpos=get_mpos(cx+i*8,cy+j*8)
-			--object
+			--object (we draw shadow here)
 			if not fget(mget(mpos.x,mpos.y),0) then
 				--circfill(i*8,j*8,7,6)
-				sspr(96,46,16,16,i*8-10,-cy%8+j*8-14)
+				local shx=i*8-10
+				local shy=-cy%8+j*8-14
+				local shw=16
+				local shh=16
+				sspr(96,46,16,16,shx,shy)
+				--check if player is in shadow
+				local spx=p_x%128
+				local spy=p_y-cy
+				if spx>shx and spy>shy and
+							spx<shx+shw and spy<shy+shh then
+					p_inshadow=true
+				end
 			end
 		end
 	end
