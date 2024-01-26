@@ -798,33 +798,31 @@ function collision_check()
  		--left check
  		local x=(p_x+4)%8
  		if x>3 then
- 			shake=0.3
-			 sfx(1)
-			 p_crash = true
-			 blood_particles(p_x,p_y-cy)
+ 			crash()
 	 	end
  	elseif fget(tile,7) then
  	 --right check
 	 	local x=(p_x+4)%8
  		if x<6 then
- 			shake=0.3
-			 sfx(1)
-			 p_crash = true
-			 blood_particles(p_x,p_y-cy)
+ 			crash()
 	 	end
  	--small check
  	else
 			local x=(p_x+4)%8
  		if x>2 or x<6 then
- 			shake=0.3
-			 sfx(1)
-			 p_crash = true
-			 blood_particles(p_x,p_y-cy)
+ 		 crash()
 	 	end
  	end
  end
 end
 
+function crash()
+	shake=0.3
+ sfx(1)
+ p_crash = true
+ blood_particles(p_x,p_y-cy)
+ green_particles(p_x,p_y-cy)
+end
 -->8
 --win screen/crash screen
 function draw_win()
@@ -931,6 +929,18 @@ function speed_particles(x,y)
    x+4,y+4,rnd(0.5)-dx,rnd(2)-dy,
   	rnd(10),0.5,0,1,
   	{6,7,7,7})
+ end
+end
+
+function green_particles(x,y)
+ dx=p_dx
+ dy=p_dy
+ for i=1,20 do
+  add_new_dust(
+   x+4,y+4,dx*2+rnd(1)-0.5,dy*2+rnd(1)-0.5,
+   --life r g shrink
+  	20,0.5,0,1,
+  	{3})
  end
 end
 
