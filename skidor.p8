@@ -655,6 +655,7 @@ function move_player()
  --player hits wall bounce
  if not (p_x>0-2 and p_x+6<128) then
   p_dx*=-1
+  p_landangle=atan2(p_dx,p_dy)
   sfx(7)
   shake+=0.1*p_speed/p_maxspeed
   p_angle=p_angle-2*(p_angle-0.75)
@@ -687,6 +688,7 @@ function move_player()
    p_jumping=false
    p_height=0
    p_jvel=0
+   p_angle=p_landangle
    if p_trick then
    	shake+=0.05
    	p_speed*=1.4
