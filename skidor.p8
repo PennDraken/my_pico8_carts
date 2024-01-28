@@ -1040,7 +1040,7 @@ function blood_particles(x,y,angle)
 	 add_new_dust(
 		 x+4,y+4,
 		 rnd(2)-2,rnd(2)-2,
-		 rnd(20)+30,rnd(6)+6,0.5,0.9,
+		 rnd(30)+30,rnd(10)+6,0,0.9,
 		 8)
 	end
 	add_new_dust(
