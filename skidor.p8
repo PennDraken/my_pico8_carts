@@ -188,9 +188,7 @@ function draw_game()
 	draw_borders()
 	draw_deaths(1,0)
 	draw_time(clock,128-25,0,15)
-	if best_time!=nil then
-	 draw_time(best_time,128-25,8,59)
-	end
+	if best_time!=nil then draw_time(best_time,128-25,8,59) end
 	draw_warning()--shows upcoming obstacles
 	draw_position()--ui
 	move_camera()
@@ -278,18 +276,16 @@ function set_p_pal()
 	pal(4 ,_pal[6])--hand
 end
 
-_dark_pal={{0,0},{1,0},{2,1},{3,1},{4,2},{5,0},{6,5},{7,6},{8,4},{9,5},{10,9},{11,3},{12,13},{13,1},{14,8},{15,9}}
+_dark_pal={{0,0},{1,0},{2,1},{3,1},{4,2},{5,0},{6,5},{7,6},{8,4},{9,9},{10,9},{11,3},{12,13},{13,1},{14,8},{15,9}}
 --sets dark theme (in shadow)
 function set_dark_pal()
-	for p in all(_dark_pal) do
-		pal(p[1],p[2])
-	end
+	for p in all(_dark_pal) do pal(p[1],p[2]) end
 end
 
 function draw_player()
 	--set_p_pal()
-	if p_inshadow then
-		set_dark_pal()
+	if p_inshadow and not p_jumping then
+		--set_dark_pal()
 	end
 	if p_crash then
 		spr(79,p_x,p_y-cy)
@@ -505,22 +501,23 @@ function draw_shadows()
 	p_inshadow=false--reset on each frame
 	for i=0,15 do
 		for j=0,15 do
-			if cy+j*8<0 then break end
-			mpos=get_mpos(cx+i*8,cy+j*8)
-			--object (we draw shadow here)
-			if not fget(mget(mpos.x,mpos.y),0) then
-				--circfill(i*8,j*8,7,6)
-				local shx=i*8-10
-				local shy=-cy%8+j*8-14
-				local shw=16
-				local shh=16
-				sspr(96,46,16,16,shx,shy)
-				--check if player is in shadow
-				local spx=p_x%128
-				local spy=p_y-cy
-				if spx>shx and spy>shy and
-							spx<shx+shw and spy<shy+shh then
-					p_inshadow=true
+			if cy+j*8>0 then
+				mpos=get_mpos(cx+i*8,cy+j*8)
+				--object (we draw shadow here)
+				if not fget(mget(mpos.x,mpos.y),0) then
+					--circfill(i*8,j*8,7,6)
+					local shx=i*8-10
+					local shy=-cy%8+j*8-14
+					local shw=16
+					local shh=16
+					sspr(96,46,16,16,shx,shy)
+					--check if player is in shadow
+					local spx=p_x%128
+					local spy=p_y-cy
+					if spx>shx and spy>shy and
+								spx<shx+shw and spy<shy+shh then
+						p_inshadow=true
+					end
 				end
 			end
 		end
