@@ -509,7 +509,7 @@ function draw_shadows()
 					local shy=-cy%8+j*8-14
 					local shw=16
 					local shh=16
-					sspr(96,46,16,16,shx,shy)
+					sspr(96,46,16,16,shx-4,shy)
 					--check if player is in shadow
 					local spx=p_x%128
 					local spy=p_y-cy
