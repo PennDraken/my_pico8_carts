@@ -54,15 +54,9 @@ function tri(x,y,w,c)
 	for row=0,w do
 		for col=0,row-1 do
 		 pset(x+row-1,y-col+w-1,c)
-		end
-	end
-	
-	for row=0,w do
-		for col=0,row-1 do
 		 pset(x-row+w*2,y-col+w-1,c)
 		end
 	end
-	--pset(x,y,1)
 end
 
 function _update60()
