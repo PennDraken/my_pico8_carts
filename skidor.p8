@@ -12,28 +12,40 @@ function _init()
  upd=menu_update
 end
 
+pressed_screen = false
+--main menu
 function menu_update()
-	if btnp(❎) or btnp(🅾️) or stat(34)==1 then
+	if pressed_screen then
+		
+	elseif btnp(❎) or btnp(🅾️) or stat(34)==1 then
 	 --todo add player falling animation
 	 --todo option select
-	 start_game()
+	 --start_game()
+	 pressed_screen = true
 	end
 end
 
+options={{"start game"},{"settings",{"slomo:","difficulty:","character look"}}}
+seln=0--selected box
 t=0
 function menu_draw()
 	cls(12)
 	print("s k i d o r",32,24,7)
 	draw_mountain(0,48)
 	draw_mountain(56,24)
- draw_tree(-t%300-16,100,4)
- draw_tree((-t+64)%500-16,116,3)
- draw_tree((-t+96)%700-16,108,4)
- draw_tree((-t+96)%1100-16,100,4)
-	if t%120>60 then
-	 print("press any key to continue",10,120,1)
+	draw_tree(-t%300-16,100,4)
+	draw_tree((-t+64)%500-16,116,3)
+	draw_tree((-t+96)%700-16,108,4)
+	draw_tree((-t+96)%1100-16,100,4)
+	if not pressed_screen then
+		if t%120>60 then
+			print("press any key to continue",10,120,1)
+		else
+			print("press screen to continue",10,120,1)
+		end
 	else
-		print("press screen to continue",10,120,1)
+		print("sTART gAME",10,60,0)
+		print("sETTINGS",10,80,0)
 	end
 	t+=0.5
 end
