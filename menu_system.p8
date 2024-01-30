@@ -5,7 +5,6 @@ function _init()
 	--layouts
 	settings_layout=new_layout(10,30)
 	home_layout=new_layout(10,30)
-
 	--buttons
 	slomo_btn=new_button("slow motion",false)
 	immersive_btn=new_button("immersive",false)
@@ -70,8 +69,7 @@ function new_layout(x,y)
 		
 		for i=1,#this.list do
 			local b=this.list[i]
-			local x=this.x+4
-			local y=this.y+i*8-8+ofs
+			local x=this.x+4 y=this.y+i*8-8+ofs
 			if i==this.seln then
 				local w=#b.text
 				line(x,y+5,x+w*4,y+5,6)
@@ -81,13 +79,9 @@ function new_layout(x,y)
 	end
 	
 	o.update=function(this)
-		if btnp(⬆️) then
-			this.seln=(this.seln-2+#this.list)%#this.list+1
-		elseif btnp(⬇️) then
-			this.seln=(this.seln%#this.list)+1
-		elseif btnp(❎) then
-			this.list[this.seln]:click()
-		end
+		if (btnp(⬆️))	this.seln=(this.seln-2+#this.list)%#this.list+1
+		if (btnp(⬇️)) this.seln=(this.seln%#this.list)+1
+		if (btnp(❎)) this.list[this.seln]:click()
 	end
 	
 	return o
