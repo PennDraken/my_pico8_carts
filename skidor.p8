@@ -8,6 +8,7 @@ function _init()
  --pic2scr(pic)
  best_time=nil--used for record progression
  curr_time=nil
+ init_menu()
  drw=menu_draw
  upd=menu_update
 end
@@ -16,7 +17,7 @@ pressed_screen = false
 --main menu
 function menu_update()
 	if pressed_screen then
-		
+		screen_layout:update()
 	elseif btnp(❎) or btnp(🅾️) or stat(34)==1 then
 	 --todo add player falling animation
 	 --todo option select
@@ -44,8 +45,7 @@ function menu_draw()
 			print("press screen to continue",10,120,1)
 		end
 	else
-		print("sTART gAME",10,60,0)
-		print("sETTINGS",10,80,0)
+		screen_layout:draw()
 	end
 	t+=0.5
 end
@@ -1274,6 +1274,95 @@ local i,r=0,0
   end
   return r
 end--instr
+-->8
+--menu system
+--objects
+function init_menu()
+	--layouts
+	local x=10
+	local y=50
+	settings_layout=new_layout(x,y)
+	home_layout=new_layout(x,y)
+	--buttons
+	slomo_btn=new_button("slow motion",false)
+	immersive_btn=new_button("immersive",false)
+	b3=new_button("immersive",false)
+	back_btn=new_button("back",home_layout)
+	settings_layout.title="settings"
+	settings_layout.list={slomo_btn,immersive_btn,b3,back_btn}
+
+	start_btn=new_button("sTART gAME")
+	start_btn.click=function(this)
+		start_game()
+	end
+	settings_btn=new_button("sETTINGS",settings_layout)
+	home_layout.list={start_btn,settings_btn}
+
+	--set layout to be shown on screen
+	screen_layout=home_layout
+end
+
+function new_layout(x,y)
+	o={title="",
+				list=list,
+				seln=1,--button index to show
+				x=x,
+				y=y}
+	
+	o.draw=function(this)
+  local ofs=0
+  if this.title~="" then
+   print(this.title,this.x+4,this.y,6)
+   ofs=8
+  end
+
+  for i,b in ipairs(this.list) do
+   local x,y=this.x+4,this.y+i*8-8+ofs
+   if i==this.seln then
+    line(x,y+5,x+#b.text*4,y+5,6)
+   end
+   b:draw(x,y)
+  end
+	end
+
+	o.update=function(this)
+		if (btnp(⬆️))	this.seln=(this.seln-2+#this.list)%#this.list+1
+		if (btnp(⬇️)) this.seln=(this.seln%#this.list)+1
+		if (btnp(❎)) this.list[this.seln]:click()
+	end
+	
+	return o
+end
+
+function new_button(text,var)
+	o={text=text,var=var,c=1}
+	
+	o.click=function(this)
+		--toogle boolean
+		if (type(this.var)=="boolean") this.var=not this.var	
+		--change layout
+		if (type(this.var)=="table") screen_layout=var
+	end
+	
+	o.draw=function(this,x,y)
+		print(this.text,x,y,this.c)
+		if type(this.var)=="boolean" then
+			draw_toggle(x+60,y,40,5,this.var)
+		end
+	end
+	
+	return o
+end
+
+function draw_toggle(x,y,w,h,var)
+	rect(x,y+1,x+w,y+h-1,1)
+	local xmid=x+w/2
+	if var then
+		rectfill(xmid,y,x+w,y+5,3)
+	else
+		rectfill(x,y,xmid,y+5,8)
+	end
+end
 __gfx__
 000000000000000000000003300000000bbb00000000bbb0000000000000000000000033333000000000003bbbb0000000000000000000000011110000000000
 000000000000000000000033330000000333bbbbbbbb3330000000000000000000003333333330000000033bbbabb00020000000000000200011110000ddd000
@@ -1301,11 +1390,11 @@ __gfx__
 000000000000000000555555555555555555555553bbbbbb00676000066556601151333306655660188888100111111001116677777777609119999111999999
 333333331111111100090000000000000000000053bbbbbb0667500000bbbb001113333300000000888688800000000001161677777777609999999999999999
 333333331111777700919000000000000000000053bbbbbb6777506703bdbbb011553333000000008806088000ddd00011166667677777769999999999999999
-7337777711117777009190000000000000000000533bbbbb0667767633bbbbbb1151533300000000000600000d9a9d0011161616777777769999999110000000
-37733333111177770991990000000000000000005533bbb3000577603dbbbbbb111515330000000000060000d99a99d011116161677777760000000550000000
-33333333777711110999990000000000000000000553333000057600333bbdb3011111500000000000060000d99a99d001111617767771100000000055000000
-777333337777111199919990000000000000000000055000006777603333bb33066556600000000000060000d999a9d000011111111110000000006655600000
-33377777777711119999999000000000000000000665566000675760033333306665566600000000000600000d999d0000000005500000000000666556666000
+7337777711117777009190000000404400000000533bbbbb0667767633bbbbbb1151533300000000000600000d9a9d0011161616777777769999999110000000
+37733333111177770991990000444440000000005533bbb3000577603dbbbbbb111515330000000000060000d99a99d011116161677777760000000550000000
+333333337777111109999900ff444000000000000553333000057600333bbdb3011111500000000000060000d99a99d001111617767771100000000055000000
+777333337777111199919990000004000000000000055000006777603333bb33066556600000000000060000d999a9d000011111111110000000006655600000
+33377777777711119999999000000040000000000665566000675760033333306665566600000000000600000d999d0000000005500000000000666556666000
 333333331111111100000000000000000000000066655666000666000665566006666660000000000006000000ddd00000000000000000000000006666600000
 00033000000033000000033000000330003300000000330000033000070000700000070000070000000000000033000000003300000330007771177700e00e00
 009ff9000009ff0000009ff000000ff000ff000000099900009999000700007070007000700093300000000000ff00000009990000999900773443770e1001e0

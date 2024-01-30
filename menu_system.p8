@@ -50,7 +50,6 @@ function update_menu()
 end
 -->8
 --objects
---list of buttons, selected n
 function new_layout(x,y)
 	o={title="",
 				list=list,
