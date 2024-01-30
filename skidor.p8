@@ -18,6 +18,8 @@ pressed_screen = false
 function menu_update()
 	if pressed_screen then
 		screen_layout:update()
+		slomo=slomo_btn.var
+		ui_bool=ui_btn.var
 	elseif btnp(❎) or btnp(🅾️) or stat(34)==1 then
 	 --todo add player falling animation
 	 --todo option select
@@ -187,22 +189,24 @@ function draw_game()
 	 draw_player()
 	end
 	camera()--reset camera
-	if slomo and not p_crash then
+	if tf<1 and not p_crash then
 		spr(50,tri_x,tri_y-cy)--danger obstacle
 	end
 	--ui
-	draw_borders()
-	draw_deaths(1,0)
-	draw_time(clock,128-25,0,15)
-	if best_time!=nil then draw_time(best_time,128-25,8,59) end
-	draw_warning()--shows upcoming obstacles
-	draw_position()--ui
-	move_camera()
-	tb_draw()
-	if mouse_enabled then
-	 --print("♥",stat(32),stat(33))
+	if ui_bool then
+		draw_borders()
+		draw_deaths(1,0)
+		draw_time(clock,128-25,0,15)
+		if best_time!=nil then draw_time(best_time,128-25,8,59) end
+		draw_warning()--shows upcoming obstacles
+		draw_position()--ui
+		tb_draw()
+		if mouse_enabled then
+		 --print("♥",stat(32),stat(33))
+		end
+	 --print(stat(1),0,16)--cpu perf
 	end
- --print(stat(1),0,16)--cpu perf
+	move_camera()
 end
 
 --number
@@ -673,10 +677,10 @@ function move_player()
   end
  end
  --move player
- p_x += p_dx*tf
- p_y += p_dy*tf
+ p_x+=p_dx*tf
+ p_y+=p_dy*tf
  
- --slow_mo_check()
+ if (slomo) slow_mo_check()
 
  --height update
  if p_jumping then
@@ -739,11 +743,9 @@ function slow_mo_check()
 			tf=lerp(tf,0.25,0.1)--time factor
 			tri_x=flr(x/8)*8--triangle location
 			tri_y=flr(y/8)*8
-			slomo=true
 			return
 		end
 	end
-	slomo=false
 	tf=lerp(tf,1,0.1)--no obstacle
 end
 
@@ -1285,11 +1287,11 @@ function init_menu()
 	home_layout=new_layout(x,y)
 	--buttons
 	slomo_btn=new_button("slow motion",false)
-	immersive_btn=new_button("immersive",false)
-	b3=new_button("immersive",false)
+	ui_btn=new_button("ui",true)
+	b3=new_button("--",false)
 	back_btn=new_button("back",home_layout)
 	settings_layout.title="settings"
-	settings_layout.list={slomo_btn,immersive_btn,b3,back_btn}
+	settings_layout.list={slomo_btn,ui_btn,b3,back_btn}
 
 	start_btn=new_button("sTART gAME")
 	start_btn.click=function(this)
