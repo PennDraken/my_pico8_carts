@@ -52,32 +52,24 @@ end
 --objects
 --list of buttons, selected n
 function new_layout(x,y)
-	o={}
-	o.from=nil
-	o.title=""
-	o.list=list
-	o.seln=1
-	o.x=x
-	o.y=y
+	o={from=nil,title="",list=list,seln=1,x=x,y=y}
 	
 	o.draw=function(this)
-		local ofs=0
-		if this.title!="" then
-			print(this.title,this.x+4,this.y,6)
-			ofs=8
-		end
-		
-		for i=1,#this.list do
-			local b=this.list[i]
-			local x=this.x+4 y=this.y+i*8-8+ofs
-			if i==this.seln then
-				local w=#b.text
-				line(x,y+5,x+w*4,y+5,6)
-			end
-			b:draw(x,y)
-		end
+  local ofs=0
+  if this.title~="" then
+   print(this.title,this.x+4,this.y,6)
+   ofs=8
+  end
+
+  for i,b in ipairs(this.list) do
+   local x,y=this.x+4,this.y+i*8-8+ofs
+   if i==this.seln then
+    line(x,y+5,x+#b.text*4,y+5,6)
+   end
+   b:draw(x,y)
+  end
 	end
-	
+
 	o.update=function(this)
 		if (btnp(⬆️))	this.seln=(this.seln-2+#this.list)%#this.list+1
 		if (btnp(⬇️)) this.seln=(this.seln%#this.list)+1
@@ -88,25 +80,17 @@ function new_layout(x,y)
 end
 
 function new_button(text,var)
-	o={}
-	o.text=text
-	o.var=var--variable to modify
-	o.c=7
+	o={text=text,var=var,c=7}
 	
 	o.click=function(this)
-		if type(this.var)=="boolean" then
-			this.var=not this.var	
-		elseif type(this.var)=="table" then
-			screen_layout=var
-		end
+		if (type(this.var)=="boolean") this.var=not this.var	
+		if (type(this.var)=="table") screen_layout=var
 	end
 	
 	o.draw=function(this,x,y)
 		print(this.text,x,y,this.c)
 		if type(this.var)=="boolean" then
 			draw_toggle(x+60,y,40,5,this.var)
-		elseif type(this.var)=="table" then
-		
 		end
 	end
 	
