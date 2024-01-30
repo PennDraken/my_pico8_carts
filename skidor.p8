@@ -21,9 +21,6 @@ function menu_update()
 		slomo=slomo_btn.var
 		ui_bool=ui_btn.var
 	elseif btnp(❎) or btnp(🅾️) or stat(34)==1 then
-	 --todo add player falling animation
-	 --todo option select
-	 --start_game()
 	 pressed_screen = true
 	end
 end
@@ -132,14 +129,14 @@ function start_game()
 	p_jvel  = 0
 	p_jumping=false
 	p_inshadow=false
-	p_height =0
+	p_height = 0
 	p_width = 6
 	p_trail={}
 	p_deaths=0
 	score = 0
 	--camera
 	cx = 0
-	cstrty = p_strty
+	cstrty = p_strty-100
 	cy = cstrty
 	cv = 0
 	ca = 0.1
@@ -150,12 +147,11 @@ function start_game()
 	
 	--jumping starting state
 	p_jumping=true
- shake=0.07
- p_height=0
- p_landangle=p_angle
- --if we perform a jump trick
- p_trick=false
- p_jvel=2
+	shake=0.07
+	p_height=100
+	p_landangle=p_angle
+	p_trick=false
+	p_jvel=0
 
 	init_music()
 	reading=false--for textboxes
@@ -799,7 +795,7 @@ function collision_check()
   --if we perform a jump trick
   if pdir!=nil then
    p_trick=true
-   _arr={0.025,0.05,0.1}
+   _arr={0.025,0.05,0.1}--rotation speed LUT
    p_trickspeed=_arr[ceil(p_speed/p_maxspeed*3)]
    --p_trickspeed=_arr[ceil(rnd(3))]
    if pdir==⬅️ then
