@@ -52,7 +52,11 @@ end
 --objects
 --list of buttons, selected n
 function new_layout(x,y)
-	o={from=nil,title="",list=list,seln=1,x=x,y=y}
+	o={title="",
+				list=list,
+				seln=1,--button index to show
+				x=x,
+				y=y}
 	
 	o.draw=function(this)
   local ofs=0
@@ -83,7 +87,9 @@ function new_button(text,var)
 	o={text=text,var=var,c=7}
 	
 	o.click=function(this)
+		--toogle boolean
 		if (type(this.var)=="boolean") this.var=not this.var	
+		--change layout
 		if (type(this.var)=="table") screen_layout=var
 	end
 	
