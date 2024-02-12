@@ -510,11 +510,12 @@ function draw_shadows()
 	for i=0,15 do
 		for j=0,15 do
 			if cy+j*8>0 then--todo check ouofbounds
-				mpos=get_mpos(cx+i*8,cy+j*8)
-				--object (we draw shadow here)
-				if fget(mget(mpos.x,mpos.y),1) then
+				local mpos=get_mpos(cx+i*8,cy+j*8)
+				local tile=mget(mpos.x,mpos.y)
+				--big object
+				if fget(tile,1) then
 					local shx=i*8-10
-					local shy=-cy%8+j*8-14
+					local shy=-cy%8+j*8-13
 					local shw=16
 					local shh=16
 					sspr(96,46,16,16,shx-4,shy)
@@ -525,7 +526,8 @@ function draw_shadows()
 								spx<shx+shw and spy<shy+shh then
 						p_inshadow=true
 					end
-				elseif fget(mget(mpos.x,mpos.y),2) then
+				-- small object
+				elseif fget(tile,2) then
 					--small shadow
 					local shx=i*8-10
 					local shy=-cy%8+j*8-14
@@ -539,6 +541,11 @@ function draw_shadows()
 								spx<shx+shw and spy<shy+shh then
 						p_inshadow=true
 					end
+				--tunnel shadow
+				elseif tile==110 or tile==111 or tile==126 or tile==127 then
+					local shx=i*8
+					local shy=-cy%8+j*8-16
+					sspr(104,56,8,8,shx,shy+8)
 				end
 			end
 		end
@@ -795,6 +802,7 @@ function collision_check()
 		p_trail={{x=p_x,y=p_y-3}}--reset trail
  end
  if (p_tunneling) return
+ 
  --signs
  sign_collision()
   
