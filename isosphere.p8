@@ -4,30 +4,57 @@ __lua__
 --init
 function _init()
 	a=0
+	a2=0
 	pointx=0
 end
 -->8
 --update
 function _update()
 	a+=0.004
-	a=a%1
-	
+	a=a%1--2pi==1
+	a2+=0.003
+	a2=a2%1
+	--pointx=(pointx+0.5)%64
 end
 -->8
 --draw
 function _draw()
 	cls(0)
+	local r=32--radius
 	draw_side_sphere(64+32-1,96,32,a)
 	draw_front_sphere(32,96,32,a)
 	--draw_front_sphere(32,32,32,(a+0.25)%1)
-	pointx=(pointx+1)%64
-	draw_point(32,96,32,pointx-32,10,7,a)
+	px=pointx+4
+	py=5
+	pz=sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz)
+	
+	px=pointx-20
+	py=10
+	pz=sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz)
+	
+	px=pointx-10
+	py=25
+	pz=sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz)
+	
+	px=pointx+20
+	py=-25
+	pz=sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz)
+end
+
+function plot_point(px,py,pz)
+	r=32
+	draw_point_front(32,96,r,px,py,pz)
+	draw_point_side(96,96,r,px,py,pz)
 end
 
 function draw_side_sphere(x,y,r,a)
 	circ(x,y,r,1)
 	--draw lines
-	local n=10
+	local n=5
 	for i=-n,n,2 do
 		local s=(i)*(r/n) -- adjust the step size as needed
 		local x1=x+sqrt(r^2-s^2)
@@ -37,20 +64,20 @@ function draw_side_sphere(x,y,r,a)
 		local p1=rotate_point(x,y,x1,y1,a)
 		local p2=rotate_point(x,y,x2,y2,a)
 		line(p1.x,p1.y,p2.x,p2.y,9)
-		pset(p1.x,p1.y,9)
+		pset(p1.x,p1.y,4)
 		pset(p2.x,p2.y,12)
 	end
 	--state vector
 	local x1=x+5
 	local y1=y+6
 	local p=rotate_point(x,y,x1,y1,a)
-	line(p.x,p.y,x,y,7)
+	--line(p.x,p.y,x,y,7)
 end
 
 function draw_front_sphere(x,y,r,a)
 	circ(x,y,r,1)
 	--draw lines
-	local n=10
+	local n=5
 	for i=-n,n,2 do
 		local s=(i)*(r/n) -- adjust the step size as needed
 		local x1=x+sqrt(r^2-s^2)
@@ -66,12 +93,19 @@ function draw_front_sphere(x,y,r,a)
 end
 
 --draws point on outside of circle
-function draw_point(x,y,r,px,py,pz,a)
-	local p=rotate_point(x,y,x+px,y+pz,a)
-	--now we find width
-	local dx=sqrt(r^2-py^2-px^2)
-	line(x+dx,p.y,x,y,1)
-	pset(x+dx,p.y,7)
+function draw_point_front(x,y,r,px,py,pz,a)
+	local p=rotate_point(x,y,x+pz,y+py,a)
+	line(x+px,p.y,x,y,1)
+	pset(x+px,p.y,7)
+end
+
+function draw_point_side(x,y,r,px,py,pz,a)
+	local p=rotate_point(x,y,x+pz,y+py,a)
+	line(p.x,p.y,x,y,1)
+	pset(p.x,p.y,7)
+	--?px
+	--?py
+	--?pz,7
 end
 
 --rotate point around center coords
