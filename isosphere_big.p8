@@ -3,9 +3,8 @@ version 41
 __lua__
 --init
 function _init()
-	a=0.125
+	a=0.9
 	a2=0
-	pointx=0
 end
 -->8
 --update
@@ -13,8 +12,8 @@ function _update()
 	local v=0.005
 	if (btn(⬆️)) a+=v
 	if (btn(⬇️)) a-=v
-	if (btn(➡️)) a2+=v
-	if (btn(⬅️)) a2-=v
+	if (btn(➡️)) a2-=v
+	if (btn(⬅️)) a2+=v
 	a=a%1
 	a2=a2%1
 end
@@ -22,69 +21,64 @@ end
 --draw
 function _draw()
 	cls(0)
-	local r=32--radius
-	draw_side_sphere(64+32-1,96,32,a)
-	draw_front_sphere(32,96,32,a)
+	local r=64--radius
+	draw_front_sphere(64,64,r,a)
 	--draw_front_sphere(32,32,32,(a+0.25)%1)
-	px=pointx+4
+	px=4
 	py=5
 	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz)
+	plot_point(px,py,pz,7)
 	
-	px=pointx+20
+	px=20
 	py=-25
 	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz)
+	plot_point(px,py,pz,7)
 	
-	px=pointx-10
+	px=-10
 	py=-25
 	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz)
+	plot_point(px,py,pz,7)
 	
-	px=pointx+15
-	py=20
+	px=64
+	py=0
 	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz)
+	plot_point(px,py,pz,7)
+	
+	px=-64
+	py=0
+	pz=sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz,7)
+	
+	px=10
+	py=50
+	pz=-sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz,9)
+	
+	px=10
+	py=-50
+	pz=-sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz,9)
+	
+	px=0
+	py=-50
+	pz=-sqrt(r^2-px^2-py^2)
+	plot_point(px,py,pz,10)
 end
 
-function plot_point(px,py,pz)
-	local r=32
+function plot_point(px,py,pz,c)
+	local r=64
 	local np=ry(px,py,pz,a2)
 	px=np.x
 	py=np.y
 	pz=np.z
-	draw_point_front(32,96,r,px,py,pz)
-	draw_point_side(96,96,r,px,py,pz)
-end
-
-function draw_side_sphere(x,y,r,a)
-	circ(x,y,r,1)
-	--draw lines
-	local n=5
-	for i=-n,n,2 do
-		local s=(i)*(r/n) -- adjust the step size as needed
-		local x1=x+sqrt(r^2-s^2)
-		local y1=y-s
-		local x2=x-sqrt(r^2-s^2)
-		local y2=y-s
-		local p1=rotate_point(x,y,x1,y1,a)
-		local p2=rotate_point(x,y,x2,y2,a)
-		line(p1.x,p1.y,p2.x,p2.y,9)
-		pset(p1.x,p1.y,4)
-		pset(p2.x,p2.y,12)
-	end
-	--state vector
-	local x1=x+5
-	local y1=y+6
-	local p=rotate_point(x,y,x1,y1,a)
-	--line(p.x,p.y,x,y,7)
+	draw_point_front(64,64,r,px,py,pz,c)
 end
 
 function draw_front_sphere(x,y,r,a)
 	circ(x,y,r,1)
 	--draw lines
-	local n=5
-	for i=-n,n,2 do
+	local n=3
+	for i=-n+1,n-1,2 do
 		local s=(i)*(r/n) -- adjust the step size as needed
 		local x1=x+sqrt(r^2-s^2)
 		local y1=y-s
@@ -99,10 +93,14 @@ function draw_front_sphere(x,y,r,a)
 end
 
 --draws point on outside of circle
-function draw_point_front(x,y,r,px,py,pz)
+function draw_point_front(x,y,r,px,py,pz,c)
 	local p=rotate_point(x,y,x+pz,y+py,a)
+	
 	line(x+px,p.y,x,y,1)
-	pset(x+px,p.y,7)
+	if pz>0 then
+		--pset(x+px,p.y,c)
+		circfill(x+px,p.y,1,c)
+	end
 end
 
 function draw_point_side(x,y,r,px,py,pz)
