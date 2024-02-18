@@ -4,16 +4,35 @@ __lua__
 --init
 function init_verts()
 	local verts = {
-		p(1,1,1),
-		p(1,1,-1),
-		p(1,-1,1),
-		p(1,-1,-1),
-		p(-1,1,1),
-		p(-1,1,-1),
-		p(-1,-1,-1),
-		p(-1,-1,1)
+		p(-1, 1, -1),--front
+  p(1, 1, -1),  
+  p(-1, -1, -1), 
+  p(1, -1, -1), 
+  p(-1, 1, 1),--back
+  p(1, 1, 1), 
+  p(-1, -1, 1),
+  p(1, -1, 1)  
 	}
 	return verts
+end
+
+--triangles
+function init_faces()
+ local faces = {
+	 {1,2,3},--front
+	 {2,3,4},
+	 {5,6,7},--back
+	 {6,7,8}, 
+	 {1,2,5},--top
+	 {2,5,6},
+	 {3,7,8},--bottom
+	 {3,4,8},
+	 {1,5,3},--side
+	 {3,7,5},
+	 {4,6,8},--side
+	 {4,2,6},
+ }
+ return faces
 end
 
 
@@ -26,13 +45,7 @@ function _init()
 	mesh={}
 	--add edges
 	verts=init_verts()
-	for p1 in all(verts) do
-		for p2 in all(verts) do
-			if p1!=p2 then
-				add(mesh,{p1,p2})
-			end
-		end
-	end
+	faces=init_faces()
 end
 
 
@@ -44,6 +57,8 @@ function _update()
 	if (btn(⬇️)) a-=v
 	if (btn(➡️)) a2-=v
 	if (btn(⬅️)) a2+=v
+	if (btn(❎)) zoom+=1
+	if (btn(🅾️)) zoom-=1
 	a=a%1
 	a2=a2%1
 end
@@ -52,13 +67,18 @@ end
 function _draw()
 	cls(0)
 	local r=64--radius
-	draw_front_sphere(64,64,r,a)
-	for edge in all(mesh) do
-		local p1=edge[1]
-		local p2=edge[2]
+	--draw_front_sphere(64,64,r,a)
+	for face in all(faces) do
+		local p1=verts[face[1]]
+		local p2=verts[face[2]]
+		local p3=verts[face[3]]
 		screenp1=plot_point(p1.x,p1.y,p1.z,7)
 		screenp2=plot_point(p2.x,p2.y,p2.z,7)
+		screenp3=plot_point(p3.x,p3.y,p3.z,7)
 		line(screenp1[1],screenp1[2],screenp2[1],screenp2[2],4)
+		line(screenp1[1],screenp1[2],screenp3[1],screenp3[2],4)
+		line(screenp2[1],screenp2[2],screenp3[1],screenp3[2],4)
+
 	end
 end
 
