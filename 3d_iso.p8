@@ -2,14 +2,40 @@ pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
 --init
+function init_verts()
+	local verts = {
+		p(1,1,1),
+		p(1,1,-1),
+		p(1,-1,1),
+		p(1,-1,-1),
+		p(-1,1,1),
+		p(-1,1,-1),
+		p(-1,-1,-1),
+		p(-1,-1,1)
+	}
+	return verts
+end
+
+
 function _init()
 	--stores angle information
 	a=0.9
 	a2=0
 	--mesh
+	zoom=40
 	mesh={}
-	add(mesh())
+	--add edges
+	verts=init_verts()
+	for p1 in all(verts) do
+		for p2 in all(verts) do
+			if p1!=p2 then
+				add(mesh,{p1,p2})
+			end
+		end
+	end
 end
+
+
 -->8
 --update
 function _update()
@@ -26,46 +52,14 @@ end
 function _draw()
 	cls(0)
 	local r=64--radius
-	--draw_front_sphere(64,64,r,a)
-	px=4
-	py=5
-	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,7)
-	
-	px=20
-	py=-25
-	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,7)
-	
-	px=-10
-	py=-25
-	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,7)
-	
-	px=64
-	py=0
-	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,7)
-	
-	px=-64
-	py=0
-	pz=sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,7)
-	
-	px=10
-	py=50
-	pz=-sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,9)
-	
-	px=10
-	py=-50
-	pz=-sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,9)
-	
-	px=0
-	py=-50
-	pz=-sqrt(r^2-px^2-py^2)
-	plot_point(px,py,pz,10)
+	draw_front_sphere(64,64,r,a)
+	for edge in all(mesh) do
+		local p1=edge[1]
+		local p2=edge[2]
+		screenp1=plot_point(p1.x,p1.y,p1.z,7)
+		screenp2=plot_point(p2.x,p2.y,p2.z,7)
+		line(screenp1[1],screenp1[2],screenp2[1],screenp2[2],4)
+	end
 end
 
 function plot_point(px,py,pz,c)
@@ -74,7 +68,8 @@ function plot_point(px,py,pz,c)
 	px=np.x
 	py=np.y
 	pz=np.z
-	draw_point_front(64,64,r,px,py,pz,c)
+	p=draw_point_front(64,64,r,px*zoom,py*zoom,pz*zoom,c)
+	return p
 end
 
 function draw_front_sphere(x,y,r,a)
@@ -98,12 +93,14 @@ end
 --draws point on outside of circle
 function draw_point_front(x,y,r,px,py,pz,c)
 	local p=rotate_point(x,y,x+pz,y+py,a)
-	
-	line(x+px,p.y,x,y,1)
+	--line(x+px,p.y,x,y,1)
 	if pz>0 then
 		--pset(x+px,p.y,c)
 		circfill(x+px,p.y,1,c)
+	else
+		circfill(x+px,p.y,1,c)
 	end
+	return {x+px,p.y}
 end
 
 --rotate point around center coords
@@ -123,7 +120,8 @@ function ry(x,y,z,a)
 end
 -->8
 --mesh
-function new_p(x,y,z)
+--point
+function p(x,y,z)
 	o={}
 	o.x=x
 	o.y=y
@@ -131,10 +129,11 @@ function new_p(x,y,z)
 	return o
 end
 
-function new_edge(pa,pb)
+--edge
+function e(p1,p2)
 	o={}
-	o.pa=pa
-	o.pb=pa
+	o.p1=p1
+	o.p2=p2
 	return o
 end
 __gfx__
