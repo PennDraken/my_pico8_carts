@@ -1,0 +1,93 @@
+pico-8 cartridge // http://www.pico-8.com
+version 41
+__lua__
+cls()
+--val1=14
+--poke(0x3200,val1)
+--?peek(0x3200,64),7
+
+
+function _init()
+	note=make_note(0,2,7,0)
+	set_note(0,0,note)
+	set_speed(0,32)
+	effect=make_globalfx(0,0,0,2,2)
+	set_globalfx(0,effect)
+	sfx(0)
+end
+
+t=0
+function _update() 
+	if t>120 then
+		stop()
+	end
+	t+=1
+end
+
+
+-->8
+--this code is public domain, feel free to copy, use, and modify however you'd like
+function make_note(pitch,instr,vol,effect)
+ return {pitch+64*(instr%4),16*effect+2*vol+flr(instr/4)}
+end
+
+function get_note(sfx_index,time_index)
+ local addr=0x3200+68*sfx_index+2*time_index
+ return {peek(addr),peek(addr+1)}
+end
+
+function set_note(sfx_index,time_index,note)
+ local addr=0x3200+68*sfx_index+2*time_index
+ poke(addr,note[1])
+ poke(addr+1,note[2])
+end
+
+function get_speed(sfx_index)
+ return peek(0x3200+68*sfx_index+65)
+end
+
+function set_speed(sfx_index,speed)
+ poke(0x3200+68*sfx_index+65,speed)
+end
+
+function get_loop_start(sfx_index)
+ return peek(0x3200+68*sfx_index+66)
+end
+
+function get_loop_end(sfx_index)
+ return peek(0x3200+68*sfx_index+67)
+end
+
+function set_loop(sfx_index,start,ending)
+ local addr=0x3200+68*sfx_index
+ poke(addr+66,start)
+ poke(addr+67,ending)
+end
+
+--noiz(0,1),buzz(0,1),detune(0,1,2),reverb(0,1,2),dampen(0,1,2)
+function make_globalfx(noiz,buzz,detune,reverb,dampen)
+	local effect = 0
+	effect |= noiz and 2 or 0
+	effect |= buzz and 4 or 0
+	effect += detune * 8
+	effect += reverb * 24
+	effect += dampen * 72
+ return effect
+end
+
+function set_globalfx(sfx_index,effect)
+	local addr=0x3200+68*sfx_index
+ poke(addr+64,effect)
+end
+
+
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+__sfx__
+c1200000004700600010000180003900037000320002f0002c000260002e0001d0001b0001900016000140001300012000120001200012000170001600000000320002e000240001e00000000000000000000000
+01010000350500605010050180503905037050320502f0502c050260502e0501d0501b0501905016050140501305012050120501205012050170501605000000320502e050240501e05000000000000000000000

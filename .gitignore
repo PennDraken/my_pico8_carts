@@ -1,0 +1,8 @@
+
+*.bin
+picocad/spr.png
+picosynth/MANUAL-picoSYNTH-1.2.pdf
+picosynth/picosynth-1.2_windows/picosynth-1.2_windows/data.pod
+picosynth/picosynth-1.2_windows/picosynth-1.2_windows/legal.txt
+picosynth/picosynth-1.2_windows/picosynth-1.2_windows/picosynth-1.2.exe
+picosynth/picosynth-1.2_windows/picosynth-1.2_windows/SDL2.dll
