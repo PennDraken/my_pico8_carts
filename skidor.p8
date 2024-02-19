@@ -172,7 +172,11 @@ end
 -->8
 --draw game
 function draw_game()
-	cls(7)
+	if tf<1 then
+		cls(8)
+	else
+		cls(7)
+	end
 	palt()
 	doshake()
 	draw_shadows()
@@ -748,13 +752,15 @@ function slow_mo_check()
 		end
 		--obstacle
 		if obstacle_check(x,y) then
-			tf=lerp(tf,0.25,0.1)--time factor
+			--tf=lerp(tf,0.25,0.1)--time factor
+			tf=0.25
 			tri_x=flr(x/8)*8--triangle location
 			tri_y=flr(y/8)*8
 			return
 		end
 	end
-	tf=lerp(tf,1,0.1)--no obstacle
+	--tf=lerp(tf,1,0.1)--no obstacle
+	tf=1
 end
 
 --util coords converters
