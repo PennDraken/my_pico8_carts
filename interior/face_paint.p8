@@ -33,9 +33,8 @@ bed_blanket_f_string="020301020804010705050201020403020608010307050602"
 
 colored_bed_v_string=
 "ff990099ff9900660099ff99ff990099ff1900660099ff19ff8000b3ff99008000b3ff99ff8000b30100008000b30100ffb30099ff19ffb30099ff80004c0099ff19004c0099ff80ffb300ccff19ffb300b3ff80004c00b3ff80004c00ccff19ff800033ff9900800033ff99ff8000330100008000330100ff99004cff990066004cff99ff99004cff190066004cff19006600e6ff19ff9900e6ff19006600e6ff00ff9900e6ff0000660000ff19ff990000ff1900660000ff00ff990000ff00ff80003300e60080003300e6ff80003300cc0080003300ccff80000000e60080000000e6ff80000000cc0080000000cc"
-colored_bed_f_string=
-"010602000005080606060a030101010a020c01010c040b06060f0d0e0e0e0b0f0c0606090e0d01010c0e0a06060812060101051307060602180400000315010d0d13080701010616020d0d1505010101171d180d0d191c1a04042427230404232521040421262204042228240404191f1b04041b201c0404201a1c040410191a0707010506000005070806060a090301010a010201010c020406060f100d0e0e0b100f0606090a0e01010c0f0e06060814120101051113060602161800000317150d0d13140801010612160d0d1511050101171e1d0d0d191b1c04042428270404232725040421252604042226280404191d1f04041b1f200404201e1a040403090d0d0d100b0407071a030d060610041907071a0d100606"
-
+colored_bed_f_string
+="010602000005080607070a030101010a020c01010c040b06060f0d0e0e0e0b0f0c0606090e0d01010c0e0a06060812060101051307060602180400000315010d0d13080701010616020d0d1505010101171d180707191c1a04042427230404232521040421262204042228240404191f1b04041b201c0404201a1c040410191a0707010506000005070807070a090301010a010201010c020406060f100d0e0e0b100f0606090a0e01010c0f0e06060814120101051113060602161800000317150d0d13140801010612160d0d1511050101171e1d0d0d191b1c04042428270404232725040421252604042226280404191d1f04041b1f200404201e1a040403090d0d0d100b0407071a030d060610041907071a0d100606"
 
 
 ------------------------------------------------------------------------------------------------------------
@@ -1298,7 +1297,6 @@ scene_index=1
 scene_list=
 {
 {load_room, update_room, draw_room_background},
-{load_fox_dynamic,update_fox_dynamic,draw_fox_background},
 {load_temple,update_temple,draw_temple_background},
 {load_factory,update_factory,draw_factory_background}
 }
@@ -1381,7 +1379,10 @@ function _update()
 		if(scene_index>#scene_list)scene_index=1
 		load_scene(scene_list[scene_index][1],scene_list[scene_index][2],scene_list[scene_index][3])
 	end
-
+	if btnp(5)then
+		export_object_face_string(object_list[1])
+	end
+	
 	local t=stat(1)
 	handle_buttons() -- handle default buttons for player-- this can be overwritten obviously.
 	update_player() -- update the player with default movement, stopping at obstacles
@@ -1509,6 +1510,41 @@ function _init()
 	--load_scene(load_fox_dynamic,update_fox_dynamic,draw_fox_background)
 	load_scene(scene_list[scene_index][1],scene_list[scene_index][2],scene_list[scene_index][3])
 end
+-->8
+--export
+function export_object_face_string(object)
+	--printh('collision data: xpos='..xpos..' ypos='..ypos, '@clip')
+	--exports object data as compressed string
+	local model_f_string = ""
+
+	for i=1,#object.faces do
+		f=object.faces[i]
+		-- 3 verts + 2 color values
+		for j=1,5 do
+			--print(f[j],7)
+			local val=f[j] --get value of face
+			val=min(val,255)
+			local hex_string=tohex(flr(val))
+			--pad with 0 if low width
+			if #hex_string==1 then
+				hex_string="0"..hex_string
+			end
+			model_f_string = model_f_string..hex_string
+		end
+		print(model_f_string,7)
+		--stop()
+	end
+	printh("model_f_string='"..model_f_string.."'", '@clip')
+end
+
+function tohex(v) 
+	local s,l,r=tostr(v,true),3,11
+	while(ord(s,l)==48) l+=1
+	while(ord(s,r)==48) r-=1
+	return sub(s,min(l,6),r>7 and r or 6)
+end
+
+
 __gfx__
 77700000000000000000000000000000000000000000000000000000000000005555555555555555555555550000000000000000000000000000000000000000
 77000000055555550666666607777777000c100000000000000cc000000000005666666556666665566666650111111101111111011111110222222202222222
