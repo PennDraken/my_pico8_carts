@@ -22,12 +22,24 @@ __lua__
 --exported from blender into these lists. If someone is in the
 --mood to write a conversion scrip that would be really awesome.
 
-fox_v_string="fe7106e700c6fec605aeffebfe1404b600d8fe6605e001f9fe710734027dfe4404b701b1ff8b0a06ffabff0b099affedff870a590009ff1b0a7f0055ff3d03c6fd3dfedd0350fdbdff2004dbfe4403060356fda9027d0504fdf4029a04a7ffc5fd5d0041fdf7fd0100ccfefbfd4000e7fd49feb102d6fd21fe2101d9fe0afded028afe43fe9d03acffb9feda048effb8fdf408580070fe9b08b7ffeffefa073e0022fe6403060010fe98039a0038fed8028bff84fe5b022e008afe2c0344012bfd1b0162fe5ffd7509720219fdd50a210283fe5d0a870114fc8f081b016dfc3608fb01c4029f0154fd2702ba02cbfce9fdb00947010d004d0a860072013d09ac01b5015508a100af01e905af002cfdb90110fc4600430775ffbdff36086effccfdbb09ec00e5005e069cff2d012006acffd000fa05ecfdbefdbf005ffc21fe9300d0fb63ff05033ffcd5034d0271ff3203360143fd73ff600bb0ffd6ff550bd70064ff6c0aef012400560a970157000609a3ffe3015f0484fc970007050bfd1dffc70acbffd1ffce06c0ff77fdc7008dfc96feaa03daff3cfda401c0fff2fd96011f000eff440272fc65ff090585ff69ffac061eff0e01d0061a00da017e06ce00affe0b07b80232fdbc07f20102021f007afc8e01050051fb7f01cd0278fbeefe2701d4ff6afd84019efeaafea201bdfd13fd360054ff40fec5032efe91033a0116ff22ff7903a5fcfdfe6801acfc32fd9c016dfd6301a8072f015afc9908430266ff870168fc77fef90aef00df012103dffc3afea0053c027e005502ecfbf9ffff00e9fb2401a300e000ad020f0053012a024d005f0018ffa6009d02ccffaf00b8017cfee100ce0195fe9400e3007dfe8d00ee0124fe8901fd012eff7c0b7c03dbffe20a5203d600460ad1033200dc0816030bffaf09ca03d0ff3f09d70333fef608c203c4ff71093c03acfe3c08570313fee5fffd027afe4d00920213009d014afbae011d08e3029600dc076402cdfeae026f019fff8f01b50166ffd7031b0199002103c80234ffdb00f00219006e00d80249ff3f0aa9034bffa40a4e036f029603370018015c025100e8026f021100f8fdc80093fff7012b01c301d900e903a6026f0116005b0151032f02210007007206a402e0ffb707e70375ff62050702f6fde0092d02a801f7051800f900df04f902e6017a044801fffdb7002701beff5b0ab40236ff690bb70361ffd10052fb3aff6104160230ff1e0a8a028bfd75fffcff59fd48fffcff2afd59fffcfe94fdd0fffc0193fe03fffc015dfdddfffc01f2fee1fffc0276feb6fffc008ffec4fffcfbe4fe1cfffc022bfee2fffc02790257fffcfd84021afffc00c1023ffffcfd44026cfffcff880024fffc02efff72fffc0311ffdffffcfb6c0272fffcfdd2026dfffcfd8e02a1fffcff2bfdadfffcfceefd82fffcfda9fe3dfffcfc20fe6afffcfc08fe7dfffc006afe05fffc01410093fffc016f004bfffc02dc0060fffcfb88fe93fffcfc030179fffcfc2000cffffc013c011dfffcfbc101a1fffc0138fee4fffc0274fee8fffc0266fee9fffc026afeeafffc026ffef1fffc02870203fffc0129"
+bed_wood_v_string="ff9900330100006600330100ff990033ff0000660033ff00ff9900000100006600000100ff990000ff0000660000ff00ff990033ff1900660033ff19ff990000ff1900660000ff19ff99003300e60066003300e6ff99000000e60066000000e6ffb300330100ffb30033ff00ffb300000100ffb30000ff00004c00330100004c0033ff00004c00000100004c0000ff00ff9900ccff00006600ccff00ff990080ff0000660080ff00ff9900ccff00006600ccff00"
+bed_wood_f_string="1207030a08040d05011002060b03071301051506021804081904031c1d1b1214070a0c080d0f05100e020b0903131101151706181604191a041c1e1d"
+bed_pillow_v_string="ffb30080ff66004c0080ff66ffb30099ff19004c0099ff19"
+bed_pillow_f_string="020301020403"
+bed_mattress_v_string="ff9900330100006600330100ff990033ff0000660033ff00ff990080ff00ff990080010000660080010000660080ff00"
+bed_mattress_f_string="070506080204060301070102070805080702060503070601"
+bed_blanket_v_string="ff8000850119008000850119ff80009eff660080009eff66ff8000380119008000380119ff800051ff6600800051ff66"
+bed_blanket_f_string="020301020804010705050201020403020608010307050602"
 
+colored_bed_v_string="fecc00330100ff9900330100fecc0033ff00ff990033ff00fecc00000100ff9900000100fecc0000ff00ff990000ff00fecc0033ff19ff990033ff19fecc0000ff19ff990000ff19fecc003300e6ff99003300e6fecc000000e6ff99000000e6fee600330100fee60033ff00fee600000100fee60000ff00ff8000330100ff800033ff00ff8000000100ff800000ff00fecc0080ff00fecc00800100ff9900800100ff990080ff00fee60080ff66ff800080ff66fee60099ff19ff800099ff19fecc00b3ff00ff9900b3ff00feb300850100ffb300850100feb3009eff66ffb3009eff66feb300380100ffb300380100feb30051ff66ffb30051ff66"
+colored_bed_f_string="12070304040a080404040d0501040410020604040b030704041301050404150602040418040804041b191a0d0d1c020406061a0301040419040304041b01020d0d1e1f1d0d0d1c211906062425230404242a260404232927040412140704040a0c0804040d0f050404100e0204040b090304041311010404151706040418160404041b1c190d0d1c1b0206061a19030404191c0404041b1a010d0d1e201f0d0d1c22210606242625040424282a04042325290404"
+
+
+------------------------------------------------------------------------------------------------------------
+fox_v_string="fe7106e700c6fec605aeffebfe1404b600d8fe6605e001f9fe710734027dfe4404b701b1ff8b0a06ffabff0b099affedff870a590009ff1b0a7f0055ff3d03c6fd3dfedd0350fdbdff2004dbfe4403060356fda9027d0504fdf4029a04a7ffc5fd5d0041fdf7fd0100ccfefbfd4000e7fd49feb102d6fd21fe2101d9fe0afded028afe43fe9d03acffb9feda048effb8fdf408580070fe9b08b7ffeffefa073e0022fe6403060010fe98039a0038fed8028bff84fe5b022e008afe2c0344012bfd1b0162fe5ffd7509720219fdd50a210283fe5d0a870114fc8f081b016dfc3608fb01c4029f0154fd2702ba02cbfce9fdb00947010d004d0a860072013d09ac01b5015508a100af01e905af002cfdb90110fc4600430775ffbdff36086effccfdbb09ec00e5005e069cff2d012006acffd000fa05ecfdbefdbf005ffc21fe9300d0fb63ff05033ffcd5034d0271ff3203360143fd73ff600bb0ffd6ff550bd70064ff6c0aef012400560a970157000609a3ffe3015f0484fc970007050bfd1dffc70acbffd1ffce06c0ff77fdc7008dfc96feaa03daff3cfda401c0fff2fd96011f000eff440272fc65ff090585ff69ffac061eff0e01d0061a00da017e06ce00affe0b07b80232fdbc07f20102021f007afc8e01050051fb7f01cd0278fbeefe2701d4ff6afd84019efeaafea201bdfd13fd360054ff40fec5032efe91033a0116ff22ff7903a5fcfdfe6801acfc32fd9c016dfd6301a8072f015afc9908430266ff870168fc77fef90aef00df012103dffc3afea0053c027e005502ecfbf9ffff00e9fb2401a300e000ad020f0053012a024d005f0018ffa6009d02ccffaf00b8017cfee100ce0195fe9400e3007dfe8d00ee0124fe8901fd012eff7c0b7c03dbffe20a5203d600460ad1033200dc0816030bffaf09ca03d0ff3f09d70333fef608c203c4ff71093c03acfe3c08570313fee5fffd027afe4d00920213009d014afbae011d08e3029600dc076402cdfeae026f019fff8f01b50166ffd7031b0199002103c80234ffdb00f00219006e00d80249ff3f0aa9034bffa40a4e036f029603370018015c025100e8026f021100f8fdc80093fff7012b01c301d900e903a6026f0116005b0151032f02210007007206a402e0ffb707e70375ff62050702f6fde0092d02a801f7051800f900df04f902e6017a044801fffdb7002701beff5b0ab40236ff690bb70361ffd10052fb3aff6104160230ff1e0a8a028bfd75fffcff59fd48fffcff2afd59fffcfe94fdd0fffc0193fe03fffc015dfdddfffc01f2fee1fffc0276feb6fffc008ffec4fffcfbe4fe1cfffc022bfee2fffc02790257fffcfd84021afffc00c1023ffffcfd44026cfffcff880024fffc02efff72fffc0311ffdffffcfb6c0272fffcfdd2026dfffcfd8e02a1fffcff2bfdadfffcfceefd82fffcfda9fe3dfffcfc20fe6afffcfc08fe7dfffc006afe05fffc01410093fffc016f004bfffc02dc0060fffcfb88fe93fffcfc030179fffcfc2000cffffc013c011dfffcfbc101a1fffc0138fee4fffc0274fee8fffc0266fee9fffc026afeeafffc026ffef1fffc02870203fffc0129"
 fox_f_string="01020301040504010306040307080909080a0b0c0d0e0f10111213141516170218191a1b1c1d1e1f201c21131222232425261927280e291a192a2b2c2d100f2e13212f1b30222431323334342d0f352e360c0b370e3839280f0e332d342a3a3b2a3c3d072a3e3e08073f40342a413a1926291b2f42400b0d35432e4417180a4109412a07451246470b40481b49021b484a2d4b014c4d3e30084e4f50270e39511c1e5115521e16511553525412111e4455284e5038563947570b160c144551521c2003200603322f333a410a582e59525859312408262229223129493234400d4902011b48490d2c2f3e2c5a4b4b332c1848441a301b01191b5b262532422f254d4c3d2b2a503f280c16550d44483e2f30440c55475c531453152152595116154b2d3303021717441e171e1d1c031d31081a301a081b4249014d1955161e180248332f2c4934405d3a0a3249424d25194c01053f340f3b3c2a2a2c3e29311a505e3f375747431113351143240a082112455f040628274e604740440d0c57370b475314471437525358461c45592e21140c3743132e283f0f4552215d3b3a171d03245d0a451c5161585361535c626364656667681f46696a686b6c6d6e6c6f707172057173746775766050776e78797a7b7c7d7e7f7080686a1f697567362e58380e10677a7969676a1f1c468182838468467e8586667a675b254c8782858883648446126774657d657e657d66898a8b058a715b738c8d5a8e775a2b108d818c232286858f857e87586136868f8e6287638287625688647569905e6040045f8b91926d7170238d828180706f614f9389788a8a058b8183886c6b802b6d6c6e728a828d8f56388894067b79206a7d7a66504f760941072b5a2c2391243d916d9123953d6d2b3d3c9171238c8c225b3881886b6d92957f6b956b9270726f6c806f6c6e776f726e7f9570952370718c738a786e8a72718b5f94867c7e764f61772b6c24915d5b4c735b2226785a778e5a894b5a4a5a8d4a8d2d4a8b05041254848f858247605c7b7d7c5d3c3b8382626a201f7b06790620796b7f80913c5d78895a06945f8e898b7c8e8b10813864836260765c8d8e8f947b7c8e7c86947c8b7b7a7d67796a5c76614c0573403f5e5e50602d8d10959291a09f9cb5b74fb54f4ea1a34ea14e27a9a127a92739989754985411aead35ae3536a79e93abac11ab1135a8a939a83956aaa856a3b54eac9811af9d68af6884bda665bd65749b9f759b7590a6a565b6b8879796849784549db068a2a464b09a69b06968b2b17e9a99909a90699fa0749f7475b3a793b3934f9eb4619e6193bea264be6463b4ae36b43661a4aa56a45664b1b687b1877e96af84999b90a5b27ea57e65b8be63b86387a09c74babb749cb974b9ba74adab35b7b34fbcbd74bbbc74"
 
 pyramid_v_string="0000fdf0fc000376fdf00200000003970000fc89fdf00200"
-
 pyramid_f_string="020304010302040301010204"
 
 column_v_string="fe00fffd0200fe00fffdfe000200fffdfe000200fffd0200fe0001140200fe000114fe0002000114fe00020001140200fef5029c010afef5029cfef5010a029cfef5010a029c010a0000103c0179fe86103c00000000103cfe860179103c0000000011580289fd761158000000001158fd76028911580000"
@@ -90,14 +102,37 @@ end
 
 function read_face()
 	f={}
+	--verts 1 to 3
 	for i=1,3 do
 		text=sub(cur_string,cur_string_index,cur_string_index+2)
 		value=read_byte(text)
+		--print(value)
+
 		f[i]=value
 		cur_string_index+=2
 	end
+	--color test
+	--f[4]=7
+	--f[5]=7
+	--print(f[4])
 	return f
-end		
+end
+
+function read_colored_face()
+	f={}
+	--verts 1 to 3 + 2 color values
+	for i=1,5 do
+		text=sub(cur_string,cur_string_index,cur_string_index+2)
+		value=read_byte(text)
+		--print(value)
+
+		f[i]=value
+		cur_string_index+=2
+	end
+	--color test
+	--print(f[4])
+	return f
+end	
 
 function read_vector_string(string)
 	vector_list={}
@@ -118,6 +153,16 @@ function read_face_string(string)
 	end
 		return face_list
 end
+
+function read_colored_face_string(string)
+	face_list={}
+	load_string(string)
+	while(cur_string_index<#string)do
+		face=read_colored_face()
+		add(face_list,face)
+	end
+		return face_list
+end
 ------------------------------------------------------------end hex string data handling--------------------------------
 
 
@@ -128,21 +173,17 @@ end
 k_color1=4
 k_color2=5
 
-k_screen_scale=80
+k_screen_scale=120
 k_x_center=64
 k_y_center=64
 
-
-
-z_clip=-3
+z_clip=0
 z_max=-50
 
 k_min_x=0
 k_max_x=128
 k_min_y=0
 k_max_y=128
-
-
 
 --These are used for the 2 scanline color shading scheme
 double_color_list=	{{0,0,0,0,0,0,0,0,0,0},
@@ -198,26 +239,22 @@ double_color_list=	{{0,0,0,0,0,0,0,0,0,0},
 k_ambient=.3
 function color_faces(object,base)
 	--local p1x,p1y,p1z,p2x,p2y,p2z,p3x,p3y,p3z
-	
-		
-		for i=1,#object.faces do
-			local face=object.faces[i]
-		--for face in all(object.faces)do
-			local p1x=object.t_vertices[face[1]][1]
-			local p1y=object.t_vertices[face[1]][2]
-			local p1z=object.t_vertices[face[1]][3]
-			local p2x=object.t_vertices[face[2]][1]
-			local p2y=object.t_vertices[face[2]][2]
-			local p2z=object.t_vertices[face[2]][3]
-			local p3x=object.t_vertices[face[3]][1]
-			local p3y=object.t_vertices[face[3]][2]
-			local p3z=object.t_vertices[face[3]][3]		
-		
-		
-	
-			local nx,ny,nz = vector_cross_3d(p1x,p1y,p1z,
-								p2x,p2y,p2z,
-								p3x,p3y,p3z)
+	for i=1,#object.faces do
+		local face=object.faces[i]
+		-- load every point in triangle face
+		local p1x=object.t_vertices[face[1]][1]
+		local p1y=object.t_vertices[face[1]][2]
+		local p1z=object.t_vertices[face[1]][3]
+		local p2x=object.t_vertices[face[2]][1]
+		local p2y=object.t_vertices[face[2]][2]
+		local p2z=object.t_vertices[face[2]][3]
+		local p3x=object.t_vertices[face[3]][1]
+		local p3y=object.t_vertices[face[3]][2]
+		local p3z=object.t_vertices[face[3]][3]		
+		--print(face[1])
+		local nx,ny,nz = vector_cross_3d(p1x,p1y,p1z,
+							p2x,p2y,p2z,
+							p3x,p3y,p3z)
 
 	
 		nx,ny,nz = normalize(nx,ny,nz)
@@ -227,7 +264,10 @@ function color_faces(object,base)
 		-- print(nx.." "..ny.." "..nz,10,i*8+8,8) 
 		-- flip()
 		if(object.color_mode==k_multi_color_dynamic)then
+			--here we load the color at index 4 of the face
 			face[4],face[5]=color_shade(object.base_faces[i][4], mid( b,0,1)*(1-k_ambient)+k_ambient )
+			stop()
+			--print("Here")
 		else
 			face[4],face[5]=color_shade(base, mid( b,0,1)*(1-k_ambient)+k_ambient )
 		end
@@ -469,7 +509,6 @@ end
 
 
 function new_triangle(p1x,p1y,p2x,p2y,p3x,p3y,z,c1,c2)
-
 	add(triangle_list,{p1x=p1x,
 	                   p1y=p1y,
 	                   p2x=p2x,
@@ -517,16 +556,10 @@ function cam_transform_object(object)
 			vertex[1],vertex[2],vertex[3]=rotate_cam_point(vertex[1],vertex[2],vertex[3])
 		
 		end
-	
-
 	end
 end
 
 function transform_object(object)
-	
-
-		
-	
 	if(object.visible)then
 		generate_matrix_transform(object.ax,object.ay,object.az)
 		for i=1, #object.vertices do
@@ -542,8 +575,6 @@ function transform_object(object)
 end
 
 function generate_matrix_transform(xa,ya,za)
-
-	
 	local sx=sin(xa)
 	local sy=sin(ya)
 	local sz=sin(za)
@@ -560,12 +591,9 @@ function generate_matrix_transform(xa,ya,za)
 	mat02=sx*sz*cy-cx*sy
 	mat12=sx*cz
 	mat22=sx*sz*sy+cx*cy
-
 end
 
 function generate_cam_matrix_transform(xa,ya,za)
-
-	
 	local sx=sin(xa)
 	local sy=sin(ya)
 	local sz=sin(za)
@@ -852,7 +880,6 @@ function handle_buttons()
 	end
 	
 	if(btn(3))then
-
 		player.vx=vx
 		player.vy=vy
 		player.vz=vz
@@ -870,7 +897,7 @@ function init_player()
 	player.max_z=4.5
 	
 	player.x=0
-	player.y=8
+	player.y=1.6
 	player.z=15
 	
 	player.vx=0
@@ -1014,7 +1041,6 @@ function shade_trifill( x1,y1,x2,y2,x3,y3, color1, color2)
 			nex=x2
 		end
 
-		  
 		if(y3!=y2)then
 			local delta_sx=(x3-x1)/(y3-y1)
 			local delta_ex=(x3-x2)/(y3-y2)
@@ -1039,7 +1065,6 @@ function shade_trifill( x1,y1,x2,y2,x3,y3, color1, color2)
 			--rectfill(nsx,y3,nex,y3,color1)
 			if(band(y,1)==0)then rectfill(nsx,y3,nex,y3,color1) else rectfill(nsx,y3,nex,y3,color2) end
 		end
-
 end
 
 
@@ -1055,10 +1080,8 @@ function center_text(text,x,y,c)
 	print(text,x,y-1,1)
 	print(text,x,y+1,1)
 	
-	
 	print(text,x,y,c)
 end
-
 
 
 function init_stars()
@@ -1089,10 +1112,6 @@ function draw_background()
 	end
 end
 
-
-
-
-
 function start_timer()
 	timer_value=stat(1)
 end
@@ -1115,19 +1134,12 @@ function load_factory()
 	--factory_data[-1][0]=2
 	--factory_data[0][1]=2
 	--factory_data[0][-1]=2
-	
-
-	
-
 	player.x=10
 	player.z=10
 	for i=-2,2 do
 		for j=-2,2 do
-			
-				if(factory_data[i][j]==1)load_object(read_vector_string(factory_v_string),read_face_string(factory_f_string),i*20,0,j*20,0,0,0,true,k_colorize_static,6)
-				if(factory_data[i][j]==2)load_object(read_vector_string(tower_v_string),read_face_string(tower_f_string),i*20,0,j*20,0,0,0,true,k_colorize_static,6)
-				
-			
+			if(factory_data[i][j]==1)load_object(read_vector_string(factory_v_string),read_face_string(factory_f_string),i*20,0,j*20,0,0,0,true,k_colorize_static,6)
+			if(factory_data[i][j]==2)load_object(read_vector_string(tower_v_string),read_face_string(tower_f_string),i*20,0,j*20,0,0,0,true,k_colorize_static,6)
 		end
 	end
 	
@@ -1145,7 +1157,6 @@ function update_factory()
 	if(player.x<-10)player.x+=20
 	if(player.z>10)player.z-=20
 	if(player.z<-10)player.z+=20
-
 end
 
 function draw_factory_background()
@@ -1166,7 +1177,7 @@ end
 function load_fox_dynamic()
 	fox_v=read_vector_string(fox_v_string)
 	fox_f=read_face_string(fox_f_string)
-	fox=load_object(fox_v,fox_f,0,0,0,0,-.35,0,false,k_colorize_dynamic,8)
+	fox=load_object(fox_v,fox_f,0,0,-10,0,-.35,0,false,k_colorize_dynamic,8)
 end
 
 function update_fox_dynamic()
@@ -1174,9 +1185,7 @@ function update_fox_dynamic()
 end
 
 function load_temple()
-	
 	init_stars()
-
 	for i=1,5 do
 		l=30
 		x=sin(i/5)*l
@@ -1217,7 +1226,6 @@ end
 function draw_temple_background()
 	rectfill(0,0,127,64,14)
 	draw_stars()
-
 	
 	rectfill(0,64,127,127,5)
 	
@@ -1244,15 +1252,11 @@ end
 
 function draw_fox_background()
 	cls(9)
-	
 	srand(2)
 	for i=1,8 do
 		circfill((rnd(167)+cur_frame)%167-20,rnd(167),rnd(20),10)
 	end
-
 end
-
-
 
 function load_scene(init_func,update_func,background_func)
 	scene_update_func=update_func
@@ -1261,24 +1265,87 @@ function load_scene(init_func,update_func,background_func)
 	init_func()
 end
 
-scene_index=1
-scene_list={{load_fox_dynamic,update_fox_dynamic,draw_fox_background},
-			{load_temple,update_temple,draw_temple_background},
-			{load_factory,update_factory,draw_factory_background}}
-
-function _init()
-	cur_frame=0
-
-	
-	init_3d() --Need to call init_3d() to set up player, camera and lights
-
-	load_scene(load_fox_dynamic,update_fox_dynamic,draw_fox_background)
-
+-->8
+--custom room
+function load_room()
+	c_mode = k_preset_color
+	colored_bed_v = read_vector_string(colored_bed_v_string)
+	colored_bed_f = read_colored_face_string(colored_bed_f_string)
+	colored_bed = load_object(colored_bed_v, colored_bed_f, 0, 0, 0, 0, 0, 0, False, c_mode, 4)
 end
 
+function load_room2()
+	--color mode
+	--c_mode = k_colorize_static
+	--c_mode = 3
+	c_mode = k_preset_color
+	--object_vertices, object_faces, x, y, z, ax, ay, az, obstacle, color_mode, color
+	bed_wood_v = read_vector_string(bed_wood_v_string)
+	bed_wood_f = read_face_string(bed_wood_f_string)
+	bed_wood = load_object(bed_wood_v, bed_wood_f, 0, 0, 0, 0, 0, 0, False, c_mode, 4)
 
-function _update()
+	bed_mattress_v = read_vector_string(bed_mattress_v_string)
+	bed_mattress_f = read_face_string(bed_mattress_f_string)
+	bed_mattress = load_object(bed_mattress_v, bed_mattress_f, 0, 0, 0, 0, 0, 0, False, c_mode, 6)
+
+	bed_blanket_v = read_vector_string(bed_blanket_v_string)
+	bed_blanket_f = read_face_string(bed_blanket_f_string)
+	bed_blanket = load_object(bed_blanket_v, bed_blanket_f, 0, 0, 0, 0, 0, 0, False, c_mode, 1)
+
+	bed_pillow_v = read_vector_string(bed_pillow_v_string)
+	bed_pillow_f = read_face_string(bed_pillow_f_string)
+	bed_pillow = load_object(bed_pillow_v, bed_pillow_f, 0, 0, 0, 0, 0, 0, False, c_mode, 7)
+end
+
+function update_room()
+	--bed_wood.ay+=0.01
+	--bed_mattress.ay+=0.01
+	--bed_blanket.ay+=0.01
+	--bed_pillow.ay+=0.01
+	colored_bed.ay+=0.01
+end
+
+function draw_room_background()
+	cls(9)
+	srand(2)
+	for i=1,8 do
+		circfill((rnd(167)+cur_frame)%167-20,rnd(167),rnd(20),10)
+	end
+end
+
+scene_index=1
+scene_list=
+{
+{load_room, update_room, draw_room_background},
+{load_fox_dynamic,update_fox_dynamic,draw_fox_background},
+{load_temple,update_temple,draw_temple_background},
+{load_factory,update_factory,draw_factory_background}
+}
+-->8
+--draw
+function _draw()
+	local t=stat(1)
+	cur_frame+=1
 	
+	scene_background_function()
+
+	local t=stat(1)
+	update_3d() -- call update_3d() at the end of the _update() function to transform etc.
+	update_time=stat(1)-t
+	draw_3d() --render objects into triangles, sort the triangles and draw them onto the screen
+	draw_time=stat(1)-t
+	--print("utility time: "..utility_time,0,7,8)
+	--print("update time: "..update_time,0,14,8)
+	--print("draw time: "..draw_time,0,21,8)
+	--print("render time: "..render_time,32,28,12)
+	--print("sort time: "..sort_time,32,35,12)
+	--print("triangle time: "..triangle_time,32,42,12)
+	print(stat(1),2,0,7)
+	print("z for next scene",2,120,7)
+end
+-->8
+--update
+function _update()
 	if(btnp(4))then
 		scene_index+=1
 		if(scene_index>#scene_list)scene_index=1
@@ -1289,43 +1356,19 @@ function _update()
 	handle_buttons() -- handle default buttons for player-- this can be overwritten obviously.
 	update_player() -- update the player with default movement, stopping at obstacles
 	
-	
 	update_camera() -- update the camera based on player location and direction
 	utility_time=stat(1)-t
 	scene_update_func()
-
 end
 
-
-
-function _draw()
-	local t=stat(1)
-	cur_frame+=1
-	
-	scene_background_function()
-	
-
-	local t=stat(1)
-	update_3d() -- call update_3d() at the end of the _update() function to transform etc.
-	update_time=stat(1)-t
-	draw_3d() --render objects into triangles, sort the triangles and draw them onto the screen
-	draw_time=stat(1)-t
-
-	
-	--print("utility time: "..utility_time,0,7,8)
-	--print("update time: "..update_time,0,14,8)
-	--print("draw time: "..draw_time,0,21,8)
-	--print("render time: "..render_time,32,28,12)
-	--print("sort time: "..sort_time,32,35,12)
-	--print("triangle time: "..triangle_time,32,42,12)
-	print(stat(1),2,0,7)
-	
-	print("z for next scene",2,120,7)
-
+-->8
+--init
+function _init()
+	cur_frame=0
+	init_3d() --Need to call init_3d() to set up player, camera and lights
+	--load_scene(load_fox_dynamic,update_fox_dynamic,draw_fox_background)
+	load_scene(scene_list[scene_index][1],scene_list[scene_index][2],scene_list[scene_index][3])
 end
-
-
-
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000005555555555555555555555550000000000000000000000000000000000000000
 01100000055555550666666607777777000c100000000000000cc000000000005666666556666665566666650111111101111111011111110222222202222222
