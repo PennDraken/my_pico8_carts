@@ -1239,6 +1239,17 @@ scene_list=
 }
 -->8
 --draw
+long_text={text="",x=0,y=0,c=7,l=0}
+
+function long_print(text,x,y,c,l)
+	long_text.text=text
+	long_text.x=x
+	long_text.y=y
+	long_text.c=c
+	long_text.l=l
+end
+
+
 m_down = false--mouse
 function draw_3d()
 	triangle_list={}
@@ -1311,6 +1322,9 @@ function _draw()
 	spr(0,stat(32),stat(33))--mouse
 	--print("pRESS ❎ TO COPY MODEL TO CLPBRD",0,0,7)
 	--print("pRESS Z TO PASTE MODEL TO CLPBRD",0,8,7)
+	if long_text.l>0 then
+		print(long_text.text,long_text.x,long_text.y,long_text.c)
+	end
 end
 -->8
 --update
@@ -1353,10 +1367,12 @@ function _update()
 	
 	--copy
 	if m_down and stat(32)<8 and stat(33)<8 then
+		long_print("copied circuit!",16,1,7,60)
 		export_object_face_string(object_list[1])
 	end
 	--paste
 	if m_down and stat(32)>120 and stat(33)<8 then
+		long_print("pasted circuit!",16,1,7,60)
 		if #stat(4)>10 then
 			cls(0)
 			sfx(62)
@@ -1369,6 +1385,9 @@ function _update()
 			--load_model_scene()
 			--stop()
 		end
+	end
+	if long_text.l>0 then
+		long_text.l-=1
 	end
 end
 
@@ -1426,7 +1445,6 @@ function color_face(x,y,object)
 		if(object.background==true) z_paint-=1000 
 		face[6]=z_paint
 		
-
 		if((p1z>z_max or p2z>z_max or p3z>z_max))then
 			if(p1z< z_clip and p2z< z_clip and p3z< z_clip)then
 				--simple option -- no clipping required
@@ -1435,7 +1453,6 @@ function color_face(x,y,object)
 				local s2x,s2y = p2[4],p2[5]
 				local s3x,s3y = p3[4],p3[5]
 	
-
 				if( max(s3x,max(s1x,s2x))>0 and min(s3x,min(s1x,s2x))<128)  then
 					--only use backface culling on simple option without clipping
 					--check if triangles are backwards by cross of two vectors
@@ -1459,7 +1476,6 @@ function color_face(x,y,object)
 						end
 					end
 				end
-				
 			end
 		end
 	end
@@ -1470,7 +1486,6 @@ function inside_tri(x, y, p1x, p1y, p2x, p2y, p3x, p3y)
     local a = ((p2y - p3y) * (x - p3x) + (p3x - p2x) * (y - p3y)) / denominator
     local b = ((p3y - p1y) * (x - p3x) + (p1x - p3x) * (y - p3y)) / denominator
     local c = 1 - a - b
-
     -- Check if the point is inside the triangle
     return a >= 0 and b >= 0 and c >= 0
 end
