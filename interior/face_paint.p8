@@ -269,8 +269,7 @@ function color_faces(object,base)
 		if(object.color_mode==k_multi_color_dynamic)then
 			--here we load the color at index 4 of the face
 			face[4],face[5]=color_shade(object.base_faces[i][4], mid( b,0,1)*(1-k_ambient)+k_ambient )
-			stop()
-			--print("Here")
+			--stop()
 		else
 			face[4],face[5]=color_shade(base, mid( b,0,1)*(1-k_ambient)+k_ambient )
 		end
@@ -965,28 +964,7 @@ function update_3d()
 	end
 end
 
-function draw_3d()
-	triangle_list={}
-	quicksort(object_list)
-	
-	start_timer()
-	for object in all(object_list) do
-		
-		if(object.visible and not object.background) then
-			render_object(object) --sort_faces(object)
-			--if(object.color_mode==k_colorize_dynamic or object.color_mode==k_multi_color_dynamic) color_faces(object,object.color)
-		end
-	end
-	render_time=stop_timer()
-	
-	start_timer()
-		quicksort(triangle_list)
-	sort_time=stop_timer()
-	
-	start_timer()
-		draw_triangle_list()
-	triangle_time=stop_timer()
-end
+
 
 
 function shade_trifill( x1,y1,x2,y2,x3,y3, color1, color2)
@@ -1305,7 +1283,7 @@ function update_room()
 	--bed_mattress.ay+=0.01
 	--bed_blanket.ay+=0.01
 	--bed_pillow.ay+=0.01
-	colored_bed.ay+=0.01
+	--colored_bed.ay+=0.01
 end
 
 function draw_room_background()
@@ -1326,6 +1304,39 @@ scene_list=
 }
 -->8
 --draw
+m_down = false--mouse
+function draw_3d()
+	triangle_list={}
+	quicksort(object_list)
+	
+	start_timer()
+	for object in all(object_list) do
+		if(object.visible and not object.background) then
+			render_object(object) --sort_faces(object)
+			--if(object.color_mode==k_colorize_dynamic or object.color_mode==k_multi_color_dynamic) color_faces(object,object.color)
+		end
+	end
+	render_time=stop_timer()
+	if m_down then
+		if stat(33)<120 then
+			for object in all(object_list) do
+				if(object.visible and not object.background) then
+					--if(object.color_mode==k_colorize_dynamic or object.color_mode==k_multi_color_dynamic) color_faces(object,object.color)
+					color_face(stat(32),stat(33),object)
+				end
+			end
+		end
+	end
+	start_timer()
+		quicksort(triangle_list)
+	sort_time=stop_timer()
+	
+	start_timer()
+		draw_triangle_list()
+	triangle_time=stop_timer()
+end
+
+paint_color=7
 function _draw()
 	local t=stat(1)
 	cur_frame+=1
@@ -1345,6 +1356,22 @@ function _draw()
 	--print("triangle time: "..triangle_time,32,42,12)
 	print(stat(1),2,0,7)
 	print("z for next scene",2,120,7)
+	for i=0,16 do -- color palette
+		local w=128/16
+		local y=120
+		local x=i*w
+		rectfill(x,y,x+w,y+w,i)
+		if i==paint_color then
+			rectfill(x,y-2,x+w-1,y+w-1,i)
+		end
+		if m_down then
+			--select color
+			if stat(33)>120 and stat(32)>x and stat(32)<x+w then
+				paint_color=i
+			end
+		end
+	end
+	spr(0,stat(32),stat(33))--mouse
 end
 -->8
 --update
@@ -1362,20 +1389,130 @@ function _update()
 	update_camera() -- update the camera based on player location and direction
 	utility_time=stat(1)-t
 	scene_update_func()
+
+	if stat(34)==1 then
+		m_down = true
+	else
+		m_down = false
+	end
 end
 
+function find_face2(x,y)
+	--for t in all(triangle_list) do
+	triangle_i = nil
+	closest_z = -100
+	for i=1,#triangle_list do
+		local t=triangle_list[i]
+		--shade_trifill( t.p1x,t.p1y,t.p2x,t.p2y,t.p3x,t.p3y, t.c1,t.c2 
+		if inside_tri(x, y, t.p1x,t.p1y,t.p2x,t.p2y,t.p3x,t.p3y) then
+			--print(t.tz)
+			--stop()
+			triangle_i = i
+			--if t.tz>closest_z then
+			--	triangle_i = i
+			--end	
+		end
+	end
+	if triangle_i!=nil then
+		-- change color here
+		triangle_list[triangle_i].c1=7
+		triangle_list[triangle_i].c2=7
+		-- we need to find face corresponding to triangle
+		object.faces[triangle_i][4]=7
+		object.faces[triangle_i][5]=7
+	end
+end
+
+
+function color_face(x,y,object)
+	--project all points in object to screen space
+	--it's faster to go through the array linearly than to use a for all()
+	for i=1, #object.t_vertices do
+		local vertex=object.t_vertices[i]
+		vertex[4],vertex[5] = vertex[1]*k_screen_scale/vertex[3]+k_x_center,vertex[2]*k_screen_scale/vertex[3]+k_x_center
+	end
+
+	for i=1,#object.faces do
+	--for face in all(object.faces) do
+		local face=object.faces[i]
+	
+		local p1=object.t_vertices[face[1]]
+		local p2=object.t_vertices[face[2]]
+		local p3=object.t_vertices[face[3]]
+		
+		local p1x,p1y,p1z=p1[1],p1[2],p1[3]
+		local p2x,p2y,p2z=p2[1],p2[2],p2[3]
+		local p3x,p3y,p3z=p3[1],p3[2],p3[3]
+
+		local cz=.01*(p1z+p2z+p3z)/3
+		local cx=.01*(p1x+p2x+p3x)/3
+		local cy=.01*(p1y+p2y+p3y)/3
+		local z_paint= -cx*cx-cy*cy-cz*cz
+		
+		if(object.background==true) z_paint-=1000 
+		face[6]=z_paint
+		
+
+		if((p1z>z_max or p2z>z_max or p3z>z_max))then
+			if(p1z< z_clip and p2z< z_clip and p3z< z_clip)then
+				--simple option -- no clipping required
+
+				local s1x,s1y = p1[4],p1[5]
+				local s2x,s2y = p2[4],p2[5]
+				local s3x,s3y = p3[4],p3[5]
+	
+
+				if( max(s3x,max(s1x,s2x))>0 and min(s3x,min(s1x,s2x))<128)  then
+					--only use backface culling on simple option without clipping
+					--check if triangles are backwards by cross of two vectors
+					if(( (s1x-s2x)*(s3y-s2y)-(s1y-s2y)*(s3x-s2x)) < 0)then
+						--new_triangle(s1x,s1y,s2x,s2y,s3x,s3y,z_paint,face[k_color1],face[k_color2])
+						--faster to move new triangle function inline
+						--add(triangle_list,{p1x=s1x,
+						--					p1y=s1y,
+						--					p2x=s2x,
+						--					p2y=s2y,
+						--					p3x=s3x,
+						--					p3y=s3y,
+						--					tz=z_paint,
+						--					c1=face[k_color1],
+						--					c2=face[k_color2]})
+						--
+						--change face color
+						if inside_tri(x, y, s1x, s1y, s2x, s2y, s3x, s3y) then
+							object.faces[i][4]=paint_color
+							object.faces[i][5]=paint_color
+						end
+					end
+				end
+				
+			end
+		end
+	end
+end
+
+function inside_tri(x, y, p1x, p1y, p2x, p2y, p3x, p3y)
+    local denominator = ((p2y - p3y) * (p1x - p3x) + (p3x - p2x) * (p1y - p3y))
+    local a = ((p2y - p3y) * (x - p3x) + (p3x - p2x) * (y - p3y)) / denominator
+    local b = ((p3y - p1y) * (x - p3x) + (p1x - p3x) * (y - p3y)) / denominator
+    local c = 1 - a - b
+
+    -- Check if the point is inside the triangle
+    return a >= 0 and b >= 0 and c >= 0
+end
 -->8
 --init
 function _init()
+	poke(0x5f2d, 1)--mouse listener
 	cur_frame=0
 	init_3d() --Need to call init_3d() to set up player, camera and lights
 	--load_scene(load_fox_dynamic,update_fox_dynamic,draw_fox_background)
 	load_scene(scene_list[scene_index][1],scene_list[scene_index][2],scene_list[scene_index][3])
 end
 __gfx__
-00000000000000000000000000000000000000000000000000000000000000005555555555555555555555550000000000000000000000000000000000000000
-01100000055555550666666607777777000c100000000000000cc000000000005666666556666665566666650111111101111111011111110222222202222222
-01000000050000050600000607000007000c10000000000000cccc00000000005600006556000065560200650100000101000001010000010200000202000002
+77700000000000000000000000000000000000000000000000000000000000005555555555555555555555550000000000000000000000000000000000000000
+77000000055555550666666607777777000c100000000000000cc000000000005666666556666665566666650111111101111111011111110222222202222222
+70000000050000050600000607000007000c10000000000000cccc00000000005600006556000065560200650100000101000001010000010200000202000002
 00000000050555050605550607000507000c100000666600000cc000000000005622206556020265562000650101110101011101010001010202220202022202
 00000000050050050605550607005007000c10000666666000044000005555005602006556202025560200650100100101011101010010010200200202022202
 00000000050050050605050607000507000c10000600006000044000056666505602006556200025562000650100100101010101010001010200200202020202
