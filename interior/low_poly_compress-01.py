@@ -4,7 +4,6 @@
 import sys
 from math import *
 from collections import Counter 
-# C:/Users/Henry/AppData/Roaming/pico-8/carts/interior/colored_bed.obj
 ## Blender v2.72 (sub 0) OBJ File: 'small_block.blend'
 ## www.blender.org
 #mtllib small_block.mtl
@@ -76,6 +75,7 @@ def closest_color(r, g, b)->int:
 	return color_out
 
 def main():
+	print("Opening file")
 	input_filename = sys.argv[1]
 	#input_file = open(input_filename,'r')
 	#print(input_filename.strip(".obj"))
@@ -134,28 +134,27 @@ def main():
 				
 					output_file.write(hex_string) # write point
 				# Get face color
-				if len(vertex_colors)!=0: # check if there are any colors
-					vert1 = int(point_text[0])
-					vert2 = int(point_text[1])
-					vert3 = int(point_text[2])
-					try:
-						c1 = int(vertex_colors[vert1])
-						c2 = int(vertex_colors[vert2])
-						c3 = int(vertex_colors[vert3])
-						# Face color is the most common vertice color
-						c_values = [c1, c2, c3]
-						c_counter = Counter(c_values)
-						c = c_counter.most_common(1)[0][0] # Set color of face to most common color
-						print(c)
-					except:
-						print("Vertices not colored")
-						c = int(0)
-					hex_string=tohex(c, 8)
-					hex_string=hex_string[2:]
-					hex_string=hex_string.zfill(2)
-					# print(hex_string)
-					output_file.write(hex_string) # write color at every 4th index
-					output_file.write(hex_string) # write color at every 5th index
+				vert1 = int(point_text[0])
+				vert2 = int(point_text[1])
+				vert3 = int(point_text[2])
+				try:
+					c1 = int(vertex_colors[vert1])
+					c2 = int(vertex_colors[vert2])
+					c3 = int(vertex_colors[vert3])
+					# Face color is the most common vertice color
+					c_values = [c1, c2, c3]
+					c_counter = Counter(c_values)
+					c = c_counter.most_common(1)[0][0] # Set color of face to most common color
+					# print(c)
+				except:
+					# print("Vertices not colored")
+					c = int(0)
+				hex_string=tohex(c, 8)
+				hex_string=hex_string[2:]
+				hex_string=hex_string.zfill(2)
+				# print(hex_string)
+				output_file.write(hex_string) # write color at every 4th index
+				output_file.write(hex_string) # write color at every 5th index
 					
 				#output_file.write('},\n')
 		output_file.write('"\n')

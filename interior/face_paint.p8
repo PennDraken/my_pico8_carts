@@ -86,13 +86,9 @@ function read_colored_face()
 	for i=1,5 do
 		text=sub(cur_string,cur_string_index,cur_string_index+2)
 		value=read_byte(text)
-		--print(value)
-
 		f[i]=value
 		cur_string_index+=2
 	end
-	--color test
-	--print(f[4])
 	return f
 end	
 
@@ -1333,7 +1329,9 @@ function _draw()
 		end
 	end
 	spr(1,0,0)--copy
-	spr(2,120,0)--paste
+	if stat(4)!=nil then
+		spr(2,120,0)--paste
+	end
 	spr(0,stat(32),stat(33))--mouse
 	--print("pRESS ❎ TO COPY MODEL TO CLPBRD",0,0,7)
 	--print("pRESS Z TO PASTE MODEL TO CLPBRD",0,8,7)
@@ -1345,26 +1343,18 @@ end
 --update
 function _update()
 	--check if new info in clipboard
-	if btnp(🅾️) or stat(4)!=old_clipboard then
-		cls(0)
-		sfx(62)
-		old_clipboard = stat(4)
-		--parse string
-		split_string = split(old_clipboard, '"', false)
-		model_v_string=split_string[2] --update our global variable functions
-		model_f_string=split_string[4]
-		load_model_scene()
-		--stop()
-	end
+	--if btnp(🅾️) or stat(4)!=old_clipboard then
+	--	cls(0)
+	--	sfx(62)
+	--	old_clipboard = stat(4)
+	--	--parse string
+	--	split_string = split(old_clipboard, '"', false)
+	--	model_v_string=split_string[2] --update our global variable functions
+	--	model_f_string=split_string[4]
+	--	load_model_scene()
+	--	--stop()
+	--end
 
-	if(btnp(4))then
-		scene_index+=1
-		if(scene_index>#scene_list)scene_index=1
-		load_scene(scene_list[scene_index][1],scene_list[scene_index][2],scene_list[scene_index][3])
-	end
-	if btnp(5)then
-		export_object_face_string(object_list[1])
-	end
 	
 	local t=stat(1)
 	handle_buttons() -- handle default buttons for player-- this can be overwritten obviously.
@@ -1384,9 +1374,8 @@ function _update()
 	if m_down and stat(32)<8 and stat(33)<8 then
 		long_print("copied circuit!",16,1,7,60)
 		export_object_face_string(object_list[1])
-	end
 	--paste
-	if m_down and stat(32)>120 and stat(33)<8 then
+	elseif m_down and stat(32)>120 and stat(33)<8 then
 		long_print("pasted circuit!",16,1,7,60)
 		if #stat(4)>10 then
 			cls(0)
