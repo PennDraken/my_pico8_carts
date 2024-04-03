@@ -122,8 +122,8 @@ function start_game()
 	p_dx = 0
 	p_dy = 0
 	p_angle = 0.75
-	p_friction = 0.991
-	--p_friction = 0.995
+	--p_friction = 0.991
+	p_friction = 0.995
 	p_acc = 0.02
 	p_strtx = 128/2+4-1
 	p_strty = 0
@@ -177,6 +177,7 @@ end
 -->8
 --draw game
 function draw_game()
+	
 	if tf<1 then
 		cls(8)
 	else
@@ -652,12 +653,12 @@ end
 function move_player()
  --momentum
  if abs(p_speed) > 0 then
-  p_speed = p_speed * p_friction
+  p_speed = p_speed * max(p_friction*sin(p_angle),0.991)
  else
   p_speed = 0
  end
  if p_speed < p_maxspeed then
-  p_speed = p_speed+p_acc * sin(p_angle)
+  p_speed = p_speed+p_acc*sin(p_angle)
  else
   --travelling too fast
   p_speed=lerp(p_speed,p_maxspeed,0.9)
