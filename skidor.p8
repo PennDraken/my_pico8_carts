@@ -85,32 +85,57 @@ end
 
 --new player implementation for multiplayer/ replays etc
 function new_player()
-
+	p={}
+	p.maxspeed = 4
+	p.turnspeed = p.maxspeed/2
+	p.n = 64
+	p.speed = 0
+	p.dx = 0
+	p.dy = 0
+	p.angle = 0.75
+	--p_friction = 0.991
+	p_friction = 0.995
+	p_acc = 0.02
+	p.strtx = 128/2+4-1
+	p.strty = 0
+	p_turning = false
+	p.x = p.strtx
+	p.y = p.strty
+	p.crash = false
+	p.jvel  = 0
+	p.jumping=false
+	p_inshadow=false
+	p.height = 0
+	p_width = 6
+	p.trail={}
+	p.deaths=0
+	p.tunneling=false
+	return p
 end
 
 function reset_player()
- p_x = p_strtx
- p_y = p_strty
- p_crash  =false
- p_jumping=false
- p_height =0
- p_trail={}
- p_n = 64
-	p_speed = 0.2
-	p_dx = 0
-	p_dy = 0
-	p_angle = 0.75
-	p_deaths+=1
+ p.x = p.strtx
+ p.y = p.strty
+ p.crash = false
+ p.jumping = false
+ p.height =0
+ p.trail={}
+ p.n = 64
+	p.speed = 0.2
+	p.dx = 0
+	p.dy = 0
+	p.angle = 0.75
+	p.deaths+=1
 	init_signs()
 	res_time=30
 	
 	--jumping starting state
-	p_jumping=true
+	p.jumping=true
  shake=0.07
- p_height=40
- p_landangle=p_angle
- p_trick=false
- p_jvel=0
+ p.height=40
+ p.landangle=p.angle
+ p.trick=false
+ p.jvel=0
  
  --time
  tf=1
@@ -120,35 +145,12 @@ end
 function start_game()
 	clock=0
 	mouse_enabled=true
-	p_maxspeed = 4
-	p_turnspeed = p_maxspeed/2
-	p_n = 64
-	p_speed = 0
-	p_dx = 0
-	p_dy = 0
-	p_angle = 0.75
-	--p_friction = 0.991
-	p_friction = 0.995
-	p_acc = 0.02
-	p_strtx = 128/2+4-1
-	p_strty = 0
-	p_turning = false
-	--p_strty = 7.7*(8*64)
-	p_x = p_strtx
-	p_y = p_strty
-	p_crash = false
-	p_jvel  = 0
-	p_jumping=false
-	p_inshadow=false
-	p_height = 0
-	p_width = 6
-	p_trail={}
-	p_deaths=0
-	p_tunneling=false
+	--init player
+	p=new_player()
 	score = 0
 	--camera
 	cx = 0
-	cstrty = p_strty-100
+	cstrty = p.strty-100
 	cy = cstrty
 	cv = 0
 	ca = 0.1
@@ -158,12 +160,12 @@ function start_game()
 	t=0
 	
 	--jumping starting state
-	p_jumping=true
+	p.jumping=true
 	shake=0.07
-	p_height=100
-	p_landangle=p_angle
-	p_trick=false
-	p_jvel=0
+	p.height=100
+	p.landangle=p.angle
+	p.trick=false
+	p.jvel=0
 
 	init_music()
 	reading=false--for textboxes
@@ -192,17 +194,17 @@ function draw_game()
 	doshake()
 	draw_shadows()
 	draw_tombs()
-	draw_trail(p_trail)
+	draw_trail(p.trail)
 	draw_particles()
-	if not p_jumping then
+	if not p.jumping then
 	 draw_player()
 	end
 	draw_w()
-	if p_jumping then
+	if p.jumping then
 	 draw_player()
 	end
 	camera()--reset camera
-	if tf<1 and not p_crash then
+	if tf<1 and not p.crash then
 		spr(50,tri_x,tri_y-cy)--danger obstacle
 	end
 	--ui
@@ -306,24 +308,24 @@ function set_dark_pal()
 end
 
 function draw_player()
-	if (p_tunneling) return
+	if (p.tunneling) return
 	set_p_pal()
-	if p_inshadow and not p_jumping then
+	if p_inshadow and not p.jumping then
 		--set_dark_pal()
 	end
-	if p_crash then
-		spr(79,p_x,p_y-cy)
+	if p.crash then
+		spr(79,p.x,p.y-cy)
 		pal()
 		return
  end
- if p_angle > 0.75 then
+ if p.angle > 0.75 then
   s_flip = false
  else
   s_flip = true
  end
- abs_angle = abs(p_angle - 0.75)
+ abs_angle = abs(p.angle - 0.75)
  jofs=0
- if p_jumping then
+ if p.jumping then
   jofs=7
  elseif pdir==➡️ then
   if s_flip then
@@ -340,64 +342,64 @@ function draw_player()
  end
  
  if abs_angle < 0.01 then
-  spr(64+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+  spr(64+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  elseif abs_angle < 0.10 then
-  spr(65+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+  spr(65+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  elseif abs_angle < 0.16 then
- 	spr(66+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+ 	spr(66+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  elseif abs_angle < 0.25 then
- 	spr(67+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+ 	spr(67+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  elseif abs_angle < 0.30 then
- 	spr(68+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+ 	spr(68+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  elseif abs_angle < 0.45 then
- 	spr(69+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+ 	spr(69+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  else
- 	spr(70+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
+ 	spr(70+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
  end
  pal()
  --shadow when jumping
- if p_jumping then
+ if p.jumping then
   draw_shadow()
  end
  --speed particles
- if p_speed>=p_maxspeed*0.95 then
- 	speed_particles(p_x,p_y-cy)
+ if p.speed>=p.maxspeed*0.95 then
+ 	speed_particles(p.x,p.y-cy)
  end
 end
 
 --recolors shadow based on pixels under
 function draw_shadow()
 	--get pixel color
- p=pget(p_x,p_y-cy)
+ local color=pget(p.x,p.y-cy)
  _y=0--shadow offset
- if p==7 then--white
+ if color==7 then--white
   pal(6,6)
- elseif p==11 then--lime
+ elseif color==11 then--lime
   --3=dark green
   pal(6,3)
   _y=16
- elseif p==3 then--dark green
+ elseif color==3 then--dark green
   --1=dark blue
   pal(6,1)
   _y=4
- elseif p==8 then--red
+ elseif color==8 then--red
   --2=purple
   pal(6,2)
  end
- spr(95,p_x,p_y-cy-_y)
+ spr(95,p.x,p.y-cy-_y)
  pal()
 end
 
 function draw_trail(trail)
  --draw to player
  if #trail==0 then return end
- if not (p_jumping or p_tunneling) then
+ if not (p.jumping or p.tunneling) then
 	 --trail towards player
 	 ppos=trail[#trail]
 	 line(ppos.x+2,ppos.y-cy+7,
-	      p_x   +2,p_y   -cy+5,6)
+	      p.x   +2,p.y   -cy+5,6)
 	 line(ppos.x+5,ppos.y-cy+7,
-	      p_x   +5,p_y   -cy+5,6)
+	      p.x   +5,p.y   -cy+5,6)
  end
  --draw trail array
  for i=2,#trail do
@@ -416,7 +418,7 @@ end
 
 function draw_deaths(x,y)
  spr(31,x,y)
- print(pad(""..p_deaths,3),x+7,y+2,1)
+ print(pad(""..p.deaths,3),x+7,y+2,1)
 end
 
 function draw_time(t,x,y,n)
@@ -489,16 +491,16 @@ end
 --draws position of player on side
 --of the screen
 function draw_position()
-	x1,y1=1,0
-	x2,y2=127-x1,y1
+ x1,y1=1,0
+ x2,y2=127-x1,y1
  line(x1,y1,x2,y2,6)-- bg line
- p=(p_y/limy)/8
- x,y=(x2-x1)*p+x1,(y2-y1)*p+y1
+ local perc=(p.y/limy)/8
+ x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
  line(x1,y1,x,y,15)
  circfill(x,y,0,1)  -- curr pos
- p=(p_strty/limy)/8
- x,y=(x2-x1)*p+x1,(y2-y1)*p+y1
- if p>0.1 then
+ local perc=(p.strty/limy)/8
+ x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
+ if perc>0.1 then
  	line(x1,y1,x,y,11)  -- checkpoint line
  end
 end
@@ -536,8 +538,8 @@ function draw_shadows()
 					local shh=16
 					sspr(96,46,16,16,shx-4,shy)
 					--check if player is in shadow
-					local spx=p_x%128
-					local spy=p_y-cy
+					local spx=p.x%128
+					local spy=p.y-cy
 					if spx>shx and spy>shy and
 								spx<shx+shw and spy<shy+shh then
 						p_inshadow=true
@@ -551,8 +553,8 @@ function draw_shadows()
 					local shh=16
 					sspr(80,56,16,8,shx,shy+8)
 					--check if player is in shadow
-					local spx=p_x%128
-					local spy=p_y-cy
+					local spx=p.x%128
+					local spy=p.y-cy
 					if spx>shx and spy>shy and
 								spx<shx+shw and spy<shy+shh then
 						p_inshadow=true
@@ -581,10 +583,10 @@ end
 t=0
 res_time=0--respawn timer
 function update_game()
-	if p_crash then
-		p_speed *= 0.9
-		if p_speed<0.2 then
-		 add(tombs,{x=p_x,y=p_y})
+	if p.crash then
+		p.speed *= 0.9
+		if p.speed<0.2 then
+		 add(tombs,{x=p.x,y=p.y})
 		 reset_player()
 		end
 	else
@@ -606,7 +608,7 @@ maxangle=0.20
 function input()
  p_turning = false
  pdir=nil
- if p_jumping or p_tunneling then return end
+ if p.jumping or p.tunneling then return end
  --button input
  if mouse_enabled then
   _x=stat(32)
@@ -626,111 +628,111 @@ function input()
  btnr=btnr or btn(➡️)
  
 	if btnl then
-	 if p_angle > 0.75-maxangle then
-	  p_angle -= ts*tf
+	 if p.angle > 0.75-maxangle then
+	  p.angle -= ts*tf
 	  p_turning=true
 	 end
 	 pdir=⬅️
 	elseif btnr then
-	 if p_angle < 0.75+maxangle then
-	  p_angle += ts*tf
+	 if p.angle < 0.75+maxangle then
+	  p.angle += ts*tf
 	  p_turning=true
 	 end
 	 pdir=➡️
 	elseif btn(⬇️) then
-	 if p_angle < 0.75 then
-			p_angle += ts*tf
+	 if p.angle < 0.75 then
+			p.angle += ts*tf
 			p_turning=true
-		elseif p_angle > 0.75 then
-			p_angle -= ts*tf
+		elseif p.angle > 0.75 then
+			p.angle -= ts*tf
 			p_turning=true
 		end
 	elseif btn(⬆️) then
-	 --p_angle=lerp(p_angle%1,0.25,0.1)
+	 --p.angle=lerp(p.angle%1,0.25,0.1)
 	end
 	--boost
 	if btnp(❎) and shake==0 then
-		p_speed*=1.5
-		shake+=0.1*p_speed/p_maxspeed
+		p.speed*=1.5
+		shake+=0.1*p.speed/p.maxspeed
 	end
 end
 
 function move_player()
  --momentum
- if abs(p_speed) > 0 then
- 	p_speed = p_speed * max(p_friction*sin(p_angle),0.991)
- 	--p_speed += 0.1
+ if abs(p.speed) > 0 then
+ 	p.speed = p.speed * max(p_friction*sin(p.angle),0.991)
+ 	--p.speed += 0.1
  else
-  p_speed = 0
+  p.speed = 0
  end
- if p_speed < p_maxspeed then
-  p_speed = p_speed + p_acc*sin(p_angle)
+ if p.speed < p.maxspeed then
+  p.speed = p.speed + p_acc*sin(p.angle)
  else
   --travelling too fast
-  p_speed=lerp(p_speed,p_maxspeed,0.9)
+  p.speed=lerp(p.speed,p.maxspeed,0.9)
  end
  --update velocity direction
- if not p_jumping then
-		p_dx = p_speed * cos(p_angle)
-		p_dy = p_speed * sin(p_angle)
+ if not p.jumping then
+		p.dx = p.speed * cos(p.angle)
+		p.dy = p.speed * sin(p.angle)
 	end
  --trail
- if not (p_jumping or p_tunneling) then
+ if not (p.jumping or p.tunneling) then
   if t%3==0 then
 		 pos={}
-		 pos.x=p_x
-		 pos.y=p_y
-		 add(p_trail,pos)
+		 pos.x=p.x
+		 pos.y=p.y
+		 add(p.trail,pos)
   end
  end
  --update position
  --player hits wall bounce
- if not (p_x>0-2 and p_x+6<128) then
-  p_dx*=-1
-  p_landangle=atan2(p_dx,p_dy)
+ if not (p.x>0-2 and p.x+6<128) then
+  p.dx*=-1
+  p.landangle=atan2(p.dx,p.dy)
   sfx(7)
-  shake+=0.1*p_speed/p_maxspeed
-  p_angle=p_angle-2*(p_angle-0.75)
+  shake+=0.1*p.speed/p.maxspeed
+  p.angle=p.angle-2*(p.angle-0.75)
   --max = 0.9 and 0.6
-  if p_angle<0.6 then--what does this do?
-  	p_angle=0.6
-  elseif p_angle>0.9 then
-  	p_angle=0.9
+  if p.angle<0.6 then--what does this do?
+  	p.angle=0.6
+  elseif p.angle>0.9 then
+  	p.angle=0.9
   end
  end
  --move player
- p_x+=p_dx*tf
- p_y+=p_dy*tf
+ p.x+=p.dx*tf
+ p.y+=p.dy*tf
  
  if (slomo) slow_mo_check()
 
  --height update
- if p_jumping then
+ if p.jumping then
  	_a=0.1--acc due to gravity
-  p_height+=p_jvel*tf
-  p_jvel-=_a*tf
+  p.height+=p.jvel*tf
+  p.jvel-=_a*tf
   --trick
-  if p_trick then
-  	p_angle=(p_angle+p_trickspeed*tf)%1
+  if p.trick then
+  	p.angle=(p.angle+p.trickspeed*tf)%1
   end
   
   --landing
-  if p_height<0 then
-   shake+=0.2*p_speed/p_maxspeed
-   p_jumping=false
-   p_height=0
-   --p_speed=sqrt(p_jvel^2+p_speed^2)
-   p_jvel=0
-   p_angle=p_landangle
-   if p_trick then
+  if p.height<0 then
+   shake+=0.2*p.speed/p.maxspeed
+   p.jumping=false
+   p.height=0
+   --p.speed=sqrt(p.jvel^2+p.speed^2)
+   p.jvel=0
+   p.angle=p.landangle
+   if p.trick then
    	shake+=0.05
-   	p_speed*=1.4
-   	trick_particles(p_x,p_y-cy)
+   	p.speed*=1.4
+   	trick_particles(p.x,p.y-cy)
    end
-   p_trick=false
-   --p_speed*=1.1
-   p_trail={}
-   landing_particles(p_x,p_y-cy)
+   p.trick=false
+   --p.speed*=1.1
+   p.trail={}
+   landing_particles(p.x,p.y-cy)
    sfx(9)
    shake+=0.1
   end
@@ -745,14 +747,14 @@ function slow_mo_check()
 	--search depth
 	iter=20
 	--future positions
-	local x=p_x
-	local y=p_y
+	local x=p.x
+	local y=p.y
 	for i=1,iter do
 		--increment check
-		x+=p_dx
-		y+=p_dy
+		x+=p.dx
+		y+=p.dy
 		--out of bounds or jumping
-		if x>127 or x<1 or p_jumping or p_tunneling then 
+		if x>127 or x<1 or p.jumping or p.tunneling then 
 			break 
 		end
 		--jump check (no slomo)
@@ -800,14 +802,14 @@ end
 --player collision logic
 bv=2--block velocity
 function collision_check()
- if p_crash==true then return end
+ if p.crash==true then return end
  prev_tile=tile--used to ensure trigger on rising edge
- mx=flr((p_x+4)/8)+flr((p_y+4)/limy)*16
- my=flr((p_y+4)/8)%64
+ mx=flr((p.x+4)/8)+flr((p.y+4)/limy)*16
+ my=flr((p.y+4)/8)%64
  --previous map x for player
  --previous map y for player
- pmx=flr((p_x+4-p_dx)/8)+flr((p_y+4-p_dy)/limy)*16
- pmy=flr((p_y+4-p_dy)/8)%64
+ pmx=flr((p.x+4-p.dx)/8)+flr((p.y+4-p.dy)/limy)*16
+ pmy=flr((p.y+4-p.dy)/8)%64
  tile=mget(mx,my)
  --new tile check
  if pmx==mx and pmy==my then
@@ -816,55 +818,55 @@ function collision_check()
 
  --tunnel (this is first as no collision should happen when we are underground)
  if prev_tile==110 or prev_tile==111 then
-		p_tunneling = true
+		p.tunneling = true
  	--ensure player goes straight down
-		p_angle=0.75
-		p_dx=0
-		p_dy=cos(p_angle)*p_speed
+		p.angle=0.75
+		p.dx=0
+		p.dy=cos(p.angle)*p.speed
 		shake=0.2
 		sfx(12)
-		into_tunnel_particles(p_x,p_y-cy)
- elseif p_tunneling and (tile==126 or tile==127) then
-		p_tunneling = false	
-		p_trail={{x=p_x,y=p_y-3}}--reset trail
+		into_tunnel_particles(p.x,p.y-cy)
+ elseif p.tunneling and (tile==126 or tile==127) then
+		p.tunneling = false	
+		p.trail={{x=p.x,y=p.y-3}}--reset trail
  	sfx(13)
  	shake=0.2
- 	from_tunnel_particles(p_x,p_y-cy)
+ 	from_tunnel_particles(p.x,p.y-cy)
  end
- if (p_tunneling) return
+ if (p.tunneling) return
  
  --signs
  sign_collision()
   
  --jumping block
  if tile==112 or tile==113 then
-  p_jumping=true
+  p.jumping=true
   shake=0.07
-  p_height=0
-  p_landangle=p_angle
+  p.height=0
+  p.landangle=p.angle
   --if we perform a jump trick
   if pdir!=nil then
-   p_trick=true
+   p.trick=true
    _arr={0.025,0.05,0.1}--rotation speed LUT
-   p_trickspeed=_arr[ceil(p_speed/p_maxspeed*3)]
-   --p_trickspeed=_arr[ceil(rnd(3))]
+   p.trickspeed=_arr[ceil(p.speed/p.maxspeed*3)]
+   --p.trickspeed=_arr[ceil(rnd(3))]
    if pdir==⬅️ then
-   	p_trickspeed=-p_trickspeed
+   	p.trickspeed=-p.trickspeed
    end
   else
-  	p_trick=false
+  	p.trick=false
   end
   local angle=1/8
-  local norm_speed=sqrt(p_dx^2+p_dy^2)
-  p_jvel=2+abs(sin(angle)*norm_speed)/10
+  local norm_speed=sqrt(p.dx^2+p.dy^2)
+  p.jvel=2+abs(sin(angle)*norm_speed)/10
   --more accurate jump calc
   --local angle=1/8
-  --local norm_speed=sqrt(p_dx^2+p_dy^2)
-  --p_jvel=abs(sin(angle)*norm_speed)
+  --local norm_speed=sqrt(p.dx^2+p.dy^2)
+  --p.jvel=abs(sin(angle)*norm_speed)
   --local factorspeed=(cos(angle)*norm_speed)/norm_speed
-  --p_dx*=factorspeed
-  --p_dy*=factorspeed
-  --p_speed=norm_speed
+  --p.dx*=factorspeed
+  --p.dy*=factorspeed
+  --p.speed=norm_speed
   sfx(10)
   return
  end
@@ -874,25 +876,25 @@ function collision_check()
  	--remove gift from map
  	mset(mx,my,1)
  	--play animation
- 	trick_particles(p_x,p_y-cy)
+ 	trick_particles(p.x,p.y-cy)
  	sfx(5)
  	--show popup saying new unlock
  end
  
  --checkpoint
  if tile==12 or tile==13 then
-  if p_strty!=flr(p_y/8)*8+4 then
+  if p.strty!=flr(p.y/8)*8+4 then
 	  shake=0.2
 	  sfx(0)
-	  checkpoint_particles(p_x,p_y-cy)
+	  checkpoint_particles(p.x,p.y-cy)
    my_music()
-   p_strtx = (mx*8+4)%128
-   if p_strtx>90 then
-   	p_strtx=90
-   elseif p_strtx<20 then
-    p_strtx=20
+   p.strtx = (mx*8+4)%128
+   if p.strtx>90 then
+   	p.strtx=90
+   elseif p.strtx<20 then
+    p.strtx=20
    end
-	  p_strty = flr(p_y/8)*8+4
+	  p.strty = flr(p.y/8)*8+4
   end
   
  --finish line/ goal
@@ -907,28 +909,28 @@ function collision_check()
  elseif not fget(tile,0) then
  	if fget(tile,6) then
  		--left check
- 		local x=(p_x+4)%8
+ 		local x=(p.x+4)%8
  		if x>6 then
  			crash()
 	 	end
  	elseif fget(tile,7) then
  	 --right check
-	 	local x=(p_x+4)%8
+	 	local x=(p.x+4)%8
  		if x<2 then
  			crash()
 	 	end
  	--small check
  	else
-			local x=(p_x+4)%8
+			local x=(p.x+4)%8
  		if x>2 and x<6 then
  		 crash()
 	 	else
 	 	 shake+=0.1
-	 		green_particles(p_x,p_y-cy)
+	 		green_particles(p.x,p.y-cy)
 	 	end
  	end
  	shake+=0.1
- 	green_particles(p_x,p_y-cy)
+ 	green_particles(p.x,p.y-cy)
  	sfx(11)
  end
 end
@@ -936,8 +938,8 @@ end
 function crash()
 	shake+=0.5
  sfx(1)
- p_crash=true
- blood_particles(p_x,p_y-cy)
+ p.crash=true
+ blood_particles(p.x,p.y-cy)
 end
 -->8
 --win screen/crash screen
@@ -946,7 +948,7 @@ function draw_win()
 	doshake()
 	draw_tombs()
 	draw_w()
-	draw_trail(p_trail)
+	draw_trail(p.trail)
 	draw_particles()
 	draw_player()
 	camera()--reset camera
@@ -956,21 +958,21 @@ end
 
 function update_win()
  if reading then
-  win_particles(p_x,p_y-cy)
+  win_particles(p.x,p.y-cy)
   tb_update()
  else
 	 cofs=30
-	 p_angle=0.75
-	 if p_dy>0.05 then
-	  p_dy*=0.97
-	 elseif p_dy>0 then
-	  p_dy=0
+	 p.angle=0.75
+	 if p.dy>0.05 then
+	  p.dy*=0.97
+	 elseif p.dy>0 then
+	  p.dy=0
 	  if best_time==nil or curr_time<best_time then
-	  	tb_init(7,{"new personal best!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
+	  	tb_init(7,{"new personal best!\n\ndEATHS: "..p.deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
 	  	best_time=curr_time
 	  	dset(0,best_time)
 	  else
-	  	tb_init(7,{"yOU WON!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
+	  	tb_init(7,{"yOU WON!\n\ndEATHS: "..p.deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
 	  end
 	  tb.x=10
 	  tb.w=127-tb.x*2
@@ -978,12 +980,12 @@ function update_win()
 	  tb.col1=9
 	  tb.col2=0
 	  tb.col3=0
-	  tb.y=p_y-cy+16
+	  tb.y=p.y-cy+16
 	 else
   -- restart game
 		start_game()
 	 end
-	 p_y+=p_dy
+	 p.y+=p.dy
 	 t+=1
 	end
  update_particles()
@@ -1008,9 +1010,9 @@ end
 cofs=2
 function move_camera()
 	if res_time!=0 then
-		b  = p_y-p_height-30+p_dy*10
+		b  = p.y-p.height-30+p.dy*10
 	else
-		b  = p_y-p_height-cofs+p_dy*10
+		b  = p.y-p.height-cofs+p.dy*10
 	end
  cy = lerp(cy,b,0.06*tf)
 end
@@ -1039,8 +1041,8 @@ function update_particles()
 end
 
 function speed_particles(x,y)
- dx=p_dx
- dy=p_dy
+ dx=p.dx
+ dy=p.dy
  for i=1,3 do
   add_new_dust(
    x+4,y+4,rnd(0.5)-dx,rnd(2)-dy,
@@ -1050,7 +1052,7 @@ function speed_particles(x,y)
 end
 
 function green_particles(x,y)
- local speed=1*sqrt(p_dx^2+p_dy^2)
+ local speed=1*sqrt(p.dx^2+p.dy^2)
  for i=1,10 do
  	local angle=(rnd(1)+0.5)%1
  	local dx=cos(angle)*speed
@@ -1230,7 +1232,7 @@ function tb_update()
    tb.char=0
   else
    sfx(0)
-   checkpoint_particles(p_x,p_y-cy)
+   checkpoint_particles(p.x,p.y-cy)
    reading=false
   end
  end
