@@ -1,7 +1,7 @@
 function init_camera()
     local c={}
-    c.x=0
-    c.y=0
+    c.x=-64
+    c.y=-64
     c.cx=c.x+64
     c.cy=c.y+64
     c.angle=0

@@ -11,11 +11,14 @@ end
 
 function load_track1()
     local track={}
-    add(track, node(-100,0,40))
-    add(track, node(200,0,40))
-    add(track, node(200,200,40))
-    add(track, node(120,500,40))
-    add(track, node(300,-200,40))
+    add(track, node(-100,0,30))
+    add(track, node(200,0,20))
+    add(track, node(200,200,30))
+    add(track, node(120,500,10))
+    add(track, node(120,1000,5))
+    add(track, node(200,500,10))
+    add(track, node(120,500,10))
+
     return track
 end
 
@@ -33,14 +36,18 @@ function draw_track(track)
     -- Iterate through each node in the track
     for i = 1, #track - 1 do
         -- Draw a line between current node and next node
-        --line(track[i].x, track[i].y, track[i + 1].x, track[i + 1].y, 7)
         local p1 = track[i]
         local p2 = track[i+1]
-        --circ(p1.x,p1.y,p1.r,7)
         draw_road_segment(p1.x, p1.y, p1.r, p2.x, p2.y, p2.r)
     end
-    -- Draw a line between last node and first node to close the track
-    
+
+    for i = 1, #track - 2 do
+        -- Draw lines between circles
+        local p1 = track[i]
+        local p2 = track[i+1]
+        local p3 = track[i+2]
+        draw_road_node(p1, p2, p3)
+    end
 end
 
 function draw_road_segment(x1, y1, r1, x2, y2, r2)
@@ -49,10 +56,10 @@ function draw_road_segment(x1, y1, r1, x2, y2, r2)
     local rotated_x2, rotated_y2 = rotatePoint(x2, y2, camera.x + 64, camera.y + 64, camera.angle)
 
     -- Apply camera offset
-    rotated_x1 = rotated_x1 - camera.x
-    rotated_y1 = rotated_y1 - camera.y
-    rotated_x2 = rotated_x2 - camera.x
-    rotated_y2 = rotated_y2 - camera.y
+    local rotated_x1 = rotated_x1 - camera.x
+    local rotated_y1 = rotated_y1 - camera.y
+    local rotated_x2 = rotated_x2 - camera.x
+    local rotated_y2 = rotated_y2 - camera.y
 
     -- Calculate angle of the road segment
     local angle = atan2(rotated_x2 - rotated_x1, rotated_y2 - rotated_y1)
@@ -70,4 +77,44 @@ function draw_road_segment(x1, y1, r1, x2, y2, r2)
     local rx2 = rotated_x2 + cos(angle - 0.25) * r2
     local ry2 = rotated_y2 + sin(angle - 0.25) * r2
     line(rx1, ry1, rx2, ry2, 7)
+
+    --circ(rotated_x1,rotated_y1,r1,6)
+    --circ(rotated_x2,rotated_y2,r2,6)
+end
+
+function draw_road_node(p1, p2, p3)
+    -- Rotate the road points
+    local rotated_x1, rotated_y1 = rotatePoint(p1.x, p1.y, camera.x + 64, camera.y + 64, camera.angle)
+    local rotated_x2, rotated_y2 = rotatePoint(p2.x, p2.y, camera.x + 64, camera.y + 64, camera.angle)
+    local rotated_x3, rotated_y3 = rotatePoint(p3.x, p3.y, camera.x + 64, camera.y + 64, camera.angle)
+
+    -- Apply camera offset
+    local rotated_x1 = rotated_x1 - camera.x
+    local rotated_y1 = rotated_y1 - camera.y
+    local rotated_x2 = rotated_x2 - camera.x
+    local rotated_y2 = rotated_y2 - camera.y
+    local rotated_x3 = rotated_x3 - camera.x
+    local rotated_y3 = rotated_y3 - camera.y
+
+    -- Calculate angle of the road segment
+    local angle1 = atan2(rotated_x2 - rotated_x1, rotated_y2 - rotated_y1)
+    local angle2 = atan2(rotated_x3 - rotated_x2, rotated_y3 - rotated_y2)
+
+    -- Left edge
+    local lxa = rotated_x2 + cos(angle1 + 0.25) * p2.r
+    local lya = rotated_y2 + sin(angle1 + 0.25) * p2.r
+
+    local lxb = rotated_x2 + cos(angle2 + 0.25) * p2.r
+    local lyb = rotated_y2 + sin(angle2 + 0.25) * p2.r
+
+    -- Right edge
+    local rxa = rotated_x2 + cos(angle1 - 0.25) * p2.r
+    local rya = rotated_y2 + sin(angle1 - 0.25) * p2.r
+
+    local rxb = rotated_x2 + cos(angle2 - 0.25) * p2.r
+    local ryb = rotated_y2 + sin(angle2 - 0.25) * p2.r
+
+
+    line(lxa, lya, lxb, lyb, 7)
+    line(rxa, rya, rxb, ryb, 7)
 end
