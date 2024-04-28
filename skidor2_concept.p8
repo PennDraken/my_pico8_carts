@@ -33,11 +33,12 @@ function new_p()
 	x=0,
 	y=0,
 	r=4,
-	g=0.1,--gravity
+	g=0.04,--gravity
 	kf=0.01,--kinetic friction
 	dx=0,
 	dy=0,
 	angle=0.75,
+	ski_angle=0.75,--ski angle
 	angle_speed=0.01,
 	speed=0,
 	a=0.01,
@@ -60,19 +61,19 @@ function new_p()
 	end,
 	draw=function(this)
 		local o=6
-		if this.angle<=0.6 then
+		if this.ski_angle<=0.6 then
 			spr(64,this.x-o,this.y-o,2,2)
-		elseif this.angle<=0.65 then	
+		elseif this.ski_angle<=0.65 then	
 			spr(66,this.x-o,this.y-o,2,2)
-		elseif this.angle<=0.7 then	
+		elseif this.ski_angle<=0.7 then	
 			spr(68,this.x-o,this.y-o,2,2)
-		elseif this.angle<=0.8 then	
+		elseif this.ski_angle<=0.8 then	
 			spr(70,this.x-o,this.y-o,2,2)
-		elseif this.angle<=0.85 then	
+		elseif this.ski_angle<=0.85 then	
 			spr(72,this.x-o,this.y-o,2,2)
-		elseif this.angle<=0.9 then	
+		elseif this.ski_angle<=0.9 then	
 			spr(74,this.x-o,this.y-o,2,2)
-		elseif this.angle<=1 then	
+		elseif this.ski_angle<=1 then	
 			spr(76,this.x-o,this.y-o,2,2)
 		end
 		--circ(this.x,this.y,4,6)
@@ -85,20 +86,26 @@ function new_p()
 		local delta_angle=this.angle_speed
 		if (btn(❎)) delta_angle*=2
 		if btn(⬅️) then
-			this.angle=max((this.angle-delta_angle)%1,0.5)
+			this.ski_angle=max((this.ski_angle-delta_angle)%1,0.5)
 		elseif btn(➡️) then
-			this.angle=min(this.angle+delta_angle
+			this.ski_angle=min(this.ski_angle+delta_angle
 																	,0.999)
+		end
+		--rotate skiis
+		if this.angle<this.ski_angle then
+			this.angle+=delta_angle/2
+		elseif this.angle>this.ski_angle then
+			this.angle-=delta_angle/2
 		end
 		--update player
 		slope=0.25-(abs(this.angle-0.75))
 		a=abs(this.g*sin(slope))
 		--kinetic friction (we always need to have friction this is why we do max())
-		fk=max(0.05,this.kf*this.speed^2)
+		fk=max(0.01,this.kf*this.speed^2)
 		net_a=a-fk--net acceleration
 		--apply acceleration
 		this.speed+=net_a
-		if (this.speed<0.05) this.speed=0
+		if (this.speed<0.01) this.speed=0
 		this.dx=this.speed*cos(this.angle)
 		this.dy=this.speed*sin(this.angle)
 		--this.dx+=net_a*cos(this.angle)
@@ -109,7 +116,7 @@ function new_p()
 		--trail
 		local trail=this.trail
 		if t%100 then
-			add(trail,{this.x,this.y+2,this.angle})
+			add(trail,{this.x,this.y+2,this.ski_angle})
 		end
 		if #trail>30 then
 			del(trail,trail[1])

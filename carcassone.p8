@@ -43,10 +43,11 @@ end
 
 --base tiles
 --tile ids,connections,rotation
-function new_tile(sprites,cons)
+function new_tile(sprites, cons, edges)
 	tile={
 		sprites=sprites,--sprites
 		cons=cons,--connections west,north,east,south
+		edges=edges,
 		draw=function(this,x,y,r)
 			rectfill(x,y+6,x+15,y+15,11)
 			spr(this.sprites[r],x  ,y)
@@ -161,7 +162,7 @@ road="road"
 --create custom tiles
 function init_tiles()
 	tiles={
-	new_tile({0,2,4,6}, {grass,grass,city,city}),
+	new_tile({0,2,4,6}, {grass,grass,city,city}, {nil, nil, 3, 4}),--for every corner we store connecting edges
 	new_tile({8,10,12,14}, {grass,grass,city,grass}),
 	new_tile({36,38,40,42}, {road,grass,grass,road}),
 	new_tile({44,46,44,46}, {city,grass,city,grass}),
