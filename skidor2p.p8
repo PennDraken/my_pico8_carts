@@ -115,9 +115,16 @@ function new_player(id)
 	p.tunneling=false
 	p.draw=function(this)
 		if (p.tunneling) return
-			--set_p_pal()
-			if this.inshadow and not this.jumping then
-				--set_dark_pal()
+		--hat,jacket,pants,skis,poles
+	--_pal={14,15,9,1,14,15}--default
+	--_pal={14,15,12,1,14,15}--blue jacket
+	--_pal={0,15,0,1,14,15}--emo outfit
+	--_pal={3,15,2,0,14,15}--lovisa outfit
+	--_pal={8,0,8,8,8,15}--demon outfit
+			if p.id==0 then
+				set_p_pal({3,15,2,0,14,15})
+			else
+				set_p_pal({0,15,0,1,14,15})
 			end
 			if this.crash then
 				spr(79,this.x,this.y-cy)
@@ -162,7 +169,7 @@ function new_player(id)
 		   else
 			   spr(70+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
 		   end
-		   pal()
+		   pal()--reset palette
 		   --shadow when jumping
 		   if this.jumping then
 			draw_player_shadow(p)
@@ -171,6 +178,7 @@ function new_player(id)
 		   if this.speed>=this.maxspeed*0.95 then
 			   speed_particles(this.x,this.y-cy)
 		   end
+
 	end
 	p.update=function(this)
 
@@ -376,13 +384,13 @@ function draw_w()
 end
 
 --sets player pallete
-function set_p_pal()
+function set_p_pal(_pal)
 	--return
 	pal()
 	--hat,jacket,pants,skis,poles
-	_pal={14,15,9,1,14,15}--default
-	_pal={14,15,12,1,14,15}--blue jacket
-	_pal={0,15,0,1,14,15}--emo outfit
+	--_pal={14,15,9,1,14,15}--default
+	--_pal={14,15,12,1,14,15}--blue jacket
+	--_pal={0,15,0,1,14,15}--emo outfit
 	--_pal={3,15,2,0,14,15}--lovisa outfit
 	--_pal={8,0,8,8,8,15}--demon outfit
 
