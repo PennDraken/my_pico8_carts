@@ -19,6 +19,10 @@ function _draw()
 	cls(5)
 	--nodes
 	for node in all(nodes) do
+		node:draw_bg()
+	end
+
+	for node in all(nodes) do
 	 node:draw_curve()
 	end
 	
@@ -132,12 +136,22 @@ function new_node(x,y,prv,nxt)
  node.nxt=nxt
  node.a=0
  node.w=1
+ node.draw_bg=function(this)
+		if this.prv!=nil then
+			local n={x=this.x,y=this.y,a=(this.a+0.5)%1}
+			draw_curve(n,this.prv,this.w+1,7)
+	 end
+		if this.nxt!=nil then
+		--local n={x=this.nxt.x,y=this.y,a=(this.a+0.5)%1}
+		--draw_curve(this,this.nxt,7)
+  end
+ end
  node.draw_curve=function(this)
-	if this.prv!=nil then
-		local n={x=this.x,y=this.y,a=(this.a+0.5)%1}
-		draw_curve(n,this.prv,this.w,7)
-  	end
-	if this.nxt!=nil then
+		if this.prv!=nil then
+			local n={x=this.x,y=this.y,a=(this.a+0.5)%1}
+			draw_curve(n,this.prv,this.w,1)
+	 end
+		if this.nxt!=nil then
 		--local n={x=this.nxt.x,y=this.y,a=(this.a+0.5)%1}
 		--draw_curve(this,this.nxt,7)
   end
