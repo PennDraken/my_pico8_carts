@@ -3,12 +3,16 @@ function _init()
     offset_y = 0
     m = init_mouse()
     key_scale = {0,2,3,5,7,8,10}--minor
-    notes = {new_note(30, 0, 2), new_note(20, 0, 2), new_note(25, 4, 2), new_note(30, 5, 6)}
+    notes = {}
+    --notes = {new_note(30, 0, 2), new_note(20, 0, 2), new_note(25, 4, 2), new_note(30, 5, 6)}
     note_hovered = nil
     temp_note = nil
     key_height=5
     step_width=3
-    offset_x = 8
+    offset_x = 31
+    max_key = 3*12+1
+    step_length = 16
+    state = {}
 end
 
 function init_mouse()
@@ -20,12 +24,18 @@ function init_mouse()
         rclick   = false,
         mclick   = false,
         rollup   = false,
-        rolldown = false
+        rolldown = false,
+        timelheld = 0,
     }
     m.update=function(this)
         this.x        = stat(32)
         this.y        = stat(33)
         this.lclick   = stat(34)==1
+        if this.lclick then
+            this.timelheld = this.timelheld + 1
+        else
+            this.timelheld = 0
+        end
         this.rclick   = stat(34)==2
         this.mclick   = stat(34)==4
         this.rollup   = stat(36)>0
@@ -33,12 +43,19 @@ function init_mouse()
 
     end
     m.draw=function(this)
-        if this.lclick then
-            spr(2,this.x,this.y)
+        local o=3
+        if this.lclick and not state.note_selected then
+            spr(2,this.x-o,this.y-o)
         elseif this.rclick then
-            spr(3,this.x,this.y)
-        else
-            spr(1,this.x,this.y)
+            spr(3,this.x-o,this.y-o)
+        elseif not note_hovered then
+            spr(1,this.x-o,this.y-o)
+        elseif note_hovered and not state.note_selected then
+            spr(4,this.x-o,this.y-o)
+        end
+        if state.note_selected then
+            --DRAG
+            spr(5,this.x-o,this.y-o)
         end
     end
 
@@ -59,11 +76,21 @@ function new_note(key, step, length)
     note.key    = key
     note.step   = step
     note.length = length
-    note.draw = function(this, offset_x, offset_y, step_width, key_height)
-        this.step = max(1, this.step)
+    note.draw = function(this, offset_x, offset_y, step_width, key_height, color, offset)
+        if color==nil then color=10 end
+        if offset==nil then offset=1 end--offset is the pixel offset (negative values inflate note)
+        this.step = max(0, this.step)
         local x = offset_x + this.step * step_width
         local y = -offset_y + this.key * key_height
-        rectfill(x + 1, y + 1, x + (this.length) * step_width - 1, y + key_height - 1, 10)
+        rectfill(x + offset, y + offset, x + (this.length) * step_width - offset, y + key_height - offset, color)
+    end
+    note.get_key = function(this)
+        --reverse order
+        local real_key = max_key - this.key
+        local scale_index = (real_key % #key_scale) + 1
+        local octave_index = flr(real_key / #key_scale)
+        local scaled_real_key = key_scale[scale_index] + octave_index * 12
+        return scaled_real_key
     end
     note.update = function(this)
 
@@ -71,93 +98,126 @@ function new_note(key, step, length)
     return note
 end
 
---RENDER--------------------------------------------------
-function _draw()
-    cls()
-    draw_piano_side(offset_y, offset_x - 1, key_height)
-    draw_input_grid(offset_y, offset_x, key_height, step_width)
-    --highlight step and key
-    local o = xy_to_note_step(m.x, m.y, offset_x, offset_y, step_width, key_height)
-    local step = o[1]
-    local key  = o[2]
-    local x0 =  offset_x + step * step_width
-    local y0 = -offset_y + key * key_height
-    rectfill(x0 + 1, y0 + 1, x0 + step_width - 1, y0 + key_height - 1, 13)
-    for note in all(notes) do
-        note:draw(offset_x, offset_y, step_width, key_height)
-    end
-    if temp_note then temp_note:draw(offset_x, offset_y, step_width, key_height) end
 
-    m:draw()
-    ?stat(34),7
+
+
+--MUSIC------------------------------------
+function sfx_step(key, waveform)
+    return {key=key, waveform=waveform}
 end
 
-function draw_piano_side(offset_y, w, key_height)
-    --takes in width w as pixels wide for piano
-    rect(0,0,w,127,1)
-    --draw rects
-    for i=0,60 do
-        local x0 = 0
-        local x1 = w
-        local y0 = i * key_height - offset_y
-        local y1 = (i + 1) * key_height - offset_y
-        rect(x0, y0, x1, y1, 1)
-        if i%8==0 then
-            line(x0, y0 + 1, x0, y1 - 1, 13)
+function set_allsfxspd(N, speed)
+    for i=0,N do
+        sfxspd(i, speed)
+    end
+end
+
+function sfxspd(sfx_i, spd)
+    --sets speed of sfx pattern i
+	local addr=0x3200+(68*sfx_i)+64+1
+	poke(mem_addr,spd)
+end
+
+function new_music_buffer()
+    local buffer = {}
+    local tracks = {}
+    local n_tracks = 4
+    local sfx_length = 32
+    --init empty tracks (corresponding to channels of audio)
+    for i=1, n_tracks do
+        add(tracks, {})
+        for j=1, sfx_length * step_length do
+            add(tracks[i], {-1, 0})
         end
     end
-end
-
-function draw_input_grid(offset_y, start_x, key_height, step_width)
-    --draw rects
-    for i=0,60 do
-        for step=0,31 do
-            local x=step*step_width+start_x
-            local y=i*key_height-offset_y
-            rect(x, y, x+step_width, y+key_height, 1)
-            if step % 4==0 then
-                line(x,0,x,127,13)
+    buffer.n_tracks = n_tracks
+    buffer.tracks = tracks
+    buffer.sfx_length = sfx_length
+    buffer.step_length = step_length
+    buffer.add_note = function(this, note)
+        --check each track for empty space
+        local found_note = false
+        for track_index=1, this.n_tracks do
+            --check step free
+            if (this.tracks[track_index][note.step * this.step_length + 1][1] == -1) then
+                --add note to sfx
+                local key = note:get_key()
+                --local sfx = sfx_step(key, 0)
+                for i=1, this.step_length * note.length do-- NOTE THAT NOTE MAY OVERLAP NOTE IN THE FUTURE, WRITING SHOULD THEREFORE BE DONE IN CHRONOLOGICAL ORDER
+                    --write note
+                    this.tracks[track_index][note.step * this.step_length + i] = {key, i}
+                end
+                found_note = true
+                break
             end
-            if step % 16==0 then
-                line(x,0,x,127,2)
+        end
+        if not found_note then
+            --replace note that has started playing
+            local highest_i = -1
+            local highest_i_track_index = -1
+            for track_index=1, this.n_tracks do
+                local i = this.tracks[track_index][note.step * this.step_length + 1][2]
+                if i > highest_i then
+                    highest_i = i
+                    highest_i_track_index = track_index
+                end
+            end
+            if highest_i > 1 then
+                local key = note:get_key()
+                for i=1, this.step_length * note.length do
+                    --write note
+                    this.tracks[highest_i_track_index][note.step * this.step_length + i] = {key, i}
+                end
             end
         end
     end
+    buffer.write_song = function(this)
+        -- Clear all 64 SFX: 64 * 68 = 4352 bytes
+        memset(0x3200, 0, 4352)
+        local volume_list = {1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,4,5,5,5,5,5,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+        -- Set all SFX to workable values
+        for track_index = 1, this.n_tracks do
+            local track = this.tracks[track_index]
+            local last_key = -1 -- willl be used to add transient to notes
+            for note_index = 1, #track do
+                local pattern_num = flr((note_index - 1) / 32)
+                local note_pos = (note_index - 1) % 32
+                local sfx_id = pattern_num * this.n_tracks + (track_index - 1)
+                --debug = sfx_id
+                local sfx_address = 0x3200 + sfx_id * 68 + note_pos * 2
+                local key = track[note_index][1]
+                local i   = track[note_index][2]
+                if key and key != -1 then
+                    local pitch  = key
+                    local instr  = 2
+                    
+                    local vol    = volume_list[min(i, #volume_list-1)]
+                    local effect = 0
+    
+                    local note = (effect << 12) | (vol << 9) | (instr << 6) | (pitch & 0x3f)
+
+                    -- Store as two bytes (little-endian)
+                    local byte1 = note & 0xff         -- low byte
+                    local byte2 = (note >> 8) & 0xff  -- high byte
+
+                    poke(sfx_address, byte1)
+                    poke(sfx_address + 1, byte2)
+                end
+            end
+        end
+        set_allsfxspd(64,10)
+    end
+    return buffer
 end
 
---UPDATE--------------------------------------------------
-function _update60()
-    m:update()
-    --scrolling
-    if (m.rollup) then
-        offset_y-=1
-    end
-    if (m.rolldown) then
-        offset_y+=1
-    end
-    --snap offset
-    offset_y = max(0,offset_y)
-    --creating notes
-    local o = xy_to_note_step(m.x, m.y, offset_x, offset_y, step_width, key_height)
-    local step = o[1]
-    local key  = o[2]
-    if (m.lclick) then--TODO use lheld instead
-        --if pressing note
-        if (note_hovered and not temp_note) then
-
-        --if no note has been created and not hovering over a note
-        elseif (not temp_note) then
-            --create new note at position
-            temp_note = new_note(key, step, 1)
-        --if note has already been created
-        elseif (temp_note) then
-            --change length of note
-            temp_note.length = step - temp_note.step
+function sort_notes(notes)
+    for i = 2, #notes do
+        local key = notes[i]
+        local j = i - 1
+        while j >= 1 and notes[j].step > key.step do
+            notes[j + 1] = notes[j]
+            j -= 1
         end
-    else
-        if temp_note then
-            add(notes, temp_note)
-            temp_note = nil
-        end
+        notes[j + 1] = key
     end
 end
