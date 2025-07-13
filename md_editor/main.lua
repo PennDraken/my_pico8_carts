@@ -162,6 +162,8 @@ function render_row(text_row, text_index, x, y)
     return render_heading2(text_row, text_index, x, y)
   elseif first_word=="###" then
     return render_heading3(text_row, text_index, x, y)
+  elseif first_word=="---" then
+    return render_horisontal_line(text_index, x, y)
   else
     return render_body(text_row, text_index, x, y)
   end
@@ -209,6 +211,19 @@ end
 function render_body(text_row, text_index, x, y)
   local char_width, char_height = 4, 6
   print(text_row, x, y)
+  local glyph = new_glyph(
+    char_width,
+    char_height,
+    text_index,
+    text_index
+  )
+  local glyph_rows = {{glyph}}
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function render_horisontal_line(text_index, x, y)
+  local char_width, char_height = 4, 6
+  print("--------------------------------", x, y)
   local glyph = new_glyph(
     char_width,
     char_height,
