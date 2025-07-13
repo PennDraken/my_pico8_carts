@@ -1,0 +1,51 @@
+function get_first_word(string)
+  --gets first word in string (note no spaces allowed)
+  local nstring = ""
+  local word_end_i
+  for i=1,#string do
+    if sub(string, i, i) !=' ' then
+      nstring = nstring..sub(string, i, i)
+    else
+      word_end_i = i + 1
+      break
+    end
+  end
+  return nstring, word_end_i
+end
+
+function reverse_case(str)
+  -- used to make text more pretty and readable
+  local result = ""
+  for i=1, #str do
+    local c = sub(str, i, i)
+    local code = ord(c)
+
+    if code >= 65 and code <= 90 then
+      -- uppercase A-Z -> lowercase a-z
+      result = result .. chr(code + 32)
+    elseif code >= 97 and code <= 122 then
+      -- lowercase a-z -> uppercase A-Z
+      result = result .. chr(code - 32)
+    else
+      -- non-alphabetic characters unchanged
+      result = result .. c
+    end
+  end
+  return result
+end
+
+function string_to_text_rows(str)
+  local rows = {}
+  for line in all(split(str, "\n", false)) do
+    add(rows, line)
+  end
+  return rows
+end
+
+function split_string_with_character(str, char)
+  local rows = {}
+  for line in all(split(str, char, true)) do
+    add(rows, line)
+  end
+  return rows
+end
