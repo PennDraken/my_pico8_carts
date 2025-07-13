@@ -1,14 +1,14 @@
 function get_onscreen_y()
-    --wrapper function that looks at memory to find current cursor position
-    return peek(0x5f27)
+  --wrapper function that looks at memory to find current cursor position
+  return peek(0x5f27)
 end
 
 function set_cursor_x(x)
-    poke(0x5f26, x)
+  poke(0x5f26, x)
 end
 
 function set_cursor_y(y)
-    poke(0x5f27, y)
+  poke(0x5f27, y)
 end
 
 function _init()
@@ -125,7 +125,101 @@ function _update60()
   end
 end
 
+---RENDER----------------------------------------------------------
 function _draw()
+  theme = themes[theme_i]
+  cls(theme.bgc)
+  glyph_rows = render_text(text_rows)
+end
+
+function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit)
+  return {
+    char_width=char_width, char_height=char_height,
+    index_in_text_rows=index_in_text_rows, index_in_text_rows_edit=index_in_text_rows_edit
+  }
+end
+
+function render_text(text_rows)
+  local glyph_rows = {} -- Stores how text is rendered on screen
+  local text_index = 1  -- Text index stores the corresponding char in text rows
+  local x = 0
+  local y = 0
+  for row_i, text_row in ipairs(text_rows) do
+    text_row = reverse_case(text_row)
+    local new_glyph_rows = nil
+    new_glyph_rows, x, y = render_row(text_row, text_index, x, y)
+    add(glyph_rows, new_glyph_rows)
+    text_index += #text_row
+  end
+  return glyph_rows
+end
+
+function render_row(text_row, text_index, x, y)
+  local first_word = get_first_word(text_row)
+  if first_word=="#" then
+    return render_heading(text_row, text_index, x, y)
+  elseif first_word=="##" then
+    return render_heading2(text_row, text_index, x, y)
+  elseif first_word=="###" then
+    return render_heading3(text_row, text_index, x, y)
+  else
+    return render_body(text_row, text_index, x, y)
+  end
+end
+
+function render_heading(text_row, text_index, x, y)
+  local char_width, char_height = header_font()
+  print("\14"..text_row, x, y)
+  local glyph = new_glyph(
+    char_width,
+    char_height,
+    text_index,
+    text_index
+  )
+  local glyph_rows = {{glyph}}
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function render_heading2(text_row, text_index, x, y)
+  local char_width, char_height = subheader_font()
+  print("\14"..text_row, x, y)
+  local glyph = new_glyph(
+    char_width,
+    char_height,
+    text_index,
+    text_index
+  )
+  local glyph_rows = {{glyph}}
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function render_heading3(text_row, text_index, x, y)
+  local char_width, char_height = subheader_font()
+  print("\14"..text_row, x, y)
+  local glyph = new_glyph(
+    char_width,
+    char_height,
+    text_index,
+    text_index
+  )
+  local glyph_rows = {{glyph}}
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function render_body(text_row, text_index, x, y)
+  local char_width, char_height = 4, 6
+  print(text_row, x, y)
+  local glyph = new_glyph(
+    char_width,
+    char_height,
+    text_index,
+    text_index
+  )
+  local glyph_rows = {{glyph}}
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function _draw2()
   theme = themes[theme_i]
   cls(theme.bgc)
   set_cursor_y(1)--y padding
