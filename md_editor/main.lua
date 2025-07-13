@@ -3,11 +3,19 @@ function get_onscreen_y()
     return peek(0x5f27)
 end
 
+function set_cursor_x(x)
+    poke(0x5f26, x)
+end
+
+function set_cursor_y(y)
+    poke(0x5f27, y)
+end
+
 function _init()
   cls()
   extcmd("set_title","Tiny Markdown Editor")
   --themes
-  theme_i = 1--theme index
+  theme_i = 4--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
   menuitem(1, "Change theme", toggle_theme)
@@ -34,7 +42,7 @@ function _init()
   end
   ci    = 3 --cursor index in row
   rowi  = 1 --selected row
-  t = 0
+  t = 0     --timer for blinking animation
 end
 
 function control_cursor(row_length)
@@ -79,8 +87,6 @@ function _update60()
 
   -- get key input
   local key = stat(31)
-
-
   if key == chr(8) then
     -- backspace
     sfx(4)
@@ -122,7 +128,7 @@ end
 function _draw()
   theme = themes[theme_i]
   cls(theme.bgc)
-  poke(0x5f27, 4)--y padding
+  set_cursor_y(1)--y padding
   -- draw live text
   local cy = 0 -- camera offset
   for i, curr_row in ipairs(text_rows) do
@@ -158,6 +164,7 @@ function _draw()
         curr_row = " "..first_word..") "..sub(curr_row, 3, #curr_row)
       end
     elseif first_word == '---' then
+      --horisontal line
       c = theme.linec
       if i != rowi then
         char_height = 6
@@ -177,8 +184,8 @@ function _draw()
           local x = 0
           local y = get_onscreen_y()
           spr(split_word[1], (128 - split_word[2]*8)/2, y, split_word[2], split_word[3])
-          poke(0x5f26, lpadding)
-          poke(0x5f27, y + split_word[3]*8) --adjust because we still print an empty line
+          set_cursor_x(lpadding)
+          set_cursor_y(y + split_word[3]*8) --adjust because we still print an empty line
           curr_row = ""
         end
       end
@@ -211,34 +218,6 @@ function _draw()
   t += 1
 end
 
-function glyph(char_width, char_height, font_function, c)
-  --glyph is a section of words
-  local glyph = {
-    char_width=char_width,
-    char_height=char_height,
-    font_function=font_function,
-    c=c
-  }
-  --TODO add rendering here draw(x,y)
-  return glyph
-end
-
-function new_row(cx, cy, rowi, charindex)
-  --this is a row that stores what is printed
-  --on each row, including the 1st words column index
-  --this is useful to avoid duplicate rendering
-  --and cursor interaction logic
-  --ie we store word positions here!
-  local row={
-    cx=cx,
-    cy=cy,
-    rowi=rowi,
-    charindex=charindex
-  }
-  
-  return row
-end
-
 function special_print(styling, char_width, char_height, str, c, lpadding, rowselected)
   --special print function that splits words to a new line
   --there are probably more efficient ways to do this
@@ -251,27 +230,7 @@ function special_print(styling, char_width, char_height, str, c, lpadding, rowse
   end
   local y = get_onscreen_y()
 
-  local words = {}
-  local i = 1
-  local len = #str
-
-  while i <= len do
-    -- skip spaces
-    while i <= len and sub(str, i, i) == " " do
-      i = i + 1
-    end
-
-    if i > len then break end
-
-    -- find word end
-    local start_i = i
-    while i <= len and sub(str, i, i) ~= " " do
-      i = i + 1
-    end
-
-    local word = sub(str, start_i, i - 1)
-    add(words, word)
-  end
+  words = string_to_list_of_words(str)
 
   local isbold    = false
   local iscursive = false
@@ -329,8 +288,8 @@ function special_print(styling, char_width, char_height, str, c, lpadding, rowse
         end
       end
 
-      poke(0x5f26, x)
-      poke(0x5f27, y)
+      set_cursor_x(x)
+      set_cursor_y(y)
     --CURSIVE TEXT
     elseif iscursive then
       if sub(word,-1,-1)=="*" then
@@ -363,8 +322,8 @@ function special_print(styling, char_width, char_height, str, c, lpadding, rowse
         end
       end
 
-      poke(0x5f26, x)
-      poke(0x5f27, y)
+      set_cursor_x(x)
+      set_cursor_y(y)
     else
       --regular text
       local word_width = #word * char_width
@@ -385,12 +344,12 @@ function special_print(styling, char_width, char_height, str, c, lpadding, rowse
         x = x + char_width
       end
 
-      poke(0x5f26, x)
-      poke(0x5f27, y)
+      set_cursor_x(x)
+      set_cursor_y(y)
     end
   end
 
-  poke(0x5f26, 0)
+  set_cursor_x(0)
   poke(0x5f27, y + char_height)
 end
 

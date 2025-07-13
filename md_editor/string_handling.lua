@@ -35,6 +35,7 @@ function reverse_case(str)
 end
 
 function string_to_text_rows(str)
+--splits a string with line breaks into a list of strings
   local rows = {}
   for line in all(split(str, "\n", false)) do
     add(rows, line)
@@ -48,4 +49,28 @@ function split_string_with_character(str, char)
     add(rows, line)
   end
   return rows
+end
+
+function string_to_list_of_words(str)
+  local words = {}
+  local i = 1
+  local len = #str
+  while i <= len do
+    -- skip spaces
+    while i <= len and sub(str, i, i) == " " do
+      i = i + 1
+    end
+
+    if i > len then break end
+
+    -- find word end
+    local start_i = i
+    while i <= len and sub(str, i, i) ~= " " do
+      i = i + 1
+    end
+
+    local word = sub(str, start_i, i - 1)
+    add(words, word)
+  end
+  return words
 end
