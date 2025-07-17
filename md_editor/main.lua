@@ -291,7 +291,7 @@ function render_body(text_row, text_index, x, y, cursor_index)
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
-    print("\14"..cleaned_word, x, y, 7)
+    x = char_width + print("\14"..cleaned_word, x, y, 7)
     local glyph = new_glyph(
       char_width,
       char_height,
@@ -299,7 +299,6 @@ function render_body(text_row, text_index, x, y, cursor_index)
       text_index
     )
     add(glyph_row, glyph)
-    x += #cleaned_word * char_width + 1
   end
   add(glyph_rows, glyph_row)
   return glyph_rows, 0, get_onscreen_y()
