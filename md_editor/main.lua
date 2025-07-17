@@ -156,7 +156,8 @@ function render_text(text_rows, cursor_index)
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index)
-    add(glyph_rows, new_glyph_rows)
+    -- add(glyph_rows, new_glyph_rows)
+    combine_tables(glyph_rows, new_glyph_rows)
     text_index += #text_row
   end
   return glyph_rows
@@ -295,10 +296,11 @@ function render_body(text_row, text_index, x, y, cursor_index)
     local glyph = new_glyph(
       char_width,
       char_height,
-      text_index,--TODO update text_index
+      text_index,
       text_index
     )
     add(glyph_row, glyph)
+    text_index += #word + 1
   end
   add(glyph_rows, glyph_row)
   return glyph_rows, 0, get_onscreen_y()
