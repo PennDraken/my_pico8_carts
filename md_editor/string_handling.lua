@@ -46,7 +46,7 @@ end
 function split_string_with_character(str, char)
   local rows = {}
   for line in all(split(str, char, true)) do
-    add(rows, line)
+    add(rows, ""..line)--Ensures numbers are still cast as strings. Note that 1. will be cast to 1 (NOT GOOD)
   end
   return rows
 end

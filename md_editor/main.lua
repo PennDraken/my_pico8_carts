@@ -1,3 +1,8 @@
+function get_onscreen_x()
+  --wrapper function that looks at memory to find current cursor position
+  return peek(0x5f26)
+end
+
 function get_onscreen_y()
   --wrapper function that looks at memory to find current cursor position
   return peek(0x5f27)
@@ -13,6 +18,8 @@ end
 
 function _init()
   cls()
+  -- render_body_test()
+  -- stop()
   extcmd("set_title","Tiny Markdown Editor")
   --themes
   theme_i = 4--theme index
@@ -23,7 +30,7 @@ function _init()
   text_rows = {
     "# Markdown",
     "## Introduction",
-    "markdown is a lightweight **markup language** for creating formatted text using a plain-text editor.",
+    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
     "",
     "## Facts",
     "- Created in 2004",
@@ -38,11 +45,12 @@ function _init()
   }
   user_string = stat(4)
   if user_string!="" then
-    text_rows = string_to_text_rows(user_string)
+    --text_rows = string_to_text_rows(user_string)
   end
   ci    = 3 --cursor index in row
   rowi  = 1 --selected row
   t = 0     --timer for blinking animation
+  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
 end
 
 function control_cursor(row_length)
@@ -129,7 +137,7 @@ end
 function _draw()
   theme = themes[theme_i]
   cls(theme.bgc)
-  glyph_rows = render_text(text_rows)
+  glyph_rows = render_text(text_rows, cursor_index)
 end
 
 function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit)
@@ -139,7 +147,7 @@ function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_ro
   }
 end
 
-function render_text(text_rows)
+function render_text(text_rows, cursor_index)
   local glyph_rows = {} -- Stores how text is rendered on screen
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
@@ -147,30 +155,42 @@ function render_text(text_rows)
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
-    new_glyph_rows, x, y = render_row(text_row, text_index, x, y)
+    new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index)
     add(glyph_rows, new_glyph_rows)
     text_index += #text_row
   end
   return glyph_rows
 end
 
-function render_row(text_row, text_index, x, y)
+function render_row(text_row, text_index, x, y, cursor_index)
   local first_word = get_first_word(text_row)
   if first_word=="#" then
-    return render_heading(text_row, text_index, x, y)
+    return render_heading(text_row, text_index, x, y, cursor_index)
   elseif first_word=="##" then
-    return render_heading2(text_row, text_index, x, y)
+    return render_heading2(text_row, text_index, x, y, cursor_index)
   elseif first_word=="###" then
-    return render_heading3(text_row, text_index, x, y)
+    return render_heading3(text_row, text_index, x, y, cursor_index)
   elseif first_word=="---" then
-    return render_horisontal_line(text_index, x, y)
+    return render_horisontal_line(text_index, x, y, cursor_index)
+  elseif first_word=="" then
+    local glyph = new_glyph(
+      4,
+      6,
+      text_index,
+      text_index
+    )
+    return {{glyph}}, 0, y + 6
   else
-    return render_body(text_row, text_index, x, y)
+    return render_body(text_row, text_index, x, y, cursor_index)
   end
 end
 
-function render_heading(text_row, text_index, x, y)
+function render_heading(text_row, text_index, x, y, cursor_index)
   local char_width, char_height = header_font()
+  -- We want to preview markdown when cursor is not on row
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+    text_row = sub(text_row, 3, -1)
+  end
   print("\14"..text_row, x, y)
   local glyph = new_glyph(
     char_width,
@@ -182,8 +202,11 @@ function render_heading(text_row, text_index, x, y)
   return glyph_rows, 0, get_onscreen_y()
 end
 
-function render_heading2(text_row, text_index, x, y)
+function render_heading2(text_row, text_index, x, y, cursor_index)
   local char_width, char_height = subheader_font()
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+    text_row = sub(text_row, 4, -1)
+  end
   print("\14"..text_row, x, y)
   local glyph = new_glyph(
     char_width,
@@ -195,8 +218,11 @@ function render_heading2(text_row, text_index, x, y)
   return glyph_rows, 0, get_onscreen_y()
 end
 
-function render_heading3(text_row, text_index, x, y)
+function render_heading3(text_row, text_index, x, y, cursor_index)
   local char_width, char_height = subheader_font()
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+    text_row = sub(text_row, 5, -1)
+  end
   print("\14"..text_row, x, y)
   local glyph = new_glyph(
     char_width,
@@ -208,8 +234,84 @@ function render_heading3(text_row, text_index, x, y)
   return glyph_rows, 0, get_onscreen_y()
 end
 
-function render_body(text_row, text_index, x, y)
+function render_body_test()
+  cls()
+  render_body("**This** is a test. This is a pretty long sentence. This is **bold**", 1, 0, 0, 1)
+end
+
+function render_body(text_row, text_index, x, y, cursor_index)
+  -- This function includes word wrapping
+  local words = string_to_list_of_words(text_row)
+  local word_formatting_functions = {}
+  local cleaned_words = {}
+  local is_bold    = false
+  local is_cursive = false
+  --Iterate through all words and store their formatting type and text index
+  for word in all(words) do
+    --Word prefix
+    if sub(word, 1, 2)=="**" then
+      is_bold = true
+      word = sub(word, 3)
+    elseif sub(word, 1, 1)=="*" then
+      is_cursive = true
+      word = sub(word, 2)
+    end
+
+    --Store data
+    if is_bold then
+      add(word_formatting_functions, regular_bold)
+    elseif is_cursive then
+      add(word_formatting_functions, regular_italic)
+    else
+      add(word_formatting_functions, regular)
+    end
+    --Word postfix
+    if sub(word, -2)=="**" then
+      is_bold = false
+      word = sub(word, 1, -3)
+    elseif sub(word, -1)=="*" then
+      is_cursive = false
+      word = sub(word, 1, -2)
+    end
+    add(cleaned_words, {word=tostr(word), index="TODO"})
+  end
+
+  local glyph_rows = {}
+  local glyph_row  = {}
+  --Draws all words to screen
+  for i,word in ipairs(words) do
+    local formatting_func = word_formatting_functions[i]
+    local cleaned_word = cleaned_words[i].word
+    local char_width, char_height = formatting_func()
+    local next_x = x + char_width * #cleaned_word
+    if next_x > 128 then
+      -- Move to new line
+      x = 0
+      y = y + char_height
+      add(glyph_rows, glyph_row)--Save previous glyph row
+      glyph_row = {}
+    end
+    print("\14"..cleaned_word, x, y, 7)
+    local glyph = new_glyph(
+      char_width,
+      char_height,
+      text_index,--TODO update text_index
+      text_index
+    )
+    add(glyph_row, glyph)
+    x += #cleaned_word * char_width + 1
+  end
+  add(glyph_rows, glyph_row)
+  return glyph_rows, 0, get_onscreen_y()
+end
+
+function render_horisontal_line(text_index, x, y, cursor_index)
   local char_width, char_height = 4, 6
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+    text_row = "--------------------------------"
+  else
+    text_row = "---"
+  end
   print(text_row, x, y)
   local glyph = new_glyph(
     char_width,
@@ -220,245 +322,3 @@ function render_body(text_row, text_index, x, y)
   local glyph_rows = {{glyph}}
   return glyph_rows, 0, get_onscreen_y()
 end
-
-function render_horisontal_line(text_index, x, y)
-  local char_width, char_height = 4, 6
-  print("--------------------------------", x, y)
-  local glyph = new_glyph(
-    char_width,
-    char_height,
-    text_index,
-    text_index
-  )
-  local glyph_rows = {{glyph}}
-  return glyph_rows, 0, get_onscreen_y()
-end
-
-function _draw2()
-  theme = themes[theme_i]
-  cls(theme.bgc)
-  set_cursor_y(1)--y padding
-  -- draw live text
-  local cy = 0 -- camera offset
-  for i, curr_row in ipairs(text_rows) do
-    local first_char = curr_row[1]
-    local styling = ""
-    local c = theme.pc --color
-    char_width = 4
-    char_height = 6
-    lpadding = 1
-    first_word, word_i = get_first_word(curr_row)
-    if first_word == "#" then
-      styling = "\14"
-      header_font()
-      c = theme.h1c
-    elseif first_word == "##" then
-      styling = "\14"
-      subheader_font()
-      c = theme.h2c
-    elseif first_word == '-' then
-      --bullet point list
-      c = theme.list1c
-      char_width = 5
-      char_height = 7
-      if i != rowi then
-        curr_row = " ○ "..sub(curr_row, 3, #curr_row)
-      end
-    elseif tonum(first_word)!=nil and tonum(first_word) >= 0 and tonum(first_word) <= 999 then
-      --numeric list
-      c = theme.list2c
-      char_width = 5
-      char_height = 7
-      if i != rowi then
-        curr_row = " "..first_word..") "..sub(curr_row, 3, #curr_row)
-      end
-    elseif first_word == '---' then
-      --horisontal line
-      c = theme.linec
-      if i != rowi then
-        char_height = 6
-        char_width = 3
-        local num_chars = flr((128 - lpadding)/char_width - 1)
-        curr_row = "-"
-        for i=0,num_chars do
-          curr_row = curr_row.."-"
-        end
-      end
-    elseif first_word[1]=="[" and first_word[-1]=="]" then
-      --image
-      if rowi != i then
-        local split_word = split_string_with_character(sub(first_word,2,-2), ",")
-        if #split_word==3 then
-          --draw image
-          local x = 0
-          local y = get_onscreen_y()
-          spr(split_word[1], (128 - split_word[2]*8)/2, y, split_word[2], split_word[3])
-          set_cursor_x(lpadding)
-          set_cursor_y(y + split_word[3]*8) --adjust because we still print an empty line
-          curr_row = ""
-        end
-      end
-    end
-    if styling != "" and rowi != i then
-      -- remove md symbols when not on that specific line
-      curr_row = sub(curr_row, word_i)
-    end
-    if t % 30 <= 15 and i == rowi then
-      --show cursor
-      --curr_row = sub(curr_row, 1, ci).."▮"..sub(curr_row, ci+2, #curr_row)
-      --this part essentially prints a duplicate string identical, except to create cursor at desired position
-      local cx=0
-      local cy=get_onscreen_y()
-      special_print(styling, char_width, char_height, reverse_case(sub(curr_row, 1, ci).."▮"..sub(curr_row, ci+2, #curr_row)), theme.cursorc, lpadding, rowi==i)
-      poke(0x5f27, cy)
-    end
-    special_print(styling, char_width, char_height, reverse_case(curr_row), c, lpadding, rowi==i)
-    if i == rowi then
-      cy = get_onscreen_y()--cursor position
-    end
-  end
-  if cy > 128 then
-    --setting camera here is a bit weird as it is for the next frame
-    camera(0, cy-128)
-  else
-    camera(0, 0)
-  end
-
-  t += 1
-end
-
-function special_print(styling, char_width, char_height, str, c, lpadding, rowselected)
-  --special print function that splits words to a new line
-  --there are probably more efficient ways to do this
-  local padding_x = lpadding
-  local screen_width = 128
-
-  local x = padding_x
-  if sub(str, 1, 1)==" " then
-    x += char_width
-  end
-  local y = get_onscreen_y()
-
-  words = string_to_list_of_words(str)
-
-  local isbold    = false
-  local iscursive = false
-  local selected_word = nil--stores the index of the word were cursor is
-  for w = 1, #words do
-    local word = words[w]
-    local boldchar_width = char_width + 1
-    local curisivechar_width = char_width
-    --BOLD TEXT
-    if sub(word,1,2)=="**" then
-      --bold text start
-      isbold = true
-      regular_bold()
-      if not rowselected then
-        word = sub(word,3,-1)--truncate starting bold signs
-      end
-    end
-    --CURSIVE TEXT
-    if word[1]=="*" and word[2]!="*" and not isbold then
-      --cursive text start
-      iscursive = true
-      regular_italic()
-      if not rowselected then
-        word = sub(word,2,-1)--truncate starting bold signs
-      end
-    end
-    if isbold then
-      if sub(word,-2,-1)=="**" then
-        --bold text ends
-        isbold = false
-        if not rowselected then
-          word = sub(word,1,-3)--truncate ending bold signs
-        end
-      end
-      local word_width = #word * boldchar_width
-
-      if x + word_width > screen_width then
-        x = padding_x
-        y = y + char_height
-      end
-
-      for j = 1, #word do
-        local char = sub(word, j, j)
-        print("\14"..styling.. char, x, y, c)--TODO use parameter instead
-        x = x + boldchar_width
-      end
-
-      if w < #words then
-        if isbold then
-          print("\14"..styling .. " ", x, y, c)
-          x = x + boldchar_width
-        else
-          print(styling .. " ", x, y, c)
-          x = x + char_width
-        end
-      end
-
-      set_cursor_x(x)
-      set_cursor_y(y)
-    --CURSIVE TEXT
-    elseif iscursive then
-      if sub(word,-1,-1)=="*" then
-        --cursive text ends
-        iscursive = false
-        if not rowselected then
-          word = sub(word,1,-2)--truncate ending bold signs
-        end
-      end
-      local word_width = #word * curisivechar_width
-
-      if x + word_width > screen_width then
-        x = padding_x
-        y = y + char_height
-      end
-
-      for j = 1, #word do
-        local char = sub(word, j, j)
-        print("\14"..styling.. char, x, y, c)--TODO use parameter instead
-        x = x + curisivechar_width
-      end
-
-      if w < #words then
-        if iscursive then
-          print("\14"..styling .. " ", x, y, c)
-          x = x + curisivechar_width
-        else
-          print(styling .. " ", x, y, c)
-          x = x + char_width
-        end
-      end
-
-      set_cursor_x(x)
-      set_cursor_y(y)
-    else
-      --regular text
-      local word_width = #word * char_width
-
-      if x + word_width > screen_width then
-        x = padding_x
-        y = y + char_height
-      end
-
-      for j = 1, #word do
-        local char = sub(word, j, j)
-        print(styling .. char, x, y, c)
-        x = x + char_width
-      end
-
-      if w < #words then
-        print(styling .. " ", x, y, c)
-        x = x + char_width
-      end
-
-      set_cursor_x(x)
-      set_cursor_y(y)
-    end
-  end
-
-  set_cursor_x(0)
-  poke(0x5f27, y + char_height)
-end
-
