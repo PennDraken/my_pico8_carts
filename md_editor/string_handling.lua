@@ -75,6 +75,32 @@ function string_to_list_of_words(str)
   return words
 end
 
+function string_to_list_of_words_with_index(str, start_index)
+  local words   = {}
+  local indexes = {}
+  local i = 1
+  local len = #str
+  while i <= len do
+    -- skip spaces
+    while i <= len and sub(str, i, i) == " " do
+      i = i + 1
+    end
+
+    if i > len then break end
+
+    -- find word end
+    local start_i = i
+    while i <= len and sub(str, i, i) ~= " " do
+      i = i + 1
+    end
+
+    local word = sub(str, start_i, i - 1)
+    add(words, word)
+    add(indexes, start_i + start_index)
+  end
+  return words, indexes
+end
+
 function space_pad_symbol(symbol, space_count)
   --Returns a string with spaces and a square marker at index
   local string = ""

@@ -53,8 +53,6 @@ function _init()
   cursor_index = 28 -- Stores cursor position (index is index of char in original array)
 end
 
-
-
 function _update60()
   -- read user input
   if user_string != stat(4) then
@@ -78,14 +76,33 @@ function _update60()
   if key == chr(8) then
     -- backspace
     sfx(4)
-    if ci != 0 then
-      text_rows[rowi] = sub(curr_row, 1, ci-1)..sub(curr_row, ci+1, #curr_row)
-      ci -= 1
-    elseif rowi != 1 then
-      text_rows[rowi-1] = text_rows[rowi-1]..curr_row
-      del(text_rows, curr_row)
-      ci = #text_rows[rowi-1] - #curr_row
-      rowi-=1
+    -- Find position of cursor index
+    local index = 1
+    local break_loop = false
+    for row_i=1,#text_rows do
+      local index_in_row = 1
+      local text_row = text_rows[row_i]
+      if #text_row==0 then
+        --Empty row
+        index += 1
+        index_in_row = 1
+        if index==cursor_index then
+          deli(text_rows, row_i)
+          break_loop = true
+        end
+      else
+        --Non-empty row
+        for char in all(text_rows) do
+          index += 1
+          index_in_row += 1
+          if index==cursor_index then
+            text_rows[row_i] = sub(text_row, 1, index_in_row-1)..sub(text_row, index_in_row+1)
+            break_loop = true
+            break
+          end
+        end
+      end
+      if break_loop then break end
     end
   elseif key >= " " and key <= "~" then
     -- add character
@@ -223,24 +240,25 @@ end
 
 function render_body(text_row, text_index, x, y, cursor_index)
   -- This function includes word wrapping
-  local words = string_to_list_of_words(text_row)
+  local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
   local word_formatting_functions = {}
   local cleaned_words = {}
   local is_bold    = false
   local is_cursive = false
   --Iterate through all words and store their formatting type and text index
   local temp_text_index = text_index
-  for word in all(words) do
-    temp_text_index += #word + 1
+  for i=1,#words do
+    local word   = words[i]
+    local word_i = indexes[i]
     --Word prefix
     if sub(word, 1, 2)=="**" then
       is_bold = true
-      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 3)
       end
     elseif sub(word, 1, 1)=="*" then
       is_cursive = true
-      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 2)
       end
     end
@@ -255,12 +273,12 @@ function render_body(text_row, text_index, x, y, cursor_index)
     --Word postfix
     if sub(word, -2)=="**" then
       is_bold = false
-      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 1, -3)
       end
     elseif sub(word, -1)=="*" then
       is_cursive = false
-      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 1, -2)
       end
     end
@@ -275,6 +293,7 @@ function render_body(text_row, text_index, x, y, cursor_index)
     local cleaned_word = cleaned_words[i].word
     local char_width, char_height = formatting_func()
     local next_x = x + char_width * #cleaned_word --TODO not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
+    local word_i = indexes[i]
     if next_x > 128 then
       -- Move to new line
       x = 0
@@ -282,19 +301,19 @@ function render_body(text_row, text_index, x, y, cursor_index)
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
-    if in_bounds(cursor_index, text_index, text_index + #word) then
-      local number_of_spaces = cursor_index - text_index
+    if in_bounds(cursor_index, word_i, word_i + #words[i]) then
+      local number_of_spaces = cursor_index - word_i
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y, 0)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y, 0)
     end 
     x = char_width + print("\14"..cleaned_word, x, y, 7)
     local glyph = new_glyph(
       char_width,
       char_height,
-      text_index,
-      text_index
+      word_i,
+      word_i
     )
     add(glyph_row, glyph)
-    text_index += #word + 1
   end
   add(glyph_rows, glyph_row)
   return glyph_rows, 0, get_onscreen_y()
