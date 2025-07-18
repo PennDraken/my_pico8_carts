@@ -28,6 +28,8 @@ function _init()
   menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
+    "Regular body text",
+    "Regular body text 2",
     "# Markdown",
     "## Introduction",
     "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
@@ -50,7 +52,7 @@ function _init()
   ci    = 3 --cursor index in row
   rowi  = 1 --selected row
   t = 0     --timer for blinking animation
-  cursor_index = 28 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 2 -- Stores cursor position (index is index of char in original array)
 end
 
 function _update60()
@@ -303,8 +305,8 @@ function render_body(text_row, text_index, x, y, cursor_index)
     end
     if in_bounds(cursor_index, word_i, word_i + #words[i]) then
       local number_of_spaces = cursor_index - word_i
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y, 0)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y, 0)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, 13)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, 13)
     end 
     x = char_width + print("\14"..cleaned_word, x, y, 7)
     local glyph = new_glyph(
