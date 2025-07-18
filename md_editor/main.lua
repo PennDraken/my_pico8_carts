@@ -50,34 +50,10 @@ function _init()
   ci    = 3 --cursor index in row
   rowi  = 1 --selected row
   t = 0     --timer for blinking animation
-  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 28 -- Stores cursor position (index is index of char in original array)
 end
 
-function control_cursor(row_length)
---Controls cursor, called every frame in update method.
-  if btnp(0) then
-    ci -= 1
-    if ci<0 then
-      rowi = max(1, rowi - 1)
-      ci = #text_rows[rowi]
-    end
-  elseif btnp(1) then
-    ci = min(ci + 1, row_length)
-  end
-  if btnp(2) then
-    rowi = max(1, rowi - 1)
-    ci = min(ci, row_length)
-    ci = max(0, ci)
-  elseif btnp(3) then
-    rowi += 1
-    if rowi > #text_rows then
-      add(text_rows, "")
-    end
-    rowi = min(rowi, #text_rows)
-    ci = min(ci, row_length)
-    ci = max(0, ci)
-  end
-end
+
 
 function _update60()
   -- read user input
@@ -91,7 +67,11 @@ function _update60()
   -- cursor control
   local curr_row   = text_rows[rowi]
   local row_length = #curr_row
-  control_cursor(row_length)
+  if btnp(0) then
+    cursor_index -= 1
+  elseif btnp(1) then
+    cursor_index += 1
+  end
 
   -- get key input
   local key = stat(31)
@@ -137,6 +117,7 @@ end
 function _draw()
   theme = themes[theme_i]
   cls(theme.bgc)
+  ?stat(1),70,0,7--cpu
   glyph_rows = render_text(text_rows, cursor_index)
 end
 
@@ -248,16 +229,21 @@ function render_body(text_row, text_index, x, y, cursor_index)
   local is_bold    = false
   local is_cursive = false
   --Iterate through all words and store their formatting type and text index
+  local temp_text_index = text_index
   for word in all(words) do
+    temp_text_index += #word + 1
     --Word prefix
     if sub(word, 1, 2)=="**" then
       is_bold = true
-      word = sub(word, 3)
+      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+        word = sub(word, 3)
+      end
     elseif sub(word, 1, 1)=="*" then
       is_cursive = true
-      word = sub(word, 2)
+      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+        word = sub(word, 2)
+      end
     end
-
     --Store data
     if is_bold then
       add(word_formatting_functions, regular_bold)
@@ -269,10 +255,14 @@ function render_body(text_row, text_index, x, y, cursor_index)
     --Word postfix
     if sub(word, -2)=="**" then
       is_bold = false
-      word = sub(word, 1, -3)
+      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+        word = sub(word, 1, -3)
+      end
     elseif sub(word, -1)=="*" then
       is_cursive = false
-      word = sub(word, 1, -2)
+      if not in_bounds(cursor_index, temp_text_index - #word, temp_text_index) then
+        word = sub(word, 1, -2)
+      end
     end
     add(cleaned_words, {word=tostr(word), index="TODO"})
   end
@@ -284,7 +274,7 @@ function render_body(text_row, text_index, x, y, cursor_index)
     local formatting_func = word_formatting_functions[i]
     local cleaned_word = cleaned_words[i].word
     local char_width, char_height = formatting_func()
-    local next_x = x + char_width * #cleaned_word
+    local next_x = x + char_width * #cleaned_word --TODO not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
     if next_x > 128 then
       -- Move to new line
       x = 0
@@ -292,6 +282,10 @@ function render_body(text_row, text_index, x, y, cursor_index)
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
+    if in_bounds(cursor_index, text_index, text_index + #word) then
+      local number_of_spaces = cursor_index - text_index
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y, 0)
+    end 
     x = char_width + print("\14"..cleaned_word, x, y, 7)
     local glyph = new_glyph(
       char_width,

@@ -75,3 +75,12 @@ function string_to_list_of_words(str)
   return words
 end
 
+function space_pad_symbol(symbol, space_count)
+  --Returns a string with spaces and a square marker at index
+  local string = ""
+  for i=0,space_count do
+    string = string.." "
+  end
+  string = string..symbol
+  return string
+end
