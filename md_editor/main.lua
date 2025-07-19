@@ -68,6 +68,11 @@ function _update60()
   elseif btnp(1) then
     cursor_index += 1
   end
+  if btnp(2) then
+    cursor_index = jump_cursor_up(cursor_index, glyph_rows)
+  elseif btnp(3) then
+    cursor_index = jump_cursor_down(cursor_index, glyph_rows)
+  end
 
   local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
   local text_row = text_rows[row_i]

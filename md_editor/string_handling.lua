@@ -111,6 +111,14 @@ function space_pad_symbol(symbol, space_count)
   return string
 end
 
+function del_char(string, index)
+  return sub(string, 1, index - 1)..sub(string, index + 1)
+end
+
+function insert_char(string, char, index)
+  return sub(string, 1, index)..char..sub(string, index + 1)
+end
+
 function cursor_index_to_position_in_list_of_strings(list_of_strings, cursor_index)
   -- Takes in a scalar index and returns position in list of strings
   -- Returns: Index of row, index of character in row
@@ -142,10 +150,38 @@ function test_cursor_index_to_position_in_list_of_strings(cursor_index)
   print(text_rows[row_i][index_in_row])
 end
 
-function del_char(string, index)
-  return sub(string, 1, index - 1)..sub(string, index + 1)
+function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  for i=1,#glyph_rows do
+    local glyph_row = glyph_rows[i]
+    for j=1,#glyph_row do
+      local glyph = glyph_row[j]
+      if glyph.index_in_text_rows > cursor_index then
+        -- We have found a glyph that is beyond our desired position
+        -- The previous glyph should be used
+        if j==1 then
+          return i-1,1
+        else
+          return i,j-1
+        end
+      end
+    end
+  end
 end
 
-function insert_char(string, char, index)
-  return sub(string, 1, index)..char..sub(string, index + 1)
+function jump_cursor_down(cursor_index, glyph_rows)
+  -- First we find position of cursor in glyph_rows
+  local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
+  local delta_index = cursor_index - glyph.index_in_text_rows
+  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
+  return cursor_index + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
+end
+
+function jump_cursor_up(cursor_index, glyph_rows)
+  -- First we find position of cursor in glyph_rows
+  local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
+  local delta_index = cursor_index - glyph.index_in_text_rows
+  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
+  return cursor_index + glyph_rows[glyph_row_i - 1][1].index_in_text_rows
 end
