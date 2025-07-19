@@ -69,8 +69,18 @@ function _update60()
     cursor_index += 1
   end
   if btnp(2) then
+    --Slightly hacky solution to render the transition of the cursor before actual movement
+    local temp = cursor_index
+    cursor_index = 0
+    _draw()
+    cursor_index = temp
     cursor_index = jump_cursor_up(cursor_index, glyph_rows)
   elseif btnp(3) then
+    --Slightly hacky solution to render the transition of the cursor before actual movement
+    local temp = cursor_index
+    cursor_index = 0
+    _draw()
+    cursor_index = temp
     cursor_index = jump_cursor_down(cursor_index, glyph_rows)
   end
 
