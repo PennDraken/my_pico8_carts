@@ -96,7 +96,7 @@ function string_to_list_of_words_with_index(str, start_index)
 
     local word = sub(str, start_i, i - 1)
     add(words, word)
-    add(indexes, start_i + start_index)
+    add(indexes, start_i + start_index - 1)
   end
   return words, indexes
 end
@@ -104,9 +104,48 @@ end
 function space_pad_symbol(symbol, space_count)
   --Returns a string with spaces and a square marker at index
   local string = ""
-  for i=0,space_count do
+  for i=1,space_count do
     string = string.." "
   end
   string = string..symbol
   return string
+end
+
+function cursor_index_to_position_in_list_of_strings(list_of_strings, cursor_index)
+  -- Takes in a scalar index and returns position in list of strings
+  -- Returns: Index of row, index of character in row
+  local row_i        = 1
+  local index_in_row = 1
+  for curr_i=1,cursor_index-1 do
+    local row_length = #list_of_strings[row_i]
+    if row_length==0 then
+      row_i += 1
+    elseif index_in_row < row_length then
+      index_in_row += 1
+    else
+      row_i += 1
+      index_in_row = 1
+    end
+  end
+  return row_i, index_in_row
+end
+
+function test_cursor_index_to_position_in_list_of_strings(cursor_index)
+  local text_rows = {
+    "This is the first line",-- 1->22
+    "",-- 23
+    "This is the seconds line",-- 24->
+    "# Whatever",
+    " "
+  }
+  local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+  print(text_rows[row_i][index_in_row])
+end
+
+function del_char(string, index)
+  return sub(string, 1, index - 1)..sub(string, index + 1)
+end
+
+function insert_char(string, char, index)
+  return sub(string, 1, index)..char..sub(string, index + 1)
 end

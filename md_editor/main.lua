@@ -28,7 +28,7 @@ function _init()
   menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
-    "Regular body text",
+    "regular body text",
     "Regular body text 2",
     "# Markdown",
     "## Introduction",
@@ -49,10 +49,8 @@ function _init()
   if user_string!="" then
     --text_rows = string_to_text_rows(user_string)
   end
-  ci    = 3 --cursor index in row
-  rowi  = 1 --selected row
   t = 0     --timer for blinking animation
-  cursor_index = 2 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
 end
 
 function _update60()
@@ -65,67 +63,45 @@ function _update60()
   end
   poke(24368,1) --disable pause on enter (needs to be done every frame)
   -- cursor control
-  local curr_row   = text_rows[rowi]
-  local row_length = #curr_row
   if btnp(0) then
     cursor_index -= 1
   elseif btnp(1) then
     cursor_index += 1
   end
 
+  local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+  local text_row = text_rows[row_i]
   -- get key input
   local key = stat(31)
-  if key == chr(8) then
+  if key == chr(8) then --TODO backspace at start of line
     -- backspace
     sfx(4)
-    -- Find position of cursor index
-    local index = 1
-    local break_loop = false
-    for row_i=1,#text_rows do
-      local index_in_row = 1
-      local text_row = text_rows[row_i]
-      if #text_row==0 then
-        --Empty row
-        index += 1
-        index_in_row = 1
-        if index==cursor_index then
-          deli(text_rows, row_i)
-          break_loop = true
-        end
-      else
-        --Non-empty row
-        for char in all(text_rows) do
-          index += 1
-          index_in_row += 1
-          if index==cursor_index then
-            text_rows[row_i] = sub(text_row, 1, index_in_row-1)..sub(text_row, index_in_row+1)
-            break_loop = true
-            break
-          end
-        end
-      end
-      if break_loop then break end
+    if #text_row==0 then
+      deli(text_rows, row_i)
+    else
+      text_rows[row_i] = del_char(text_row, index_in_row - 1)
     end
+    cursor_index = max(1, cursor_index - 1)
   elseif key >= " " and key <= "~" then
     -- add character
     sfx(rnd({0,1,2}))
-    text_rows[rowi] = sub(curr_row, 1, ci)..key..sub(curr_row, ci+1, #curr_row)
-    ci += 1
+    text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
+    cursor_index += 1 
   elseif key >= "○" and key <= "▥" then
     -- add character that is capital case (note this is automatically emoji instead of capital cases)
     sfx(rnd({0,1,2}))
     local code = ord(key) -- TODO need to get all keys (not just last key) active to get capital case to work
     key = chr(code-63)
-    text_rows[rowi] = sub(curr_row, 1, ci)..key..sub(curr_row, ci+1, #curr_row)
-    ci += 1
+    text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
+    cursor_index += 1 
   elseif key == chr(13) then
     -- new line
     sfx(3)
-    text_rows[rowi] = sub(curr_row, 1, ci)
+    text_rows[row_i] = sub(text_row, 1, index_in_row - 1)
     --add a new line
-    add(text_rows, sub(curr_row, ci+1, #curr_row), rowi + 1)
-    ci = 0
-    rowi += 1
+    add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
+    index_in_row = 1
+    row_i += 1
   elseif key =="\t" then
     --tab key
     extcmd("pause")
@@ -136,7 +112,7 @@ end
 function _draw()
   theme = themes[theme_i]
   cls(theme.bgc)
-  ?stat(1),70,0,7--cpu
+  --?stat(1),70,0,7--cpu
   glyph_rows = render_text(text_rows, cursor_index)
 end
 
@@ -158,7 +134,11 @@ function render_text(text_rows, cursor_index)
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index)
     -- add(glyph_rows, new_glyph_rows)
     combine_tables(glyph_rows, new_glyph_rows)
-    text_index += #text_row
+    if #text_row==0 then
+      text_index += 1
+    else
+      text_index += #text_row
+    end
   end
   return glyph_rows
 end
@@ -307,7 +287,7 @@ function render_body(text_row, text_index, x, y, cursor_index)
       local number_of_spaces = cursor_index - word_i
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, 13)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, 13)
-    end 
+    end
     x = char_width + print("\14"..cleaned_word, x, y, 7)
     local glyph = new_glyph(
       char_width,
