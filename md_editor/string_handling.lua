@@ -174,7 +174,7 @@ function jump_cursor_down(cursor_index, glyph_rows)
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
   local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
-  return cursor_index + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
+  return index_in_row + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
 end
 
 function jump_cursor_up(cursor_index, glyph_rows)
@@ -183,5 +183,5 @@ function jump_cursor_up(cursor_index, glyph_rows)
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
   local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
-  return cursor_index + glyph_rows[glyph_row_i - 1][1].index_in_text_rows
+  return index_in_row + glyph_rows[glyph_row_i - 1][1].index_in_text_rows
 end
