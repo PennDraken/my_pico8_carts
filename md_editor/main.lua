@@ -50,7 +50,7 @@ function _init()
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 18 -- Stores cursor position (index is index of char in original array)
 end
 
 function _update60()
@@ -92,6 +92,9 @@ function _update60()
     -- backspace
     sfx(4)
     if #text_row==0 then
+      deli(text_rows, row_i)
+    elseif index_in_row==1 then
+      text_rows[row_i - 1] = text_rows[row_i - 1]..text_rows[row_i]
       deli(text_rows, row_i)
     else
       text_rows[row_i] = del_char(text_row, index_in_row - 1)
@@ -149,11 +152,7 @@ function render_text(text_rows, cursor_index)
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index)
     -- add(glyph_rows, new_glyph_rows)
     combine_tables(glyph_rows, new_glyph_rows)
-    if #text_row==0 then
-      text_index += 1
-    else
-      text_index += #text_row
-    end
+    text_index += #text_row + 1 -- +1 adjusts for newline symbol
   end
   return glyph_rows
 end
@@ -169,6 +168,9 @@ function render_row(text_row, text_index, x, y, cursor_index)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index)
   elseif first_word=="" then
+    if cursor_index==text_index then
+      print("▮", 0, y, 13)
+    end
     local glyph = new_glyph(
       4,
       6,

@@ -125,10 +125,8 @@ function cursor_index_to_position_in_list_of_strings(list_of_strings, cursor_ind
   local row_i        = 1
   local index_in_row = 1
   for curr_i=1,cursor_index-1 do
-    local row_length = #list_of_strings[row_i]
-    if row_length==0 then
-      row_i += 1
-    elseif index_in_row < row_length then
+    local row_length = #list_of_strings[row_i] + 1--List of strings does not include newline symbol
+    if index_in_row < row_length then
       index_in_row += 1
     else
       row_i += 1
@@ -140,9 +138,9 @@ end
 
 function test_cursor_index_to_position_in_list_of_strings(cursor_index)
   local text_rows = {
-    "This is the first line",-- 1->22
-    "",-- 23
-    "This is the seconds line",-- 24->
+    "This is the first line",-- 1->23
+    "",-- 24
+    "This is the seconds line",-- 25->
     "# Whatever",
     " "
   }
