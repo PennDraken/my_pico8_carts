@@ -173,8 +173,10 @@ function jump_cursor_down(cursor_index, glyph_rows)
   local delta_index = cursor_index - glyph.index_in_text_rows
   local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
   local new_cursor_index = index_in_row + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
-  if new_cursor_index > glyph_rows[glyph_row_i + 2][1].index_in_text_rows then
-    new_cursor_index = glyph_rows[glyph_row_i + 2][1].index_in_text_rows - 1
+  if glyph_row_i + 2 < #glyph_rows then
+    if new_cursor_index > glyph_rows[glyph_row_i + 2][1].index_in_text_rows then
+      new_cursor_index = glyph_rows[glyph_row_i + 2][1].index_in_text_rows - 1
+    end
   end
   return new_cursor_index
 end

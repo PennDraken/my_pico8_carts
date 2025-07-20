@@ -28,8 +28,6 @@ function _init()
   menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
-    "regular body text",
-    "Regular body text 2",
     "# Markdown",
     "## Introduction",
     "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
@@ -50,7 +48,7 @@ function _init()
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 18 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 8 -- Stores cursor position (index is index of char in original array)
 end
 
 function _update60()
@@ -160,11 +158,11 @@ end
 function render_row(text_row, text_index, x, y, cursor_index)
   local first_word = get_first_word(text_row)
   if first_word=="#" then
-    return render_heading(text_row, text_index, x, y, cursor_index)
+    return render_heading(text_row, header_font,    text_index, x, y, cursor_index)
   elseif first_word=="##" then
-    return render_heading2(text_row, text_index, x, y, cursor_index)
+    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index)
   elseif first_word=="###" then
-    return render_heading3(text_row, text_index, x, y, cursor_index)
+    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index)
   elseif first_word=="" then
@@ -183,45 +181,19 @@ function render_row(text_row, text_index, x, y, cursor_index)
   end
 end
 
-function render_heading(text_row, text_index, x, y, cursor_index)
-  local char_width, char_height = header_font()
+function render_heading(text_row, font_function, text_index, x, y, cursor_index)
+  local char_width, char_height = font_function()
   -- We want to preview markdown when cursor is not on row
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
-    text_row = sub(text_row, 3, -1)
+    local words, indexes = string_to_list_of_words_with_index(text_row, 1)
+    text_row = sub(text_row, indexes[2])
+  else
+    -- Cursor is inside text
+    local highligh_index = cursor_index - text_index
+    local highlight_x = print("\14"..sub(text_row, 1, highligh_index))
+    rectfill(highlight_x, y, highlight_x + char_width - 1, y + char_height, 13)
   end
-  print("\14"..text_row, x, y)
-  local glyph = new_glyph(
-    char_width,
-    char_height,
-    text_index,
-    text_index
-  )
-  local glyph_rows = {{glyph}}
-  return glyph_rows, 0, get_onscreen_y()
-end
-
-function render_heading2(text_row, text_index, x, y, cursor_index)
-  local char_width, char_height = subheader_font()
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
-    text_row = sub(text_row, 4, -1)
-  end
-  print("\14"..text_row, x, y)
-  local glyph = new_glyph(
-    char_width,
-    char_height,
-    text_index,
-    text_index
-  )
-  local glyph_rows = {{glyph}}
-  return glyph_rows, 0, get_onscreen_y()
-end
-
-function render_heading3(text_row, text_index, x, y, cursor_index)
-  local char_width, char_height = subheader_font()
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
-    text_row = sub(text_row, 5, -1)
-  end
-  print("\14"..text_row, x, y)
+  print("\14"..text_row, x, y, 7)
   local glyph = new_glyph(
     char_width,
     char_height,
