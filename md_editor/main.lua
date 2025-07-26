@@ -48,7 +48,9 @@ function _init()
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 8 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 110 -- Stores cursor position (index is index of char in original array)
+  cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
+  debug = ""
 end
 
 function _update60()
@@ -62,17 +64,17 @@ function _update60()
   poke(24368,1) --disable pause on enter (needs to be done every frame)
   -- cursor control
   if btnp(0) then
-    cursor_index -= 1
+    cursor_index = max(cursor_index - 1, 1)
+    local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+    cursor_index_in_row = index_in_row
   elseif btnp(1) then
-    cursor_index += 1
+    cursor_index = min(cursor_index + 1, cursor_index + 1) -- TODO use actual length instead
+    local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+    cursor_index_in_row = index_in_row
   end
   if btnp(2) then
-    --Slightly hacky solution to render the transition of the cursor before actual movement
-    local temp = cursor_index
-    cursor_index = 0
-    _draw()
-    cursor_index = temp
     cursor_index = jump_cursor_up(cursor_index, glyph_rows)
+    _draw()
   elseif btnp(3) then
     --Slightly hacky solution to render the transition of the cursor before actual movement
     local temp = cursor_index
@@ -184,13 +186,13 @@ end
 function render_heading(text_row, font_function, text_index, x, y, cursor_index)
   local char_width, char_height = font_function()
   -- We want to preview markdown when cursor is not on row
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     text_row = sub(text_row, indexes[2])
   else
     -- Cursor is inside text
     local highligh_index = cursor_index - text_index
-    local highlight_x = print("\14"..sub(text_row, 1, highligh_index))
+    local highlight_x = print("\14"..sub(text_row, 1, highligh_index), 0, y)
     rectfill(highlight_x, y, highlight_x + char_width - 1, y + char_height, 13)
   end
   print("\14"..text_row, x, y, 7)
@@ -292,7 +294,7 @@ end
 
 function render_horisontal_line(text_index, x, y, cursor_index)
   local char_width, char_height = 4, 6
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row) then
+  if not (cursor_index >= text_index and cursor_index < text_index + 3) then
     text_row = "--------------------------------"
   else
     text_row = "---"

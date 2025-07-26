@@ -171,12 +171,16 @@ function jump_cursor_down(cursor_index, glyph_rows)
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
-  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
+  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
   local new_cursor_index = index_in_row + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
   if glyph_row_i + 2 < #glyph_rows then
     if new_cursor_index > glyph_rows[glyph_row_i + 2][1].index_in_text_rows then
       new_cursor_index = glyph_rows[glyph_row_i + 2][1].index_in_text_rows - 1
     end
+  end
+  --Correction when next line is outside the bounds of the current line
+  if new_cursor_index >= glyph_rows[glyph_row_i + 2][1].index_in_text_rows then
+    new_cursor_index = glyph_rows[glyph_row_i + 2][1].index_in_text_rows - 1
   end
   return new_cursor_index
 end
@@ -184,12 +188,16 @@ end
 function jump_cursor_up(cursor_index, glyph_rows)
   -- First we find position of cursor in glyph_rows
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  if glyph_row_i == 1 then -- If were on the first line set cursor to first char (prevents out of bounds)
+    return 1
+  end
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
-  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1] .index_in_text_rows
+  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
   local new_cursor_index = index_in_row + glyph_rows[glyph_row_i - 1][1].index_in_text_rows
-  if new_cursor_index > glyph_rows[glyph_row_i - 2][1].index_in_text_rows then
-    new_cursor_index = glyph_rows[glyph_row_i - 2][1].index_in_text_rows - 1
+  --Correction when next line is outside the bounds of the current line
+  if new_cursor_index >= glyph_rows[glyph_row_i][1].index_in_text_rows then
+    new_cursor_index = glyph_rows[glyph_row_i][1].index_in_text_rows - 1
   end
   return new_cursor_index
 end
