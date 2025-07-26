@@ -131,7 +131,7 @@ function _draw()
   theme = themes[theme_i]
   cls(theme.bgc)
   --?stat(1),70,0,7--cpu
-  glyph_rows = render_text(text_rows, cursor_index)
+  glyph_rows = render_text(text_rows, cursor_index, theme)
 end
 
 function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit)
@@ -141,7 +141,7 @@ function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_ro
   }
 end
 
-function render_text(text_rows, cursor_index)
+function render_text(text_rows, cursor_index, theme)
   local glyph_rows = {} -- Stores how text is rendered on screen
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
@@ -149,7 +149,7 @@ function render_text(text_rows, cursor_index)
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
-    new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index)
+    new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index, theme)
     -- add(glyph_rows, new_glyph_rows)
     combine_tables(glyph_rows, new_glyph_rows)
     text_index += #text_row + 1 -- +1 adjusts for newline symbol
@@ -157,19 +157,19 @@ function render_text(text_rows, cursor_index)
   return glyph_rows
 end
 
-function render_row(text_row, text_index, x, y, cursor_index)
+function render_row(text_row, text_index, x, y, cursor_index, theme)
   local first_word = get_first_word(text_row)
   if first_word=="#" then
-    return render_heading(text_row, header_font,    text_index, x, y, cursor_index)
+    return render_heading(text_row, header_font,    text_index, x, y, cursor_index, theme.h1c, theme.cursorc)
   elseif first_word=="##" then
-    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index)
+    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index, theme.h2c, theme.cursorc)
   elseif first_word=="###" then
-    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index)
+    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index, theme.h3c, theme.cursorc)
   elseif first_word=="---" then
-    return render_horisontal_line(text_index, x, y, cursor_index)
+    return render_horisontal_line(text_index, x, y, cursor_index, theme)
   elseif first_word=="" then
     if cursor_index==text_index then
-      print("▮", 0, y, 13)
+      print("▮", 0, y, theme.cursorc)
     end
     local glyph = new_glyph(
       4,
@@ -179,11 +179,11 @@ function render_row(text_row, text_index, x, y, cursor_index)
     )
     return {{glyph}}, 0, y + 6
   else
-    return render_body(text_row, text_index, x, y, cursor_index)
+    return render_body(text_row, text_index, x, y, cursor_index, theme)
   end
 end
 
-function render_heading(text_row, font_function, text_index, x, y, cursor_index)
+function render_heading(text_row, font_function, text_index, x, y, cursor_index, color, cursor_color)
   local char_width, char_height = font_function()
   -- We want to preview markdown when cursor is not on row
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
@@ -193,9 +193,9 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index)
     -- Cursor is inside text
     local highligh_index = cursor_index - text_index
     local highlight_x = print("\14"..sub(text_row, 1, highligh_index), 0, y)
-    rectfill(highlight_x, y, highlight_x + char_width - 1, y + char_height, 13)
+    rectfill(highlight_x, y, highlight_x + char_width - 1, y + char_height, cursor_color)
   end
-  print("\14"..text_row, x, y, 7)
+  print("\14"..text_row, x, y, color) -- <-- TEXT RENDERING
   local glyph = new_glyph(
     char_width,
     char_height,
@@ -211,7 +211,7 @@ function render_body_test()
   render_body("**This** is a test. This is a pretty long sentence. This is **bold**", 1, 0, 0, 1)
 end
 
-function render_body(text_row, text_index, x, y, cursor_index)
+function render_body(text_row, text_index, x, y, cursor_index, theme)
   -- This function includes word wrapping
   local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
   local word_formatting_functions = {}
@@ -276,10 +276,10 @@ function render_body(text_row, text_index, x, y, cursor_index)
     end
     if in_bounds(cursor_index, word_i, word_i + #words[i]) then
       local number_of_spaces = cursor_index - word_i
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, 13)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, 13)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
     end
-    x = char_width + print("\14"..cleaned_word, x, y, 7)
+    x = char_width + print("\14"..cleaned_word, x, y, theme.pc) -- <-- TEXT RENDERING
     local glyph = new_glyph(
       char_width,
       char_height,
@@ -292,14 +292,17 @@ function render_body(text_row, text_index, x, y, cursor_index)
   return glyph_rows, 0, get_onscreen_y()
 end
 
-function render_horisontal_line(text_index, x, y, cursor_index)
+function render_horisontal_line(text_index, x, y, cursor_index, theme)
   local char_width, char_height = 4, 6
-  if not (cursor_index >= text_index and cursor_index < text_index + 3) then
+  if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
     text_row = "--------------------------------"
   else
+    local number_of_spaces = cursor_index - text_index
+    print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
+    print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
     text_row = "---"
   end
-  print(text_row, x, y)
+  print(text_row, x, y, theme.linec)
   local glyph = new_glyph(
     char_width,
     char_height,
