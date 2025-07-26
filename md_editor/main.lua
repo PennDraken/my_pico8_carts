@@ -296,13 +296,14 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
   local char_width, char_height = 4, 6
   if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
     text_row = "--------------------------------"
+    line(0, y + 2, 128, y + 2, theme.linec)
   else
     local number_of_spaces = cursor_index - text_index
     print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
     print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
     text_row = "---"
+    print(text_row, x, y, theme.linec)
   end
-  print(text_row, x, y, theme.linec)
   local glyph = new_glyph(
     char_width,
     char_height,
@@ -310,5 +311,5 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
     text_index
   )
   local glyph_rows = {{glyph}}
-  return glyph_rows, 0, get_onscreen_y()
+  return glyph_rows, 0, y + 6
 end
