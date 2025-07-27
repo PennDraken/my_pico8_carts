@@ -48,7 +48,7 @@ function _init()
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 110 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 270 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
   debug = ""
 end

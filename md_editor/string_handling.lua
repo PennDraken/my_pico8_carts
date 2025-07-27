@@ -149,18 +149,12 @@ function test_cursor_index_to_position_in_list_of_strings(cursor_index)
 end
 
 function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
-  for i=1,#glyph_rows do
-    local glyph_row = glyph_rows[i]
-    for j=1,#glyph_row do
-      local glyph = glyph_row[j]
-      if glyph.index_in_text_rows > cursor_index then
-        -- We have found a glyph that is beyond our desired position
-        -- The previous glyph should be used
-        if j==1 then
-          return i-1,1
-        else
-          return i,j-1
-        end
+  for row_i=1,#glyph_rows do
+    local glyph_row = glyph_rows[row_i]
+    for glyph_i=1,#glyph_row do
+      local glyph = glyph_row[glyph_i]
+      if cursor_index >= glyph.index_in_text_rows and cursor_index <= glyph.index_in_text_rows + glyph.glyph_length then
+        return row_i, glyph_i
       end
     end
   end
@@ -169,6 +163,12 @@ end
 function jump_cursor_down(cursor_index, glyph_rows)
   -- First we find position of cursor in glyph_rows
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  if glyph_row_i == #glyph_rows then -- No more lines to jump to
+    local last_glyph_row = glyph_rows[#glyph_rows]
+    local last_glyph = last_glyph_row[#last_glyph_row]
+    local line_end_index = last_glyph.index_in_text_rows + last_glyph.glyph_length
+    return line_end_index
+  end
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
   local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
