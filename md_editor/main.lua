@@ -41,14 +41,15 @@ function _init()
     "3. Enjoy!",
     "[0,8,8]"
   }
+  text_rows = {    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
+}
   user_string = stat(4)
   if user_string!="" then
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 270 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
-  debug = new_debugger()
 end
 
 function _update60()
@@ -152,10 +153,9 @@ function render_text(text_rows, cursor_index, theme)
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index, theme)
-    debug:log(sub(text_row, 1, 10), stat(1))
-    -- add(glyph_rows, new_glyph_rows)
+    -- debug:log(sub(text_row, 1, 10), stat(1))
     combine_tables(glyph_rows, new_glyph_rows)
-    text_index += #text_row + 1 -- +1 adjusts for newline symbol
+    text_index += #text_row + 1 -- +1 adjusts for newline symbol not present as seperator
   end
   return glyph_rows
 end
@@ -226,6 +226,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   local is_cursive = false
   --Iterate through all words and store their formatting type and text index
   local temp_text_index = text_index
+  debug:log("1", stat(1))
   for i=1,#words do
     local word   = words[i]
     local word_i = indexes[i]
@@ -263,14 +264,18 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     end
     add(cleaned_words, {word=tostr(word), index="TODO"})
   end
-
+  debug:log("2", stat(1))
   local glyph_rows = {}
   local glyph_row  = {}
   --Draws all words to screen
+  local formatting_func = word_formatting_functions[1]
+  char_width, char_height = formatting_func()
   for i,word in ipairs(words) do
-    local formatting_func = word_formatting_functions[i]
+    if formatting_func != word_formatting_functions[i] then
+      formatting_func = word_formatting_functions[i]
+      char_width, char_height = formatting_func()
+    end
     local cleaned_word = cleaned_words[i].word
-    local char_width, char_height = formatting_func()
     local next_x = x + char_width * #cleaned_word --TODO not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
     local word_i = indexes[i]
     if next_x > 128 then
@@ -295,6 +300,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     )
     add(glyph_row, glyph)
   end
+  debug:log("3", stat(1))
   add(glyph_rows, glyph_row)
   return glyph_rows, 0, get_onscreen_y()
 end
