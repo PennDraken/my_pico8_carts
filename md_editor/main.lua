@@ -51,7 +51,7 @@ function _init()
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
   -- DEFAULT FONTS
   header_font = header_font_3
-  subheader_font = subheader_font_1
+  subheader_font = header_font_2
   regular = regular_1
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
