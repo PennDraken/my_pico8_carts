@@ -73,14 +73,17 @@ function _update60()
     cursor_index = max(cursor_index - 1, 1)
     local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
     cursor_index_in_row = index_in_row
+    t = 0
   elseif btnp(1) then
     cursor_index = min(cursor_index + 1, cursor_index + 1) -- TODO use actual length instead
     local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
     cursor_index_in_row = index_in_row
+    t = 0
   end
   if btnp(2) then
     cursor_index = jump_cursor_up(cursor_index, glyph_rows)
     _draw()
+    t = 0
   elseif btnp(3) then
     --Slightly hacky solution to render the transition of the cursor before actual movement
     local temp = cursor_index
@@ -88,6 +91,7 @@ function _update60()
     _draw()
     cursor_index = temp
     cursor_index = jump_cursor_down(cursor_index, glyph_rows)
+    t = 0
   end
 
   local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
@@ -181,7 +185,7 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index, theme)
   elseif first_word=="" then
-    if cursor_index==text_index then
+    if cursor_index==text_index and is_marker_visible() then
       print("▮", 0, y, theme.cursorc)
     end
     local glyph = new_glyph(
@@ -329,7 +333,7 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
     line(0, y + 2, 128, y + 2, theme.linec)
   else
     local number_of_spaces = cursor_index - text_index
-    if is_marker_visible then
+    if is_marker_visible() then
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
     end
