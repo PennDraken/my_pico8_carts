@@ -28,6 +28,7 @@ function _init()
   text_rows = {
     "# Markdown",
     "## Introduction",
+    "### What is it?",
     "*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.",
     "",
     "## Facts",
@@ -41,7 +42,7 @@ function _init()
     "3. Enjoy!",
     "[0,8,8]"
   }
-  -- text_rows = {    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor."}
+  -- text_rows = {""}
   user_string = stat(4)
   if user_string!="" then
     --text_rows = string_to_text_rows(user_string)
@@ -50,8 +51,9 @@ function _init()
   cursor_index = 1 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
   -- DEFAULT FONTS
-  header_font = header_font_3
-  subheader_font = header_font_2
+  header_font       = header_font_3
+  subheader_font    = header_font_2
+  subsubheader_font = skinny_font
   regular = regular_1
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
@@ -173,7 +175,7 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   elseif first_word=="##" then
     return render_heading(text_row, subheader_font, text_index, x, y, cursor_index, theme.h2c, theme.cursorc)
   elseif first_word=="###" then
-    return render_heading(text_row, subheader_font, text_index, x, y, cursor_index, theme.h3c, theme.cursorc)
+    return render_heading(text_row, subsubheader_font, text_index, x, y, cursor_index, theme.h3c, theme.cursorc)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index, theme)
   elseif first_word=="" then
