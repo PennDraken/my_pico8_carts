@@ -134,10 +134,11 @@ function _draw()
   glyph_rows = render_text(text_rows, cursor_index, theme)
 end
 
-function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit)
+function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
   return {
     char_width=char_width, char_height=char_height,
-    index_in_text_rows=index_in_text_rows, index_in_text_rows_edit=index_in_text_rows_edit
+    index_in_text_rows=index_in_text_rows, index_in_text_rows_edit=index_in_text_rows_edit,
+    glyph_length=glyph_length
   }
 end
 
@@ -175,7 +176,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
       4,
       6,
       text_index,
-      text_index
+      text_index,
+      0
     )
     return {{glyph}}, 0, y + 6
   else
@@ -185,6 +187,7 @@ end
 
 function render_heading(text_row, font_function, text_index, x, y, cursor_index, color, cursor_color)
   local char_width, char_height = font_function()
+  local glyph_length = #text_row
   -- We want to preview markdown when cursor is not on row
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
@@ -200,7 +203,8 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index,
     char_width,
     char_height,
     text_index,
-    text_index
+    text_index,
+    glyph_length
   )
   local glyph_rows = {{glyph}}
   return glyph_rows, 0, get_onscreen_y()
@@ -284,7 +288,8 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       char_width,
       char_height,
       word_i,
-      word_i
+      word_i,
+      #word
     )
     add(glyph_row, glyph)
   end
@@ -308,7 +313,8 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
     char_width,
     char_height,
     text_index,
-    text_index
+    text_index,
+    3
   )
   local glyph_rows = {{glyph}}
   return glyph_rows, 0, y + 6
