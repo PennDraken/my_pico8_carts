@@ -20,7 +20,7 @@ function _init()
   cls()
   extcmd("set_title","Tiny Markdown Editor")
   --themes
-  theme_i = 4--theme index
+  theme_i = 7--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
   menuitem(1, "Change theme", toggle_theme)
@@ -28,7 +28,7 @@ function _init()
   text_rows = {
     "# Markdown",
     "## Introduction",
-    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
+    "*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.",
     "",
     "## Facts",
     "- Created in 2004",
@@ -41,8 +41,7 @@ function _init()
     "3. Enjoy!",
     "[0,8,8]"
   }
-  text_rows = {    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor.",
-}
+  -- text_rows = {    "**Markdown** is a lightweight **markup language** for creating formatted text using a plain-text editor."}
   user_string = stat(4)
   if user_string!="" then
     --text_rows = string_to_text_rows(user_string)
@@ -112,13 +111,12 @@ function _update60()
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1 
   elseif key == chr(13) then
-    -- new line
+    -- new line (enter)
     sfx(3)
     text_rows[row_i] = sub(text_row, 1, index_in_row - 1)
     --add a new line
     add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
-    index_in_row = 1
-    row_i += 1
+    cursor_index += 1
   elseif key =="\t" then
     --tab key
     extcmd("pause")
@@ -133,7 +131,7 @@ function _draw()
   debug:log("CPU start", stat(1))
   glyph_rows = render_text(text_rows, cursor_index, theme)
   debug:log("CPU end", stat(1))
-  debug:draw()
+  --debug:draw()
 end
 
 function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
@@ -251,6 +249,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       add(word_formatting_functions, regular)
     end
     --Word postfix
+    add(cleaned_words, {word=tostr(word), index="TODO", is_bold=is_bold, is_cursive=is_cursive})
     if sub(word, -2)=="**" then
       is_bold = false
       if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
@@ -262,7 +261,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
         word = sub(word, 1, -2)
       end
     end
-    add(cleaned_words, {word=tostr(word), index="TODO"})
+    cleaned_words[i].word = word
   end
   debug:log("2", stat(1))
   local glyph_rows = {}
@@ -276,7 +275,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       char_width, char_height = formatting_func()
     end
     local cleaned_word = cleaned_words[i].word
-    local next_x = x + char_width * #cleaned_word --TODO not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
+    local next_x = x + char_width * #cleaned_word --TODO This is not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
     local word_i = indexes[i]
     if next_x > 128 then
       -- Move to new line
@@ -290,7 +289,13 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
     end
-    x = char_width + print("\14"..cleaned_word, x, y, theme.pc) -- <-- TEXT RENDERING
+    local c = theme.pc
+    if cleaned_words[i].is_bold then
+      c = theme.boldc
+    elseif cleaned_words[i].is_cursive then
+      c = theme.cursivec
+    end
+    x = char_width + print("\14"..cleaned_word, x, y, c) -- <-- TEXT RENDERING
     local glyph = new_glyph(
       char_width,
       char_height,

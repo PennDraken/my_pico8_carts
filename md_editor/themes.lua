@@ -5,16 +5,37 @@ function toggle_theme()
   end
 end
 
-function new_theme(bgc, h1c, h2c, h3c, pc, list1c, list2c, linec, cursorc)
-  return {bgc=bgc, h1c=h1c, h2c=h2c, h3c=h3c, pc=pc, list1c=list1c, list2c=list2c, linec=linec, cursorc=cursorc}
+colors = {
+  black=0,
+  dark_blue=1,
+  purple=2,
+  green=3,
+  brown=4,
+  dark_gray=5,
+  light_gray=6,
+  white=7,
+  red=8,
+  orange=9,
+  yellow=10,
+  lime=11,
+  blue=12,
+  blue_gray=13,
+  pink=14,
+  beige=15
+}
+
+function new_theme(bgc, h1c, h2c, h3c, pc, list1c, list2c, linec, cursorc, boldc, cursivec)
+  return {bgc=bgc, h1c=h1c, h2c=h2c, h3c=h3c, pc=pc, list1c=list1c, list2c=list2c, linec=linec, cursorc=cursorc, boldc=boldc, cursivec=cursivec}
 end
 
 function get_themes()
-    return {new_theme( 0,10,14, 7, 7,12, 1, 1, 1),--regular dark
-            new_theme( 7, 13,14, 1,1, 6, 6,14, 12),--light
-            new_theme( 6, 0, 0, 0, 0, 0, 0, 0, 7),--monocrome grey
-            new_theme( 1,12,10,14, 7,14,14,10, 8),
-            new_theme( 2, 7, 6,14,14,14,14,14, 8),--girly
-            new_theme( 1, 7, 6, 7, 7, 7, 7, 6, 5)
-    }
+  --                         bgc,              h1c,            h2c,           h3c,            pc,        list1c,        list2c,        linec,        cursorc,         boldc,     cursivec
+  return {new_theme(           0,               10,             14,             7,             7,            12,             1,            1,              1,             7,           7),--regular dark
+          new_theme(           7,               13,             14,             1,             1,             6,             6,           14,             12,             1,           1),--light
+          new_theme(           6,                0,              0,             0,             0,             0,             0,            0,              7,             0,           0),--monocrome grey
+          new_theme(           1,               12,             10,            14,             7,            14,            14,           10,              8, colors.orange, colors.pink),--Sweden theme
+          new_theme(           2,                7,              6,            14,            14,            14,            14,           14,              8,            14,          14),--girly
+          new_theme(           1,                7,              6,             7,             7,             7,             7,            6,              5,   colors.blue, colors.blue),
+          new_theme(colors.red,    colors.yellow,  colors.yellow, colors.yellow, colors.orange, colors.yellow, colors.yellow, colors.yellow, colors.purple, colors.yellow, colors.yellow)
+  }
 end
