@@ -20,7 +20,7 @@ function _init()
   cls()
   extcmd("set_title","Tiny Markdown Editor")
   --themes
-  theme_i = 7--theme index
+  theme_i = 4--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
   menuitem(1, "Change theme", toggle_theme)
@@ -49,6 +49,12 @@ function _init()
   t = 0     --timer for blinking animation
   cursor_index = 1 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
+  -- DEFAULT FONTS
+  header_font = header_font_3
+  subheader_font = subheader_font_1
+  regular = regular_1
+  regular_bold = regular_bold_1
+  regular_italic = regular_italic_1
 end
 
 function _update60()
@@ -128,10 +134,12 @@ function _draw()
   debug = new_debugger()
   theme = themes[theme_i]
   cls(theme.bgc)
+  camera(-1,-1)
   debug:log("CPU start", stat(1))
   glyph_rows = render_text(text_rows, cursor_index, theme)
   debug:log("CPU end", stat(1))
   --debug:draw()
+
 end
 
 function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
