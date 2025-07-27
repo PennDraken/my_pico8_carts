@@ -18,8 +18,6 @@ end
 
 function _init()
   cls()
-  -- render_body_test()
-  -- stop()
   extcmd("set_title","Tiny Markdown Editor")
   --themes
   theme_i = 4--theme index
@@ -50,7 +48,7 @@ function _init()
   t = 0     --timer for blinking animation
   cursor_index = 270 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
-  debug = ""
+  debug = new_debugger()
 end
 
 function _update60()
@@ -128,10 +126,13 @@ end
 
 ---RENDER----------------------------------------------------------
 function _draw()
+  debug = new_debugger()
   theme = themes[theme_i]
   cls(theme.bgc)
-  --?stat(1),70,0,7--cpu
+  debug:log("CPU start", stat(1))
   glyph_rows = render_text(text_rows, cursor_index, theme)
+  debug:log("CPU end", stat(1))
+  debug:draw()
 end
 
 function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
@@ -151,6 +152,7 @@ function render_text(text_rows, cursor_index, theme)
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index, theme)
+    debug:log(sub(text_row, 1, 10), stat(1))
     -- add(glyph_rows, new_glyph_rows)
     combine_tables(glyph_rows, new_glyph_rows)
     text_index += #text_row + 1 -- +1 adjusts for newline symbol
