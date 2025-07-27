@@ -28,3 +28,7 @@ function new_debugger()
     end
     return debug
 end
+
+function is_marker_visible()
+    return t % 50 > 25
+end

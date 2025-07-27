@@ -129,6 +129,8 @@ function _update60()
     --tab key
     extcmd("pause")
   end
+  -- Increment timer
+  t += 1
 end
 
 ---RENDER----------------------------------------------------------
@@ -202,7 +204,7 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index,
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     text_row = sub(text_row, indexes[2])
-  else
+  elseif is_marker_visible() then
     -- Cursor is inside text
     local highligh_index = cursor_index - text_index
     local highlight_x = print("\14"..sub(text_row, 1, highligh_index), 0, y)
@@ -294,7 +296,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
-    if in_bounds(cursor_index, word_i, word_i + #words[i]) then
+    if in_bounds(cursor_index, word_i, word_i + #words[i]) and is_marker_visible() then
       local number_of_spaces = cursor_index - word_i
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
@@ -327,8 +329,10 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
     line(0, y + 2, 128, y + 2, theme.linec)
   else
     local number_of_spaces = cursor_index - text_index
-    print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
-    print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+    if is_marker_visible then
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+    end
     text_row = "---"
     print(text_row, x, y, theme.linec)
   end
