@@ -11,8 +11,12 @@ function render_math(text_row, start_text_index, math_fonts, x, y, cursor_index,
         math_regular("*Y"),
         math_exponed("3"),
         math_regular("+X=5"),
-        math_frac({math_regular("3X"),math_exponed("2")},{math_regular("490")})
+        math_frac({math_regular("3X"),math_exponed("2"),math_regular("+325")},{math_regular("490")})
     }
+
+    -- Calculate height of equation
+
+    -- Draw equation
     for seg in all(equation) do
         x = seg:draw(x, y)
     end
@@ -30,6 +34,12 @@ end
 function math_regular(text)
     local o = {}
     o.text = text
+    o.get_width = function(this)
+        return #this.text * 4
+    end
+    o.get_height = function (this)
+        return 6
+    end
     o.draw = function(this, x, y)
         regular_1()
         return print("\14"..this.text, x, y, 7)
@@ -40,6 +50,12 @@ end
 function math_exponed(text)
     local o = {}
     o.text = text
+    o.get_width = function(this)
+        return #this.text * 4
+    end
+    o.get_height = function (this)
+        return 4
+    end
     o.draw = function(this, x, y)
         small3x3_font()
         return print("\14"..this.text, x, y, 7)
@@ -51,21 +67,39 @@ function math_frac(eq_top, eq_bottom)
     local o = {}
     o.eq_top    = eq_top
     o.eq_bottom = eq_bottom
+    o.get_height = function(this)
+        return 6*2 +2
+    end
+    o.get_width = function(this)
+        return max(get_equation_width(this.eq_top), get_equation_width(this.eq_bottom))
+    end
     o.draw = function(this, start_x, y)
+        local top_width = get_equation_width(this.eq_top)
+        local bot_width = get_equation_width(this.eq_bottom)
+        local frac_width = max(top_width, bot_width)
+        
         local top_y = y - 4
-        local top_x = start_x
+        local top_x = start_x + (frac_width - top_width)/2
         for seg in all(this.eq_top) do
             top_x = seg:draw(top_x, top_y)
         end
         local bottom_y = y + 4
-        local bot_x = start_x
+        local bot_x = start_x + (frac_width - bot_width)/2
         for seg in all(this.eq_bottom) do
             bot_x = seg:draw(bot_x, bottom_y)
         end
-        local max_x = max(bot_x, top_x)
+        local max_x = max(bot_x, top_x) - 2
         local mid_y = y + 5/2
         line(start_x, mid_y, max_x, mid_y, 7)
         return max(bot_x, top_x)
     end
     return o
+end
+
+function get_equation_width(equation)
+    local width = 0
+    for seg in all(equation) do
+        width += seg:get_width()
+    end
+    return width
 end
