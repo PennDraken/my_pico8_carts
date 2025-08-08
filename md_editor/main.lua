@@ -27,7 +27,6 @@ function _init()
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
     "",
-    ".34^2",
     "# Markdown",
     "## Introduction",
     "### What is it?",
@@ -38,6 +37,7 @@ function _init()
     "- File format is .md",
     "- This is a list",
     "---",
+    ".3x^2*y^3+x=5{3x^2+325}/{490}",
     "## Tutorial",
     "1. ⬇️⬅️⬆️➡️ Move cursor",
     "2. Write with keyboard",
