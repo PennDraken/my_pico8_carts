@@ -32,3 +32,11 @@ end
 function is_marker_visible()
     return t % 50 < 25
 end
+
+function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
+  return {
+    char_width=char_width, char_height=char_height,
+    index_in_text_rows=index_in_text_rows, index_in_text_rows_edit=index_in_text_rows_edit,
+    glyph_length=glyph_length
+  }
+end

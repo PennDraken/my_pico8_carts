@@ -26,6 +26,8 @@ function _init()
   menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
+    "",
+    ".34^2",
     "# Markdown",
     "## Introduction",
     "### What is it?",
@@ -110,18 +112,21 @@ function _update60()
       text_rows[row_i] = del_char(text_row, index_in_row - 1)
     end
     cursor_index = max(1, cursor_index - 1)
+    t = 0
   elseif key >= " " and key <= "~" then
     -- add character
     sfx(rnd({0,1,2}))
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1 
+    t = 0
   elseif key >= "○" and key <= "▥" then
     -- add character that is capital case (note this is automatically emoji instead of capital cases)
     sfx(rnd({0,1,2}))
     local code = ord(key) -- TODO need to get all keys (not just last key) active to get capital case to work
     key = chr(code-63)
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
-    cursor_index += 1 
+    cursor_index += 1
+    t = 0
   elseif key == chr(13) then
     -- new line (enter)
     sfx(3)
@@ -129,6 +134,7 @@ function _update60()
     --add a new line
     add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
     cursor_index += 1
+    t = 0
   elseif key =="\t" then
     --tab key
     extcmd("pause")
@@ -147,15 +153,6 @@ function _draw()
   glyph_rows = render_text(text_rows, cursor_index, theme)
   debug:log("CPU end", stat(1))
   --debug:draw()
-
-end
-
-function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_rows_edit, glyph_length)
-  return {
-    char_width=char_width, char_height=char_height,
-    index_in_text_rows=index_in_text_rows, index_in_text_rows_edit=index_in_text_rows_edit,
-    glyph_length=glyph_length
-  }
 end
 
 function render_text(text_rows, cursor_index, theme)
@@ -184,6 +181,7 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
     return render_heading(text_row, subsubheader_font, text_index, x, y, cursor_index, theme.h3c, theme.cursorc)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index, theme)
+  -- Empty line
   elseif first_word=="" then
     if cursor_index==text_index and is_marker_visible() then
       print("▮", 0, y, theme.cursorc)
@@ -196,6 +194,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
       0
     )
     return {{glyph}}, 0, y + 6
+  elseif text_row[1]=="." then
+    return render_math(text_row, text_index, math_fonts, x, y, cursor_index, theme)
   else
     return render_body(text_row, text_index, x, y, cursor_index, theme)
   end
@@ -233,6 +233,7 @@ end
 
 function render_body(text_row, text_index, x, y, cursor_index, theme)
   -- This function includes word wrapping
+  local screen_width = 128
   local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
   local word_formatting_functions = {}
   local cleaned_words = {}
@@ -244,7 +245,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   for i=1,#words do
     local word   = words[i]
     local word_i = indexes[i]
-    --Word prefix
+    --Markdown word prefix removal
     if sub(word, 1, 2)=="**" then
       is_bold = true
       if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
@@ -279,13 +280,13 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     end
     cleaned_words[i].word = word
   end
-  debug:log("2", stat(1))
   local glyph_rows = {}
   local glyph_row  = {}
   --Draws all words to screen
   local formatting_func = word_formatting_functions[1]
   char_width, char_height = formatting_func()
   for i,word in ipairs(words) do
+    -- Update formatting (font style)
     if formatting_func != word_formatting_functions[i] then
       formatting_func = word_formatting_functions[i]
       char_width, char_height = formatting_func()
@@ -293,14 +294,23 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     local cleaned_word = cleaned_words[i].word
     local next_x = x + char_width * #cleaned_word --TODO This is not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
     local word_i = indexes[i]
-    if next_x > 128 then
+    if next_x > screen_width then
       -- Move to new line
       x = 0
       y = y + char_height
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
+    -- TODO simplify this messy if statement
     if in_bounds(cursor_index, word_i, word_i + #words[i]) and is_marker_visible() then
+      local number_of_spaces = cursor_index - word_i
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+    elseif i < #words and in_bounds(cursor_index, word_i, indexes[i + 1] - 1) and is_marker_visible() then
+      local number_of_spaces = cursor_index - word_i
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
+      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+    elseif i == #words and cursor_index >= word_i + #word and cursor_index <= text_index + #text_row then
       local number_of_spaces = cursor_index - word_i
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
       print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
@@ -311,7 +321,16 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     elseif cleaned_words[i].is_cursive then
       c = theme.cursivec
     end
-    x = char_width + print("\14"..cleaned_word, x, y, c) -- <-- TEXT RENDERING
+    -- Render to screen
+    x = print("\14"..cleaned_word, x, y, c)
+    -- Adding trailing spaces to x
+    if i < #words then
+      local next_char_index = indexes[i + 1]
+      local curr_char_index = word_i + #word
+      local number_spaces   = next_char_index - curr_char_index
+      x += number_spaces * char_width
+    end
+
     local glyph = new_glyph(
       char_width,
       char_height,
