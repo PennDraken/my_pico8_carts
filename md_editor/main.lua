@@ -100,18 +100,20 @@ function _update60()
   -- get key input
   local key = stat(31)
   if key == chr(8) then --TODO backspace at start of line
-    -- backspace
-    sfx(4)
-    if #text_row==0 then
-      deli(text_rows, row_i)
-    elseif index_in_row==1 then
-      text_rows[row_i - 1] = text_rows[row_i - 1]..text_rows[row_i]
-      deli(text_rows, row_i)
-    else
-      text_rows[row_i] = del_char(text_row, index_in_row - 1)
+    if cursor_index != 1 then
+      -- backspace
+      sfx(4)
+      if #text_row==0 then
+        deli(text_rows, row_i)
+      elseif index_in_row==1 then
+        text_rows[row_i - 1] = text_rows[row_i - 1]..text_rows[row_i]
+        deli(text_rows, row_i)
+      else
+        text_rows[row_i] = del_char(text_row, index_in_row - 1)
+      end
+      cursor_index = max(1, cursor_index - 1)
+      t = 0
     end
-    cursor_index = max(1, cursor_index - 1)
-    t = 0
   elseif key >= " " and key <= "~" then
     -- add character
     sfx(rnd({0,1,2}))

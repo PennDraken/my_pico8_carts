@@ -106,7 +106,7 @@ function math_regular(text)
     end
     o.draw = function(this, x, y)
         math4x6_font()
-        return print("\14"..this.text, x, y, 7)
+        return print("\14"..this.text, x, y, theme.mc)
     end
     return o
 end
@@ -122,7 +122,7 @@ function math_exponed(text)
     end
     o.draw = function(this, x, y)
         small3x3_font()
-        return print("\14"..this.text, x, y - 1, 7)
+        return print("\14"..this.text, x, y - 1, theme.mc)
     end
     return o
 end
@@ -154,7 +154,7 @@ function math_frac(eq_top, eq_bottom)
         end
         local max_x = max(bot_x, top_x) - 2
         local mid_y = y + 5/2
-        line(start_x, mid_y, max_x, mid_y, 7)
+        line(start_x, mid_y, max_x, mid_y, theme.mc)
         return max(bot_x, top_x)
     end
     return o
