@@ -1,0 +1,327 @@
+function new_graph_manager()
+    local o = {}
+    -- PARAMETERS
+    o.edge_force   = 0.05
+    o.repel_force  = 20
+    o.center_force = 0.002
+    -- GRAPH DATA
+    o.nodes = {}
+
+    -- FUNCTIONS
+    o.get_node_index = function(this, node)
+        for i,n in ipairs(this.nodes) do
+            if n.name == node.name then
+                return i
+            end
+        end
+        return nil
+    end
+
+    o.add_node = function(this, node, links)
+        local node_index = this:get_node_index(node)
+        if not node_index then
+            add(this.nodes, node)
+        else
+            this.nodes[node_index] = node
+        end
+        this:update_links(node, links)
+    end
+
+    o.update_links = function(this, node, links)
+        if not links then links = {} end
+        local node_index = this:get_node_index(node)
+        if not node_index then return end
+        -- set the node’s links
+        this.nodes[node_index].nodes = {}
+        for l in all(links) do
+            this.nodes[node_index]:add_link(l)
+        end
+        -- ensure bidirectional connections
+        for node_to_update in all(this.nodes) do
+            if node_to_update != node then
+                if in_list(links, node_to_update) then
+                    node_to_update:add_link(node)
+                else
+                    node_to_update:delete_link(node)
+                end
+            end
+        end
+    end
+
+    o.add_links = function(this, node, links)
+        if not links then links = {} end
+        local node_index = this:get_node_index(node)
+        if not node_index then return end
+        for l in all(links) do
+            this.nodes[node_index]:add_link(l)
+            l:add_link(this.nodes[node_index])
+        end
+    end
+
+    o.delete_node = function(this, node)
+        del(this.nodes, node)
+        for n in all(this.nodes) do
+            n:delete_link(node)
+        end
+    end
+
+    o.update_nodes = function(this)
+        -- Mouse interaction
+        -- Move selected node
+        if not mouse.object_selected then
+            mouse.object_hovered = nil
+            for n in all(this.nodes) do
+                if n:contains_point(mouse.x, mouse.y) then
+                    mouse.object_hovered = n
+                end
+            end
+        end
+
+        -- Center force
+        -- Calculate center of all node positions
+        local cx, cy = 64, 64
+        for n in all(this.nodes) do
+            if n != mouse.object_selected then
+                local dx = cx - n.x
+                local dy = cy - n.y
+                n.dx += dx * this.center_force
+                n.dy += dy * this.center_force
+            end
+        end
+
+        -- Repel force
+        for n1 in all(this.nodes) do
+            for n2 in all(this.nodes) do
+                if n1 != mouse.object_selected or n2 != mouse.object_selected then
+                    if n1 != n2 then
+                        local dx = n2.x - n1.x
+                        local dy = n2.y - n1.y
+                        local angle = atan2(dx, dy)
+                        local d2 = dx^2 + dy^2
+                        local force = 1/(d2) * this.repel_force
+                        local ax = cos(angle) * force
+                        local ay = sin(angle) * force
+                        n1.dx -= ax
+                        n1.dy -= ay
+                    end
+                end
+            end
+        end
+
+        -- Edge force
+        for n1 in all(this.nodes) do
+            for n2 in all(n1.nodes) do
+                if n1 != mouse.object_selected or n2 != mouse.object_selected then
+                    local dx = n2.x - n1.x
+                    local dy = n2.y - n1.y
+                    local angle = atan2(dx, dy)
+                    local d2 = dx^2 + dy^2
+                    if d2 > 20 then
+                        local force = 1/(d2) * this.edge_force
+                        local ax = cos(angle) * -force
+                        local ay = sin(angle) * -force
+                        n1.dx -= ax
+                        n1.dy -= ay
+                    end
+                end
+            end
+        end
+
+        -- Update positions
+        for n in all(this.nodes) do
+            if n != mouse.object_selected then
+                n:update_position()
+            end
+        end
+    end
+
+    return o
+end
+
+function in_list(list, item)
+    for i in all(list) do
+        if item == i then
+            return true
+        end
+    end
+    return false
+end
+
+function new_node(name, nodes)
+    local node = {}
+    node.name = name
+    node.r = 3
+    node.x  = rnd(32)+32
+    node.y  = rnd(32)+32
+    node.dx = 0
+    node.dy = 0
+    if not nodes then nodes = {} end
+    node.nodes = nodes
+
+    -- FUNCTIONS
+    node.add_link = function(this, n)
+        if not in_list(this.nodes, n) then
+            add(this.nodes, n)
+        end
+    end
+
+    node.add_links = function(this, nodes)
+        for n in all(nodes) do
+            this:add_link(n)
+        end
+    end
+
+    node.delete_link = function(this, n)
+        if in_list(this.nodes, n) then
+            del(this.nodes, n)
+        end
+    end
+
+    node.update_position = function(this, n)
+        local f = 0.9
+        this.x += this.dx
+        this.y += this.dy
+        this.dx = this.dx * f
+        this.dy = this.dy * f
+    end
+
+    node.contains_point = function(this, x, y)
+        local dx = x - this.x
+        local dy = y - this.y
+        local dist = dx^2 + dy^2
+        return dist < this.r^2
+    end
+
+    return node
+end
+
+-- TEST INIT
+function reverse_case(t)
+ local r=""
+ for i=1,#t do
+  local c=sub(t,i,i)
+  local o=ord(c)
+  if o>=65 and o<=90 then c=chr(o+32)
+  elseif o>=97 and o<=122 then c=chr(o-32) end
+  r=r..c
+ end
+ return r
+end
+
+function random_graph(g, node_count, max_links_per_node)
+    -- create nodes
+    local names = {"Apple", "Banana", "Orange", "Peanuts", "Spagetti", "Lava", "Frederich Nietzche", "Ice Coffee", "Tea", "Stars", "Love Island", "Drain Gang", "Node Graph", "Markdown"}
+    for i,name in ipairs(names) do
+        names[i] = reverse_case(name)
+    end
+    for i=1,node_count do
+        local name = names[i] -- A, B, C...
+        add(g.nodes, new_node(name))
+    end
+    -- create random links
+    for n in all(g.nodes) do
+        local link_count = flr(rnd(max_links_per_node))+1
+        local links = {}
+        for j=1,link_count do
+            local other = g.nodes[flr(rnd(#g.nodes))+1]
+            if other != n and not in_list(links, other) then
+                add(links, other)
+            end
+        end
+        g:update_links(n, links)
+    end
+end
+
+function init_mouse()
+    poke(0x5F2D, 1) -- Mouse enabled
+    mouse = {}
+    mouse.x = stat(32)
+    mouse.y = stat(33)
+    mouse.dx = 0
+    mouse.dy = 0
+    mouse.left_click  = false
+    mouse.left_held_time = 0
+    mouse.right_click = false
+    mouse.right_held_time = 0
+    mouse.object_hovered  = nil
+    mouse.object_selected = nil
+
+    mouse.update = function(this)
+        this.dx = stat(32) - this.x
+        this.dy = stat(33) - this.y
+        this.x = stat(32)
+        this.y = stat(33)
+        this.left_click = (stat(34) & 0b001)==1
+        this.right_click = ((stat(34) & 0b010)>>1)==1
+        if this.left_click and this.object_hovered and not this.object_selected then
+            this.object_selected = this.object_hovered
+        elseif this.left_click and this.object_selected then
+            this.object_selected.x += this.dx
+            this.object_selected.y += this.dy
+            this.object_selected.dx = this.dx
+            this.object_selected.dy = this.dy
+        else
+            this.object_selected = nil
+        end
+    end
+
+    mouse.draw = function(this)
+        local function outline_spr(n, x, y, c)
+            pal(7, 1)
+            spr(n, x-1, y-1)
+            spr(n, x+1, y-1)
+            spr(n, x-1, y+1)
+            spr(n, x+1, y+1)
+            spr(n, x, y-1)
+            spr(n, x, y+1)
+            spr(n, x-1, y)
+            spr(n, x+1, y)
+            pal()
+            spr(n, x, y)
+        end
+        if this.left_click and not this.object_hovered then
+            outline_spr(0, this.x, this.y, 0)
+        elseif this.left_click and this.object_hovered then
+            outline_spr(2, this.x, this.y, 0)
+        elseif not this.left_click and this.object_hovered then
+            outline_spr(1, this.x, this.y, 0)
+        else
+            outline_spr(0, this.x, this.y, 0)
+        end
+    end
+    return mouse
+end
+
+function centered_print(text, x, y, c)
+    print(text,x-#text*2, y-2, c)
+end
+
+-- GAME LOOP ----------------------------------------------------------------------------------
+function _init()
+    mouse = init_mouse()
+    graph = new_graph_manager()
+    random_graph(graph, 10, 4)
+end
+
+function _draw()
+    cls(0)
+    -- draw node names and their connections for debugging
+    local y = 0
+    for n in all(graph.nodes) do
+        circfill(n.x, n.y, n.r, 5)
+    end
+    for n1 in all(graph.nodes) do
+        for n2 in all(n1.nodes) do
+            line(n1.x, n1.y, n2.x, n2.y, 5)
+        end
+    end
+    for n in all(graph.nodes) do
+        centered_print(n.name, n.x, n.y, 7)
+    end
+    mouse:draw()
+end
+
+function _update60()
+    graph:update_nodes()
+    mouse:update()
+end
