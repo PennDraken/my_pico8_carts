@@ -72,18 +72,17 @@ function _update60()
   -- cursor control
   if btnp(0) then
     cursor_index = max(cursor_index - 1, 1)
-    local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+    local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
     cursor_index_in_row = index_in_row
-    stop()
     t = 0
   elseif btnp(1) then
     cursor_index = min(cursor_index + 1, cursor_index + 1) -- TODO use actual length instead
-    local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+    local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
     cursor_index_in_row = index_in_row
     t = 0
   end
   if btnp(2) then
-    cursor_index = jump_cursor_up(cursor_index, glyph_rows)
+    cursor_index = jump_cursor_up(cursor_index, glyph_rows, cursor_index_in_row)
     _draw()
     t = 0
   elseif btnp(3) then
@@ -92,7 +91,7 @@ function _update60()
     cursor_index = 0
     _draw()
     cursor_index = temp
-    cursor_index = jump_cursor_down(cursor_index, glyph_rows)
+    cursor_index = jump_cursor_down(cursor_index, glyph_rows, cursor_index_in_row)
     t = 0
   end
 
