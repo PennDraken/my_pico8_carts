@@ -26,7 +26,6 @@ function _init()
   menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   text_rows = {
-    "",
     "# Markdown",
     "## Introduction",
     "### What is it?",
@@ -50,7 +49,7 @@ function _init()
     --text_rows = string_to_text_rows(user_string)
   end
   t = 0     --timer for blinking animation
-  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 100 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
   -- DEFAULT FONTS
   header_font       = header_font_3
@@ -75,6 +74,7 @@ function _update60()
     cursor_index = max(cursor_index - 1, 1)
     local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
     cursor_index_in_row = index_in_row
+    stop()
     t = 0
   elseif btnp(1) then
     cursor_index = min(cursor_index + 1, cursor_index + 1) -- TODO use actual length instead

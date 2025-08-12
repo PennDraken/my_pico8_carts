@@ -95,7 +95,6 @@ function string_to_equation(text)
     return result
 end
 
-
 function math_regular(text)
     local o = {}
     o.text = text
@@ -106,7 +105,7 @@ function math_regular(text)
         return 6
     end
     o.draw = function(this, x, y)
-        regular_1()
+        math4x6_font()
         return print("\14"..this.text, x, y, 7)
     end
     return o
@@ -123,7 +122,7 @@ function math_exponed(text)
     end
     o.draw = function(this, x, y)
         small3x3_font()
-        return print("\14"..this.text, x, y, 7)
+        return print("\14"..this.text, x, y - 1, 7)
     end
     return o
 end

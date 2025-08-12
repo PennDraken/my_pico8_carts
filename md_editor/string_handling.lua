@@ -160,7 +160,22 @@ function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   end
 end
 
-function jump_cursor_down(cursor_index, glyph_rows)
+function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
+  -- This function is used to keep track of last cursor index position (useful for moving up and down along different line lengths)
+  local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
+  if glyph_row_i == #glyph_rows then -- No more lines to jump to
+    local last_glyph_row = glyph_rows[#glyph_rows]
+    local last_glyph = last_glyph_row[#last_glyph_row]
+    local line_end_index = last_glyph.index_in_text_rows + last_glyph.glyph_length
+    return line_end_index
+  end
+  local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
+  local delta_index = cursor_index - glyph.index_in_text_rows
+  local index_in_row = (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
+  return index_in_row
+end
+
+function jump_cursor_down(cursor_index, glyph_rows, index_in_row)
   -- First we find position of cursor in glyph_rows
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   if glyph_row_i == #glyph_rows then -- No more lines to jump to
@@ -178,7 +193,7 @@ function jump_cursor_down(cursor_index, glyph_rows)
   return new_cursor_index
 end
 
-function jump_cursor_up(cursor_index, glyph_rows)
+function jump_cursor_up(cursor_index, glyph_rows, index_in_row)
   -- First we find position of cursor in glyph_rows
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   if glyph_row_i == 1 then -- If were on the first line set cursor to first char (prevents out of bounds)
