@@ -20,7 +20,8 @@ function new_note()
   -- Creates a new empty note (note this function is generally called from options menu)
   text_rows = {""}
   cursor_index = 1
-  close_menu()
+  _draw = draw_text_editor
+  _update60 = update_text_editor
 end
 
 function _init()
@@ -30,9 +31,10 @@ function _init()
   theme_i = 4--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
-  menuitem(1, "Change theme", toggle_theme)
   poke(0x5f2d, 1)  -- enable devkit keyboard input
+  notes = new_graph_manager()
   text_rows = {
+    "Markdown",
     "# Markdown",
     "## Introduction",
     "### What is it?",
@@ -50,6 +52,7 @@ function _init()
     "3. Enjoy!",
     "[0,8,8]"
   }
+  save_note(text_rows)
   -- text_rows = {""}
   user_string = stat(4)
   if user_string!="" then

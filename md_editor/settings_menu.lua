@@ -47,11 +47,48 @@ function new_menu(title)
         local key = stat(31)
         if key == chr(13) then
             -- Enter key
-            this.options[this.option_index].func()
+            this.options[this.option_index]:func()
         end
     end
 
     return menu
+end
+
+function set_visible_text(new_text_rows)
+    text_rows = new_text_rows
+end
+
+function save_note(new_text_rows)
+    local name = new_text_rows[1]
+    if name=="" then
+        name = "Untitled"
+    end
+    local data = {}
+    for text_row in all(new_text_rows) do
+        add(data, text_row)
+    end
+    -- if data != nil then
+    --     ?data[1]
+    --     stop()
+    -- end
+    -- local connections = TODO
+    local node = new_node(name, nil, data)
+    -- if node.data != nil then
+    --     ?node.data[1]
+    --     stop()
+    -- end
+    node.func = function(this)
+        -- Loads a note
+        cursor_index = 1
+        -- set_visible_text(this.data)
+        if this.data == nil then stop() end
+        text_rows = this.data
+        _draw = draw_text_editor
+        _update60 = update_text_editor
+    end
+    node:func()
+    notes:add_node(node)
+    node:func()
 end
 
 -------------------------------------------------------------------------------------------------------------
@@ -71,7 +108,20 @@ function close_menu()
 end
 
 function open_menu()
-    menu.option_index = 2
+    -- Save currently open note
+    save_note(text_rows)
+    menu = new_menu("sETTTINGS")
+    menu:add_option("cLOSE", close_menu)
+    menu:add_option("nEW nOTE", new_note)
+    for note in all(notes.nodes) do
+        menu:add_option(note.name, function()
+            note:func()  -- calls with 'this' set to 'note'
+        end)
+    end
+    menu:add_option("gRAPH vIEW", open_graph_view)
+    menu:add_option("tOGGLE tHEME", toggle_theme)
+    menu:add_option("tOGGLE fONTS (tODO)")
+
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw
     _update60 = update_menu

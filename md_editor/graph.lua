@@ -24,6 +24,7 @@ function new_graph_manager()
         else
             this.nodes[node_index] = node
         end
+        if links == nil then links = node.nodes end
         this:update_links(node, links)
     end
 
@@ -147,9 +148,10 @@ function in_list(list, item)
     return false
 end
 
-function new_node(name, nodes)
+function new_node(name, nodes, data)
     local node = {}
     node.name = name
+    node.data = data
     node.r = 3
     node.x  = rnd(32)+32
     node.y  = rnd(32)+32
@@ -239,8 +241,21 @@ function init_mouse()
         this.dy = stat(33) - this.y
         this.x = stat(32)
         this.y = stat(33)
+        local is_moving = abs(this.dx) > 0.1 and abs(this.dy) > 0.1
+
+        if this.left_click and (stat(34) & 0b001)!=1 and not is_moving and this.object_selected and this.left_held_time < 5 then
+            -- Mouse release on node (using previously set left click boolean)
+            if this.object_selected.func then this.object_selected:func() end
+            return
+        end
+
         this.left_click = (stat(34) & 0b001)==1
-        this.right_click = ((stat(34) & 0b010)>>1)==1
+        if this.left_click then
+            this.left_held_time += 1
+        else
+            this.left_held_time = 0
+        end
+
         if this.left_click and this.object_hovered and not this.object_selected then
             this.object_selected = this.object_hovered
         elseif this.left_click and this.object_selected then
@@ -283,8 +298,8 @@ end
 -- GAME LOOP ----------------------------------------------------------------------------------
 function init_graph()
     mouse = init_mouse()
-    graph = new_graph_manager()
-    random_graph(graph, 10, 4)
+    graph = notes
+    -- random_graph(graph, 10, 4)
 end
 
 function draw_graph()
