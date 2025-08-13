@@ -4,6 +4,8 @@ function toggle_theme()
     theme_i = 1
   end
   theme = themes[theme_i]
+  draw_text_editor() -- TODO think if this should be included here?
+  menu:draw()
 end
 
 colors = {

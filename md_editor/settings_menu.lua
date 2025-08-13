@@ -1,7 +1,7 @@
 function new_menu(title)
     menu = {}
-    menu.x = 4
-    menu.y = 4
+    menu.x = 20
+    menu.y = 20
     menu.width  = 128 - menu.x * 2
     menu.height = 128 - menu.y * 2
     menu.background_color = 1
@@ -19,8 +19,9 @@ function new_menu(title)
     end
 
     menu.draw = function(this)
-        rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.bgc)
-        centered_print(this.title, 64, this.y, theme.boldc)
+        rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.pc)
+        rectfill(this.x+1, this.y+1, this.x + this.width-1, this.y + this.height-1, theme.bgc)
+        centered_print(this.title, 64, this.y + 3, theme.boldc)
         for i,option in ipairs(this.options) do
             if i == this.option_index then
                 print("> "..option.text, this.x + 4, this.y + i * 8, theme.boldc)
@@ -56,11 +57,11 @@ end
 -------------------------------------------------------------------------------------------------------------
 function init_menu()
     local menu = new_menu("sETTTINGS")
-    menu:add_option("close", close_menu)
-    menu:add_option("new note")
-    menu:add_option("graph view")
-    menu:add_option("toggle theme", toggle_theme)
-    menu:add_option("toggle fonts")
+    menu:add_option("cLOSE", close_menu)
+    menu:add_option("nEW nOTE")
+    menu:add_option("gRAPH vIEW")
+    menu:add_option("tOGGLE tHEME", toggle_theme)
+    menu:add_option("tOGGLE fONTS")
     return menu
 end
 
