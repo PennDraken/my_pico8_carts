@@ -13,6 +13,10 @@ function get_first_word(string)
   return nstring, word_end_i
 end
 
+function centered_print(text, x, y, c)
+    print(text,x-#text*2, y-2, c)
+end
+
 function reverse_case(str)
   -- used to make text more pretty and readable
   local result = ""

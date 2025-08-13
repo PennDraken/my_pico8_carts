@@ -292,10 +292,6 @@ function init_mouse()
     return mouse
 end
 
-function centered_print(text, x, y, c)
-    print(text,x-#text*2, y-2, c)
-end
-
 -- GAME LOOP ----------------------------------------------------------------------------------
 function _init()
     mouse = init_mouse()
