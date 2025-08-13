@@ -66,12 +66,14 @@ function init_menu()
 end
 
 function close_menu()
-    _update60 = update_text_editor
-    _draw     = draw_text_editor
+    _update60 = menu.last_update_function
+    _draw     = menu.last_draw_function
 end
 
 function open_menu()
     menu.option_index = 2
+    menu.last_update_function = _update60
+    menu.last_draw_function   = _draw
     _update60 = update_menu
     _draw     = draw_menu
 end
