@@ -306,6 +306,9 @@ function draw_graph()
 end
 
 function update_graph()
+    disable_pause_on_enter()
+    local key = stat(31)
+    if key == "\t" then open_menu() end
     graph:update_nodes()
     mouse:update()
 end
