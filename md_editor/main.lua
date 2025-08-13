@@ -16,6 +16,13 @@ function set_cursor_y(y)
   poke(0x5f27, y)
 end
 
+function new_note()
+  -- Creates a new empty note (note this function is generally called from options menu)
+  text_rows = {""}
+  cursor_index = 1
+  close_menu()
+end
+
 function _init()
   cls()
   extcmd("set_title","Tiny Markdown Editor")

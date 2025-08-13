@@ -58,10 +58,10 @@ end
 function init_menu()
     local menu = new_menu("sETTTINGS")
     menu:add_option("cLOSE", close_menu)
-    menu:add_option("nEW nOTE")
-    menu:add_option("gRAPH vIEW")
+    menu:add_option("nEW nOTE", new_note)
+    menu:add_option("gRAPH vIEW", open_graph_view)
     menu:add_option("tOGGLE tHEME", toggle_theme)
-    menu:add_option("tOGGLE fONTS")
+    menu:add_option("tOGGLE fONTS (tODO)")
     return menu
 end
 

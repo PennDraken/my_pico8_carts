@@ -196,18 +196,6 @@ function new_node(name, nodes)
 end
 
 -- TEST INIT
-function reverse_case(t)
- local r=""
- for i=1,#t do
-  local c=sub(t,i,i)
-  local o=ord(c)
-  if o>=65 and o<=90 then c=chr(o+32)
-  elseif o>=97 and o<=122 then c=chr(o-32) end
-  r=r..c
- end
- return r
-end
-
 function random_graph(g, node_count, max_links_per_node)
     -- create nodes
     local names = {"Apple", "Banana", "Orange", "Peanuts", "Spagetti", "Lava", "Frederich Nietzche", "Ice Coffee", "Tea", "Stars", "Love Island", "Drain Gang", "Node Graph", "Markdown"}
@@ -293,13 +281,13 @@ function init_mouse()
 end
 
 -- GAME LOOP ----------------------------------------------------------------------------------
-function _init()
+function init_graph()
     mouse = init_mouse()
     graph = new_graph_manager()
     random_graph(graph, 10, 4)
 end
 
-function _draw()
+function draw_graph()
     cls(0)
     -- draw node names and their connections for debugging
     local y = 0
@@ -317,7 +305,14 @@ function _draw()
     mouse:draw()
 end
 
-function _update60()
+function update_graph()
     graph:update_nodes()
     mouse:update()
+end
+
+function open_graph_view()
+    close_menu()
+    init_graph()
+    _draw = draw_graph
+    _update60 = update_graph
 end
