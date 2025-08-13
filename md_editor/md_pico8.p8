@@ -6,6 +6,7 @@ __lua__
 #include themes.lua
 #include fonts.lua
 #include string_handling.lua
+#include settings_menu.lua
 #include math_renderer.lua
 #include main.lua
 __gfx__

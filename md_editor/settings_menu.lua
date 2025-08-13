@@ -12,22 +12,26 @@ function new_menu(title)
     menu.option_index = 2
 
     menu.add_option = function(this, text, func)
+        if func == nil then
+            func = function() end
+        end
         add(this.options, {text = text, func = func})
     end
 
     menu.draw = function(this)
-        rectfill(this.x, this.y, this.x + this.width, this.y + this.height, this.background_color)
-        centered_print(this.title, 64, this.y, this.passive_text_color)
+        rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.bgc)
+        centered_print(this.title, 64, this.y, theme.boldc)
         for i,option in ipairs(this.options) do
             if i == this.option_index then
-                print("> "..option.text, this.x + 4, this.y + i * 8, this.highlight_text_color)
+                print("> "..option.text, this.x + 4, this.y + i * 8, theme.boldc)
             else
-                print(option.text, this.x + 4, this.y + i * 8, this.passive_text_color)
+                print(option.text, this.x + 4, this.y + i * 8, theme.pc)
             end
         end
     end
 
     menu.update = function(this)
+        disable_pause_on_enter()
         if btnp(2) then
             this.option_index = this.option_index - 1
             if this.option_index <= 0 then
@@ -39,33 +43,42 @@ function new_menu(title)
                 this.option_index = 1
             end
         end
+        local key = stat(31)
+        if key == chr(13) then
+            -- Enter key
+            this.options[this.option_index].func()
+        end
     end
 
     return menu
 end
 
 -------------------------------------------------------------------------------------------------------------
-function _init()
-    menu = new_menu("sETTTINGS")
-    menu:add_option("close")
+function init_menu()
+    local menu = new_menu("sETTTINGS")
+    menu:add_option("close", close_menu)
     menu:add_option("new note")
-    menu:add_option("toggle theme")
+    menu:add_option("graph view")
+    menu:add_option("toggle theme", toggle_theme)
     menu:add_option("toggle fonts")
+    return menu
 end
 
-function _draw()
-    draw_menu()
+function close_menu()
+    _update60 = update_text_editor
+    _draw     = draw_text_editor
 end
 
-function _update()
-    update_menu()
-end
-
-function draw_menu()
-    menu:draw()
+function open_menu()
+    menu.option_index = 2
+    _update60 = update_menu
+    _draw     = draw_menu
 end
 
 function update_menu()
-    menu:update()
+    menu:draw()
 end
 
+function draw_menu()
+    menu:update()
+end

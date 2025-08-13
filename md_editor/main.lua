@@ -58,9 +58,13 @@ function _init()
   regular = regular_1
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
+  -- Set draw and update methods
+  _update60 = update_text_editor
+  _draw = draw_text_editor
+  menu = init_menu()
 end
 
-function _update60()
+function update_text_editor()
   -- read user input
   if user_string != stat(4) then
     --new user input
@@ -68,7 +72,7 @@ function _update60()
     print(user_string)
     text_rows = string_to_text_rows(user_string)
   end
-  poke(24368,1) --disable pause on enter (needs to be done every frame)
+  disable_pause_on_enter()
   -- cursor control
   if btnp(0) then
     cursor_index = max(cursor_index - 1, 1)
@@ -83,13 +87,13 @@ function _update60()
   end
   if btnp(2) then
     cursor_index = jump_cursor_up(cursor_index, glyph_rows, cursor_index_in_row)
-    _draw()
+    draw_text_editor()
     t = 0
   elseif btnp(3) then
     --Slightly hacky solution to render the transition of the cursor before actual movement
     local temp = cursor_index
     cursor_index = 0
-    _draw()
+    draw_text_editor()
     cursor_index = temp
     cursor_index = jump_cursor_down(cursor_index, glyph_rows, cursor_index_in_row)
     t = 0
@@ -138,14 +142,15 @@ function _update60()
     t = 0
   elseif key =="\t" then
     --tab key
-    extcmd("pause")
+    -- extcmd("pause")
+    open_menu()
   end
   -- Increment timer
   t += 1
 end
 
 ---RENDER----------------------------------------------------------
-function _draw()
+function draw_text_editor()
   debug = new_debugger()
   theme = themes[theme_i]
   cls(theme.bgc)

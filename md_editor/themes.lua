@@ -3,6 +3,7 @@ function toggle_theme()
   if theme_i > #themes then
     theme_i = 1
   end
+  theme = themes[theme_i]
 end
 
 colors = {

@@ -9,6 +9,10 @@ function in_bounds(val, start, stop)
     return val >= start and val <= stop
 end
 
+function disable_pause_on_enter()
+  poke(24368,1) --disable pause on enter (needs to be done every frame)
+end
+
 function show_cpu(y)
   ?"\#0"..stat(1),0,y,7
 end
