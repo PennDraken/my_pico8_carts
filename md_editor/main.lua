@@ -237,11 +237,6 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index,
   return glyph_rows, 0, get_onscreen_y()
 end
 
-function render_body_test()
-  cls()
-  render_body("**This** is a test. This is a pretty long sentence. This is **bold**", 1, 0, 0, 1)
-end
-
 function render_body(text_row, text_index, x, y, cursor_index, theme)
   -- This function includes word wrapping
   local screen_width = 128
