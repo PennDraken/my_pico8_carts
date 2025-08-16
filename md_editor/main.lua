@@ -22,6 +22,8 @@ function new_note()
   cursor_index = 1
   _draw = draw_text_editor
   _update60 = update_text_editor
+  last_node = nil -- We reset the last node status, will be set again by the save function
+  save_note(text_rows)
 end
 
 function _init()
@@ -53,6 +55,7 @@ function _init()
     "[0,8,8]"
   }
   save_note(text_rows)
+  last_node = notes.nodes[1]
   -- text_rows = {""}
   user_string = stat(4)
   if user_string!="" then

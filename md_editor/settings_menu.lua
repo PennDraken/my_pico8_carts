@@ -59,36 +59,44 @@ function set_visible_text(new_text_rows)
 end
 
 function save_note(new_text_rows)
-    local name = new_text_rows[1]
-    if name=="" then
-        name = "Untitled"
+    -- Creates a new or updates a previously created node
+    if not last_node then
+        local name = new_text_rows[1]
+        if name=="" then
+            name = "Untitled"
+        end
+        local data = {}
+        for text_row in all(new_text_rows) do
+            add(data, text_row)
+        end
+        -- local connections = TODO
+        local node = new_node(name, nil, data)
+        node.func = function(this)
+            -- Loads a note
+            cursor_index = 1
+            if this.data == nil then stop() end
+            text_rows = this.data
+            _draw = draw_text_editor
+            _update60 = update_text_editor
+            last_node = this
+        end
+        node:func()
+        notes:add_node(node)
+        node:func()
+    else
+        -- Update last note
+        local name = new_text_rows[1]
+        if name=="" then
+            name = "Untitled"
+        end
+        local data = {}
+        for text_row in all(new_text_rows) do
+            add(data, text_row)
+        end
+        last_node.name = name
+        last_node.data = data
+        last_node:func()
     end
-    local data = {}
-    for text_row in all(new_text_rows) do
-        add(data, text_row)
-    end
-    -- if data != nil then
-    --     ?data[1]
-    --     stop()
-    -- end
-    -- local connections = TODO
-    local node = new_node(name, nil, data)
-    -- if node.data != nil then
-    --     ?node.data[1]
-    --     stop()
-    -- end
-    node.func = function(this)
-        -- Loads a note
-        cursor_index = 1
-        -- set_visible_text(this.data)
-        if this.data == nil then stop() end
-        text_rows = this.data
-        _draw = draw_text_editor
-        _update60 = update_text_editor
-    end
-    node:func()
-    notes:add_node(node)
-    node:func()
 end
 
 -------------------------------------------------------------------------------------------------------------
