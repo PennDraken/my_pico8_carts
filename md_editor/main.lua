@@ -1,10 +1,10 @@
 function get_onscreen_x()
-  --wrapper function that looks at memory to find current cursor position
+  --looks at memory to find current cursor position
   return peek(0x5f26)
 end
 
 function get_onscreen_y()
-  --wrapper function that looks at memory to find current cursor position
+  --looks at memory to find current cursor position
   return peek(0x5f27)
 end
 
@@ -161,14 +161,10 @@ end
 
 ---RENDER----------------------------------------------------------
 function draw_text_editor()
-  debug = new_debugger()
   theme = themes[theme_i]
   cls(theme.bgc)
   camera(-1,-1)
-  debug:log("CPU start", stat(1))
   glyph_rows = render_text(text_rows, cursor_index, theme)
-  debug:log("CPU end", stat(1))
-  --debug:draw()
 end
 
 function render_text(text_rows, cursor_index, theme)
@@ -180,7 +176,6 @@ function render_text(text_rows, cursor_index, theme)
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index, theme)
-    -- debug:log(sub(text_row, 1, 10), stat(1))
     combine_tables(glyph_rows, new_glyph_rows)
     text_index += #text_row + 1 -- +1 adjusts for newline symbol not present as seperator
   end
@@ -257,7 +252,6 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   local is_cursive = false
   --Iterate through all words and store their formatting type and text index
   local temp_text_index = text_index
-  debug:log("1", stat(1))
   for i=1,#words do
     local word   = words[i]
     local word_i = indexes[i]
@@ -356,7 +350,6 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     )
     add(glyph_row, glyph)
   end
-  debug:log("3", stat(1))
   add(glyph_rows, glyph_row)
   return glyph_rows, 0, get_onscreen_y()
 end
