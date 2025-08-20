@@ -158,12 +158,14 @@ function render_text(text_rows, cursor_index, theme)
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
   local y = 0
+  local par_pad = 1
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
     new_glyph_rows, x, y = render_row(text_row, text_index, x, y, cursor_index, theme)
     combine_tables(glyph_rows, new_glyph_rows)
     text_index += #text_row + 1 -- +1 adjusts for newline symbol not present as seperator
+    y += par_pad
   end
   return glyph_rows
 end
@@ -335,9 +337,9 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
 end
 
 function render_horisontal_line(text_index, x, y, cursor_index, theme)
+  regular()
   local char_width, char_height = 4, 6
   if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
-    text_row = "--------------------------------"
     line(0, y + 2, 128, y + 2, theme.linec)
   else
     local number_of_spaces = cursor_index - text_index
