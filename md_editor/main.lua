@@ -81,7 +81,7 @@ function update_text_editor()
     cursor_index_in_row = index_in_row
     t = 0
   elseif btnp(1) then
-    cursor_index = min(cursor_index + 1, cursor_index + 1) -- TODO use actual length instead
+    cursor_index = min(cursor_index + 1, #string_list_to_string(text_rows)+1) -- TODO use actual length instead
     local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
     cursor_index_in_row = index_in_row
     t = 0
@@ -91,7 +91,7 @@ function update_text_editor()
     draw_text_editor()
     t = 0
   elseif btnp(3) then
-    --Slightly hacky solution to render the transition of the cursor before actual movement
+    --Hacky solution to compute nxt pos
     local temp = cursor_index
     cursor_index = 0
     draw_text_editor()
