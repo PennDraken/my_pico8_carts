@@ -1,4 +1,5 @@
 function extract_links(text_string)
+    -- Returns a list of strings
     local candidates = split(text_string, "[[", false)
     local links = {}
     for string in all(candidates) do
@@ -9,9 +10,3 @@ function extract_links(text_string)
     end
     return links
 end
-
-
-cls()
-extract_links(
-    "There are some links in this text object\nThis is a [[Link 1]]\nThis is also a [[Link 2]]"
-)

@@ -188,9 +188,7 @@ function new_node(name, nodes, data)
     end
 
     node.contains_point = function(this, x, y)
-        local dx = x - this.x
-        local dy = y - this.y
-        local dist = dx^2 + dy^2
+        local dist = (x - this.x)^2 + (y - this.y)^2
         return dist < this.r^2
     end
 
@@ -306,12 +304,17 @@ function draw_graph()
     cls(0)
     -- draw node names and their connections for debugging
     local y = 0
-    for n in all(graph.nodes) do
-        circfill(n.x, n.y, n.r, 5)
-    end
     for n1 in all(graph.nodes) do
         for n2 in all(n1.nodes) do
             line(n1.x, n1.y, n2.x, n2.y, 5)
+        end
+    end
+    for n in all(graph.nodes) do
+        if n.data then
+            circfill(n.x, n.y, n.r, 5)
+        else
+            circfill(n.x, n.y, n.r, 0)
+            circ(n.x, n.y, n.r, 5)
         end
     end
     for n in all(graph.nodes) do

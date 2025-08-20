@@ -141,7 +141,6 @@ function math_frac(eq_top, eq_bottom)
         local top_width = get_equation_width(this.eq_top)
         local bot_width = get_equation_width(this.eq_bottom)
         local frac_width = max(top_width, bot_width)
-        
         local top_y = y - 4
         local top_x = start_x + (frac_width - top_width)/2
         for seg in all(this.eq_top) do

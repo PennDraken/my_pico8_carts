@@ -59,46 +59,73 @@ function set_visible_text(new_text_rows)
 end
 
 function save_note(new_text_rows)
-    -- Creates a new or updates a previously created node
+    local name  = new_text_rows[1]
+    local data  = new_text_rows
+    -- Create or update the last node
     if not last_node then
-        local name = new_text_rows[1]
-        if name=="" then
-            name = "Untitled"
-        end
-        local data = {}
-        for text_row in all(new_text_rows) do
-            add(data, text_row)
-        end
-        -- local connections = TODO
-        local node = new_node(name, nil, data)
-        node.func = function(this)
-            -- Loads a note
-            cursor_index = 1
-            if this.data == nil then stop() end
-            text_rows = this.data
-            _draw = draw_text_editor
-            _update60 = update_text_editor
-            last_node = this
-        end
-        node:func()
-        notes:add_node(node)
-        node:func()
+        last_node = new_node(name, nil, data)
+        add(notes.nodes, last_node)
+        -- stop()
     else
-        -- Update last note
-        local name = new_text_rows[1]
-        if name=="" then
-            name = "Untitled"
-        end
-        local data = {}
-        for text_row in all(new_text_rows) do
-            add(data, text_row)
-        end
         last_node.name = name
         last_node.data = data
-        last_node:func()
+    end
+    -- Clear all links
+    for n in all(notes.nodes) do
+        n.nodes = {}
+    end
+    -- Remove auto-notes
+    local to_delete = {}
+    for n in all(notes.nodes) do
+        if n.data == nil then
+            add(to_delete, n)
+        end
+    end
+    for n in all(to_delete) do
+        del(notes.nodes, n)
+    end
+    -- Safe add helper (avoid duplicate links)
+    local function safe_add(t, v)
+        for x in all(t) do
+            if x == v then return end
+        end
+        add(t, v)
+    end
+    -- Create new links
+    for n1 in all(notes.nodes) do
+        local links = extract_links(string_list_to_string(n1.data))
+        local outgoing_nodes = {}
+        for link in all(links) do
+            local node = nil
+            -- Check if node already exists
+            for n2 in all(notes.nodes) do
+                if n2.name == link then
+                    node = n2
+                    break
+                end
+            end
+            -- If not found, create new node
+            if not node then
+                node = new_node(link, nil, nil)
+                add(notes.nodes, node)
+            end
+            safe_add(outgoing_nodes, node)
+        end
+        -- Set links bidirectionally
+        for n2 in all(outgoing_nodes) do
+            safe_add(n1.nodes, n2)
+            safe_add(n2.nodes, n1)
+        end
+        -- Create our loading function
+        n1.func = function(this)
+            cursor_index = 1
+            text_rows = this.data
+            if not text_rows then text_rows = {this.name} end
+            load_text_editor()
+            last_node = this
+        end
     end
 end
-
 -------------------------------------------------------------------------------------------------------------
 function init_menu()
     local menu = new_menu("sETTTINGS")

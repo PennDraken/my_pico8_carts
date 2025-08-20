@@ -20,8 +20,7 @@ function new_note()
   -- Creates a new empty note (note this function is generally called from options menu)
   text_rows = {""}
   cursor_index = 1
-  _draw = draw_text_editor
-  _update60 = update_text_editor
+  load_text_editor()
   last_node = nil -- We reset the last node status, will be set again by the save function
   save_note(text_rows)
 end
@@ -41,7 +40,7 @@ function _init()
     "## Introduction",
     "### What is it?",
     "*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.",
-    "",
+    "[[Note2]]",
     "## Facts",
     "- Created in 2004",
     "- File format is .md",
@@ -49,10 +48,8 @@ function _init()
     "---",
     ".3x^2*y^3+x=5{3x^2+325}/{490}",
     "## Tutorial",
-    "1. ⬇️⬅️⬆️➡️ Move cursor",
     "2. Write with keyboard",
-    "3. Enjoy!",
-    "[0,8,8]"
+    "3. Enjoy!"
   }
   save_note(text_rows)
   last_node = notes.nodes[1]
@@ -72,19 +69,11 @@ function _init()
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
   -- Set draw and update methods
-  _update60 = update_text_editor
-  _draw = draw_text_editor
+  load_text_editor()
   menu = init_menu()
 end
 
 function update_text_editor()
-  -- read user input
-  if user_string != stat(4) then
-    --new user input
-    user_string = stat(4)
-    print(user_string)
-    text_rows = string_to_text_rows(user_string)
-  end
   disable_pause_on_enter()
   -- cursor control
   if btnp(0) then
@@ -116,6 +105,7 @@ function update_text_editor()
   local text_row = text_rows[row_i]
   -- get key input
   local key = stat(31)
+  if (key) t = 0
   if key == chr(8) then --TODO backspace at start of line
     if cursor_index != 1 then
       -- backspace
@@ -129,14 +119,12 @@ function update_text_editor()
         text_rows[row_i] = del_char(text_row, index_in_row - 1)
       end
       cursor_index = max(1, cursor_index - 1)
-      t = 0
     end
   elseif key >= " " and key <= "~" then
     -- add character
     sfx(rnd({0,1,2}))
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1 
-    t = 0
   elseif key >= "○" and key <= "▥" then
     -- add character that is capital case (note this is automatically emoji instead of capital cases)
     sfx(rnd({0,1,2}))
@@ -144,7 +132,6 @@ function update_text_editor()
     key = chr(code-63)
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1
-    t = 0
   elseif key == chr(13) then
     -- new line (enter)
     sfx(3)
@@ -152,13 +139,10 @@ function update_text_editor()
     --add a new line
     add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
     cursor_index += 1
-    t = 0
   elseif key =="\t" then
     --tab key
-    -- extcmd("pause")
     open_menu()
   end
-  -- Increment timer
   t += 1
 end
 
@@ -312,16 +296,13 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     -- TODO simplify this messy if statement
     if in_bounds(cursor_index, word_i, word_i + #words[i]) and is_marker_visible() then
       local number_of_spaces = cursor_index - word_i
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+      draw_cursor(number_of_spaces, x, y, theme.cursorc)
     elseif i < #words and in_bounds(cursor_index, word_i, indexes[i + 1] - 1) and is_marker_visible() then
       local number_of_spaces = cursor_index - word_i
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+      draw_cursor(number_of_spaces, x, y, theme.cursorc)
     elseif i == #words and cursor_index >= word_i + #word and cursor_index <= text_index + #text_row then
       local number_of_spaces = cursor_index - word_i
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+      draw_cursor(number_of_spaces, x, y, theme.cursorc)
     end
     local c = theme.pc
     if cleaned_words[i].is_bold then
@@ -360,8 +341,7 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
   else
     local number_of_spaces = cursor_index - text_index
     if is_marker_visible() then
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, theme.cursorc)
-      print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, theme.cursorc)
+      draw_cursor(number_of_spaces, x, y, theme.cursorc)
     end
     text_row = "---"
     print(text_row, x, y, theme.linec)

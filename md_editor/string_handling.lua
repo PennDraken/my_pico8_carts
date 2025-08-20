@@ -14,7 +14,7 @@ function get_first_word(string)
 end
 
 function centered_print(text, x, y, c)
-    print(text,x-#text*2, y-2, c)
+  print(text,x-#text*2, y-2, c)
 end
 
 function reverse_case(str)
@@ -23,15 +23,14 @@ function reverse_case(str)
   for i=1, #str do
     local c = sub(str, i, i)
     local code = ord(c)
-
     if code >= 65 and code <= 90 then
-      -- uppercase A-Z -> lowercase a-z
+      -- A-Z ->  a-z
       result = result .. chr(code + 32)
     elseif code >= 97 and code <= 122 then
-      -- lowercase a-z -> uppercase A-Z
+      -- a-z -> A-Z
       result = result .. chr(code - 32)
     else
-      -- non-alphabetic characters unchanged
+      -- Symbols
       result = result .. c
     end
   end
@@ -55,6 +54,14 @@ function split_string_with_character(str, char)
   return rows
 end
 
+function string_list_to_string(list_of_strings)
+  local new_string = ""
+  for string in all(list_of_strings) do
+    new_string = new_string..string
+  end
+  return new_string
+end
+
 function string_to_list_of_words_with_index(str, start_index)
   local words   = {}
   local indexes = {}
@@ -65,9 +72,7 @@ function string_to_list_of_words_with_index(str, start_index)
     while i <= len and sub(str, i, i) == " " do
       i = i + 1
     end
-
     if i > len then break end
-
     -- find word end
     local start_i = i
     while i <= len and sub(str, i, i) ~= " " do
@@ -140,6 +145,11 @@ function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   end
 end
 
+function draw_cursor(number_of_spaces, x, y, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, cursorc)
+end
+
 function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
   -- This function is used to keep track of last cursor index position (useful for moving up and down along different line lengths)
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
@@ -166,7 +176,7 @@ function jump_cursor_down(cursor_index, glyph_rows, real_cursor_index_in_row)
   end
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
-  local index_in_row = real_cursor_index_in_row -- (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
+  local index_in_row = real_cursor_index_in_row
   local new_cursor_index = index_in_row + glyph_rows[glyph_row_i + 1][1].index_in_text_rows
   local cursor_max_index = glyph_rows[glyph_row_i + 1][#glyph_rows[glyph_row_i + 1]].index_in_text_rows + glyph_rows[glyph_row_i + 1][#glyph_rows[glyph_row_i + 1]].glyph_length
   new_cursor_index = min(new_cursor_index, cursor_max_index)
@@ -181,9 +191,9 @@ function jump_cursor_up(cursor_index, glyph_rows, real_cursor_index_in_row)
   end
   local glyph = glyph_rows[glyph_row_i][glyph_index_in_row]
   local delta_index = cursor_index - glyph.index_in_text_rows
-  local index_in_row = real_cursor_index_in_row -- (glyph.index_in_text_rows + delta_index) - glyph_rows[glyph_row_i][1].index_in_text_rows
+  local index_in_row = real_cursor_index_in_row
   local new_cursor_index = index_in_row + glyph_rows[glyph_row_i - 1][1].index_in_text_rows
-  --Correction when next line is outside the bounds of the current line
+  --Correction for nline is OOB of the current line
   if new_cursor_index >= glyph_rows[glyph_row_i][1].index_in_text_rows then
     new_cursor_index = glyph_rows[glyph_row_i][1].index_in_text_rows - 1
   end

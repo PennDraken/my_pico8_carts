@@ -28,3 +28,8 @@ function new_glyph(char_width, char_height, index_in_text_rows, index_in_text_ro
     glyph_length=glyph_length
   }
 end
+
+function load_text_editor()
+  _draw = draw_text_editor
+  _update60 = update_text_editor
+end
