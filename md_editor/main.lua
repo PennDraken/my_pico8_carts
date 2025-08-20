@@ -36,7 +36,6 @@ function _init()
   notes = new_graph_manager()
   text_rows = {
     "Markdown",
-    "# Markdown",
     "## Introduction",
     "### What is it?",
     "*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.",
@@ -171,8 +170,10 @@ end
 
 function render_row(text_row, text_index, x, y, cursor_index, theme)
   local first_word = get_first_word(text_row)
-  if first_word=="#" then
-    return render_heading(text_row, header_font,    text_index, x, y, cursor_index, theme.h1c, theme.cursorc)
+  if text_index == 1 then
+    return render_heading(text_row, header_font, text_index, x, y, cursor_index, theme.h1c, theme.cursorc)
+  elseif first_word=="#" then
+    return render_heading(text_row, header_font, text_index, x, y, cursor_index, theme.h1c, theme.cursorc)
   elseif first_word=="##" then
     return render_heading(text_row, subheader_font, text_index, x, y, cursor_index, theme.h2c, theme.cursorc)
   elseif first_word=="###" then
