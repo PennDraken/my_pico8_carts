@@ -86,11 +86,12 @@ function _draw()
 end
 
 --new player implementation for multiplayer/ replays etc
-function new_player()
+function new_player(id)
 	local p={}
 	p.maxspeed = 4
 	p.turnspeed = p.maxspeed/2
-	p.n = 64
+	p.n = 64 -- sprite number
+	p.id = id -- set player id
 	p.speed = 0
 	p.dx = 0
 	p.dy = 0
@@ -114,9 +115,16 @@ function new_player()
 	p.tunneling=false
 	p.draw=function(this)
 		if (p.tunneling) return
-			--set_p_pal()
-			if this.inshadow and not this.jumping then
-				--set_dark_pal()
+		--hat,jacket,pants,skis,poles
+	--_pal={14,15,9,1,14,15}--default
+	--_pal={14,15,12,1,14,15}--blue jacket
+	--_pal={0,15,0,1,14,15}--emo outfit
+	--_pal={3,15,2,0,14,15}--lovisa outfit
+	--_pal={8,0,8,8,8,15}--demon outfit
+			if p.id==0 then
+				set_p_pal({3,15,2,0,14,15})
+			else
+				set_p_pal({0,15,0,1,14,15})
 			end
 			if this.crash then
 				spr(79,this.x,this.y-cy)
@@ -132,13 +140,13 @@ function new_player()
 			jofs=0
 			if this.jumping then
 				jofs=7
-			elseif pdir==➡️ then
+			elseif p.dir==➡️ then
 				if s_flip then
 					jofs=21
 				else
 					jofs=16
 				end
-			elseif pdir==⬅️ then
+			elseif p.dir==⬅️ then
 			if s_flip then
 				jofs=16
 			else
@@ -161,15 +169,19 @@ function new_player()
 		   else
 			   spr(70+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
 		   end
-		   pal()
+		   pal()--reset palette
 		   --shadow when jumping
 		   if this.jumping then
-			draw_shadow()
+			draw_player_shadow(p)
 		   end
 		   --speed particles
 		   if this.speed>=this.maxspeed*0.95 then
 			   speed_particles(this.x,this.y-cy)
 		   end
+
+	end
+	p.update=function(this)
+
 	end
 	return p
 end
@@ -190,7 +202,7 @@ function new_replay()
 	return o
 end
 
-function reset_player()
+function reset_player(p)
  p.x = p.strtx
  p.y = p.strty
  p.crash = false
@@ -223,11 +235,13 @@ function start_game()
 	clock=0
 	mouse_enabled=true
 	--init player
-	p=new_player()
+	players={}
+	add(players, new_player(0))
+	add(players, new_player(1))
 	score = 0
 	--camera
 	cx = 0
-	cstrty = p.strty-100
+	cstrty = players[1].strty-100
 	cy = cstrty
 	cv = 0
 	ca = 0.1
@@ -237,12 +251,14 @@ function start_game()
 	t=0
 	
 	--jumping starting state
-	p.jumping=true
-	shake=0.07
-	p.height=100
-	p.landangle=p.angle
-	p.trick=false
-	p.jvel=0
+	for p in all(players) do
+		p.jumping=true
+		shake=0.07
+		p.height=100
+		p.landangle=p.angle
+		p.trick=false
+		p.jvel=0
+	end
 
 	init_music()
 	reading=false--for textboxes
@@ -262,8 +278,7 @@ end
 -->8
 --draw game
 function draw_game()
-	
-	if tf<1 then
+	if tf<1 then--change color when slomo
 		cls(8)
 	else
 		cls(7)
@@ -272,14 +287,20 @@ function draw_game()
 	doshake()
 	draw_shadows()
 	draw_tombs()
-	draw_trail(p.trail)
+	for p in all(players) do
+		draw_trail(p)
+	end
 	draw_particles()
-	if not p.jumping then
-		p:draw()
+	for p in all(players) do
+		if not p.jumping then
+			p:draw()
+		end
 	end
 	draw_w()
-	if p.jumping then
-		p:draw()
+	for p in all(players) do
+		if p.jumping then
+			p:draw()
+		end
 	end
 	camera()--reset camera
 	if tf<1 and not p.crash then
@@ -363,13 +384,13 @@ function draw_w()
 end
 
 --sets player pallete
-function set_p_pal()
+function set_p_pal(_pal)
 	--return
 	pal()
 	--hat,jacket,pants,skis,poles
-	_pal={14,15,9,1,14,15}--default
-	_pal={14,15,12,1,14,15}--blue jacket
-	_pal={0,15,0,1,14,15}--emo outfit
+	--_pal={14,15,9,1,14,15}--default
+	--_pal={14,15,12,1,14,15}--blue jacket
+	--_pal={0,15,0,1,14,15}--emo outfit
 	--_pal={3,15,2,0,14,15}--lovisa outfit
 	--_pal={8,0,8,8,8,15}--demon outfit
 
@@ -407,13 +428,13 @@ function draw_player()
  jofs=0
  if p.jumping then
   jofs=7
- elseif pdir==➡️ then
+ elseif p.dir==➡️ then
   if s_flip then
    jofs=21
 		else
 			jofs=16
   end
- elseif pdir==⬅️ then
+ elseif p.dir==⬅️ then
   if s_flip then
    jofs=16
 		else
@@ -439,7 +460,7 @@ function draw_player()
  pal()
  --shadow when jumping
  if p.jumping then
-  draw_shadow()
+  draw_player_shadow(p)
  end
  --speed particles
  if p.speed>=p.maxspeed*0.95 then
@@ -448,7 +469,7 @@ function draw_player()
 end
 
 --recolors shadow based on pixels under
-function draw_shadow()
+function draw_player_shadow(p)
 	--get pixel color
  local color=pget(p.x,p.y-cy)
  _y=0--shadow offset
@@ -470,7 +491,8 @@ function draw_shadow()
  pal()
 end
 
-function draw_trail(trail)
+function draw_trail(p)
+	local trail=p.trail
  --draw to player
  if #trail==0 then return end
  if not (p.jumping or p.tunneling) then
@@ -498,7 +520,7 @@ end
 
 function draw_deaths(x,y)
  spr(31,x,y)
- print(pad(""..p.deaths,3),x+7,y+2,1)
+ print(pad(""..players[1].deaths,3),x+7,y+2,1)
 end
 
 function draw_time(t,x,y,n)
@@ -574,11 +596,11 @@ function draw_position()
  x1,y1=1,0
  x2,y2=127-x1,y1
  line(x1,y1,x2,y2,6)-- bg line
- local perc=(p.y/limy)/8
+ local perc=(players[1].y/limy)/8
  x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
  line(x1,y1,x,y,15)
  circfill(x,y,0,1)  -- curr pos
- local perc=(p.strty/limy)/8
+ local perc=(players[1].strty/limy)/8
  x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
  if perc>0.1 then
  	line(x1,y1,x,y,11)  -- checkpoint line
@@ -604,7 +626,6 @@ end
 --draws shadows of trees
 function draw_shadows()
 	--iterate through all tiles on screen
-	p.inshadow=false--reset on each frame
 	for i=0,15 do
 		for j=0,15 do
 			if cy+j*8>0 then--todo check ouofbounds
@@ -618,12 +639,12 @@ function draw_shadows()
 					local shh=16
 					sspr(96,46,16,16,shx-4,shy)
 					--check if player is in shadow
-					local spx=p.x%128
-					local spy=p.y-cy
-					if spx>shx and spy>shy and
-								spx<shx+shw and spy<shy+shh then
-						p.inshadow=true
-					end
+					--local spx=p.x%128
+					--local spy=p.y-cy
+					--if spx>shx and spy>shy and
+					--			spx<shx+shw and spy<shy+shh then
+						--p.inshadow=true
+					--end
 				-- small object
 				elseif fget(tile,2) then
 					--small shadow
@@ -632,13 +653,11 @@ function draw_shadows()
 					local shw=16
 					local shh=16
 					sspr(80,56,16,8,shx,shy+8)
-					--check if player is in shadow
-					local spx=p.x%128
-					local spy=p.y-cy
-					if spx>shx and spy>shy and
-								spx<shx+shw and spy<shy+shh then
-						p.inshadow=true
-					end
+					--local spx=p.x%128
+					--local spy=p.y-cy
+					--if spx>shx and spy>shy and
+					--			spx<shx+shw and spy<shy+shh then
+					--end
 				--tunnel shadow
 				elseif tile==110 or tile==111 or tile==126 or tile==127 then
 					local shx=i*8
@@ -663,22 +682,25 @@ end
 t=0
 res_time=0--respawn timer
 function update_game()
-	if p.crash then
-		p.speed *= 0.9
-		if p.speed<0.2 then
-		 add(tombs,{x=p.x,y=p.y})
-		 reset_player()
+	for p in all(players) do
+		if p.crash then
+			p.speed *= 0.9
+			if p.speed<0.2 then
+			 add(tombs,{x=p.x,y=p.y})
+			 for p in all(players) do
+				reset_player(p)
+			 end
+			end
+		else
+		 input(p)
+		end
+	end
+	if res_time==0 then--resurecction time
+		for p in all(players) do
+			move_player(p)
 		end
 	else
-	 input()
-	end
-	if res_time==0 then
-	 move_player()
-	else
 		res_time-=1	
-	end
-	if t%30==0 then
-		replay:store(p.x,p.y,t)
 	end
 	
 	t+=1
@@ -688,40 +710,29 @@ end
 k  = 8
 ts = 0.008 --turn speed
 maxangle=0.20
-function input()
+function input(p)
  p.turning = false
- pdir=nil
+ p.dir=nil
  if p.jumping or p.tunneling then return end
  --button input
- if mouse_enabled then
-  _x=stat(32)
-		_y=stat(33)
-		btnr=false
-		btnl=false
-		if stat(34)==1 then
-			if _x<64 then
-			 btnl=true
-			elseif _x>64 and stat then
-			 btnr=true
-			end
-		end
- end
+ local btnr=false
+ local btnl=false
  
- btnl=btnl or btn(⬅️)
- btnr=btnr or btn(➡️)
+ btnl=btnl or btn(⬅️,p.id)
+ btnr=btnr or btn(➡️,p.id)
  
 	if btnl then
 	 if p.angle > 0.75-maxangle then
 	  p.angle -= ts*tf
 	  p.turning=true
 	 end
-	 pdir=⬅️
+	 p.dir=⬅️
 	elseif btnr then
 	 if p.angle < 0.75+maxangle then
 	  p.angle += ts*tf
 	  p.turning=true
 	 end
-	 pdir=➡️
+	 p.dir=➡️
 	elseif btn(⬇️) then
 	 if p.angle < 0.75 then
 			p.angle += ts*tf
@@ -740,7 +751,7 @@ function input()
 	end
 end
 
-function move_player()
+function move_player(p)
  --momentum
  if abs(p.speed) > 0 then
  	p.speed = p.speed * max(p.friction*sin(p.angle),0.991)
@@ -821,8 +832,10 @@ function move_player()
   end
   return--no collision
  end
- 
- collision_check()
+ for p in all(players) do
+	collision_check(p)
+
+ end
 end
 
 --checks if player is about to hit obstacle
@@ -884,7 +897,7 @@ end
 
 --player collision logic
 bv=2--block velocity
-function collision_check()
+function collision_check(p)
  if p.crash==true then return end
  prev_tile=tile--used to ensure trigger on rising edge
  mx=flr((p.x+4)/8)+flr((p.y+4)/limy)*16
@@ -928,12 +941,12 @@ function collision_check()
   p.height=0
   p.landangle=p.angle
   --if we perform a jump trick
-  if pdir!=nil then
+  if p.dir!=nil then
    p.trick=true
    _arr={0.025,0.05,0.1}--rotation speed LUT
    p.trickspeed=_arr[ceil(p.speed/p.maxspeed*3)]
    --p.trickspeed=_arr[ceil(rnd(3))]
-   if pdir==⬅️ then
+   if p.dir==⬅️ then
    	p.trickspeed=-p.trickspeed
    end
   else
@@ -994,31 +1007,31 @@ function collision_check()
  		--left check
  		local x=(p.x+4)%8
  		if x>6 then
- 			crash()
+ 			crash(p)
 	 	end
  	elseif fget(tile,7) then
  	 --right check
 	 	local x=(p.x+4)%8
  		if x<2 then
- 			crash()
+ 			crash(p)
 	 	end
  	--small check
  	else
 			local x=(p.x+4)%8
  		if x>2 and x<6 then
- 		 crash()
+ 		 crash(p)
 	 	else
 	 	 shake+=0.1
-	 		green_particles(p.x,p.y-cy)
+	 		green_particles(p.x,p.y-cy,p)
 	 	end
  	end
  	shake+=0.1
- 	green_particles(p.x,p.y-cy)
+ 	green_particles(p.x,p.y-cy,p)
  	sfx(11)
  end
 end
 
-function crash()
+function crash(p)
 	shake+=0.5
  sfx(1)
  p.crash=true
@@ -1031,9 +1044,12 @@ function draw_win()
 	doshake()
 	draw_tombs()
 	draw_w()
-	draw_trail(p.trail)
+	draw_trail(p)
 	draw_particles()
-	draw_player()
+	-- draw_player()
+	for p in all(players) do
+		p:draw()
+	end
 	camera()--reset camera
 	move_camera()
 	tb_draw()
@@ -1094,10 +1110,19 @@ end
 
 cofs=2
 function move_camera()
+	--track slowest player
+	local min_y = 16000
+	local slow_p
+	for p in all(players) do
+		if p.y<min_y then
+			min_y = p.y
+			slow_p=p
+		end
+	end
 	if res_time!=0 then
-		b  = p.y-p.height-30+p.dy*10
+		b  = slow_p.y-slow_p.height-30+slow_p.dy*10
 	else
-		b  = p.y-p.height-cofs+p.dy*10
+		b  = slow_p.y-slow_p.height-cofs+slow_p.dy*10
 	end
  cy = lerp(cy,b,0.06*tf)
 end
@@ -1136,7 +1161,7 @@ function speed_particles(x,y)
  end
 end
 
-function green_particles(x,y)
+function green_particles(x,y,p)
  local speed=1*sqrt(p.dx^2+p.dy^2)
  for i=1,10 do
  	local angle=(rnd(1)+0.5)%1

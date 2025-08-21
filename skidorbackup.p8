@@ -4,12 +4,10 @@ __lua__
 function _init()
  --setup cart
  cartdata("skidor")
- best_time=dget(0)--
- wr_replay=dget(1)--load replay information
+ best_time=dget(0)
  if best_time==0 then
  	best_time=nil
  end
- if (wr_replay==0) wr_replay=nil
  poke(0x5f2d, 1)--mouse listener
  cls()
  --pic="mgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ymgtzmgtzmgtzmgtzmgtpmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzmgtzmgtzmgtzmgtz[)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtpmgtzmgtzmgtzmgtzmgtzhgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzm{]oxdtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]omgtzmgtzmgtzmgtzmgtzmgtzmgtzx)]ox)]ox)]ox)rzmgtzmg}ymgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]oxdtzm{]ox)]ox)rzmgtzmgtzmgtzmgtzm{]ox)]ox)]ox)]ox)]oxdtzmgtzx)rzmgtzm{]omgtzx)]ox)rzmgtzmgtzmgtz[)]ox)]ohgtzx)]ox)rpxdtzmgtzmgtzmgtzmg}ox)]ox)]ox)rz[)]ox)]ohgtzmg}ohgtzmgtpx)]ym{]ox)]ox)]omgtzmgtzm{]ox)]ox)]omg}ox)]omg}ohgtzmgtzmgtzmgtzx)]ox)]ymgtzmgtzmgtpx)]omgtz[)]ymgtzm{]oxdtzx)]ox)]ox)]ymgtzmgtpx)]ymgtzmgtzmgtzmgtzm{]omgtzmgtzmgtzmg}ox)]omgtzmgtzmgtzm{]ox)rzmgtpxdtzmgtzx)]omg}ox)]ym{]ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzmgtzmgtzmgtz[)]oxdtzmgtzmgtzmgtzm{]oxdtz[)]ymgtzmgtpx)rzm{]oxdtzmgtphgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ohgtzmgtzmgtzmgtpx)]ymgtzmgtzmgtzmgtz[)]omgtpxdtzmgtzm{]ohgtzx)]omgtzmg}omgtzmgtzmgtzmgtpx)rzx)]oxdtpx)rzmgtzmgtzmgtzm{]oxdtzmgtzmgtzmgtzmgtpx)rz[)]ymgtzmgtzx)]ymg}ox)rzmgtz[)]ymgtpx)]ymgtzm{]ohg}ox)]ox)]omgtzmgtzmgtzmgtzx)]ymgtzmgtzmgtzmgtzm{]ohgtpxdtpmgtzmg}oxdtz[)]ohgtzmgtpxdtzm{]oxdtzmgtzx)]y[)]ox)]oxdtzmgtzmgtzmgtzmg}oxdtzmgtzmgtzmgtzmgtzx)]y[)]y[)]ymgtz[)]omgtpx)rzmgtzm{]omgtpx)]ymgtzmg}oxdtpx)]ox)rzhgtzmgtzmgtzmgtz[)]ohgtzmgtzm{]ox)rzmg}oxd}oxdtzhgtzmgtpx)rzm{]oxdtzmgtz[)]ym{]oxdtzmgtz[)]om{]ox)]ym{]omgtzmgtzmgtzmgtpx)]omgtpx)]ox)]oxdtz[)]o[)]ymgtzmgtzm{]ohgtzx)]omgtzmgtpxdtzx)]omgtzmgtpx)rzx)]ox)rz[dtzmgtzmgtzmgtzm{]ox)]ox)]ox)]ox)]omgtzx)]ox)]ymgtzmgtzx)]ymg}ox)rzmgtzm{]omg}ox)rzmgtzm{]ohg}ox)]oxdtzmgtzmgtzmgtzmgtz[)]ox)]ox)]ohgtpx)]ymg}ox)]ox)]ymgtzmg}oxdtz[)]ohgtzmgtzx)rz[)]ohgtzmgtzx)]y[)]oxd}ohgtzmgtzmgtzmgtzmgtzx)]ox)rzmgtzmg}oxdtz[)]om{]ox)rzmgtz[)]omgtpx)]ymgtzmg}ohgtpx)]ymgtzm{]ohgtpx)]om{]omgtzmgtzmgtzmgtzmgtzmgtzmgtzmg}ym{]omgtpx)]ymg}oxdtzmgtpx)rz[)]oxdtzmgtz[)]ym{]ox)rzmgtzx)]ym{]ox)rz[)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtzx)rzx)rzmg}oxdtzmg}ohgtzm{]ohgtpx)]omgtzmgtpxdtzx)]ohgtzm{]oxdtzx)]ohgtpx)]ymgtzmgtzmgtzmgtzmgtzmgtzmgtpmg}ohgtz[)]omgtzm{]oxdtzx)]ym{]ox)rzmgtzx)]ymgtpx)]omgtpx)]ymg}ox)]ymg}ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]ymgtpx)rzmgtz[)]ox)]oxdtzx)]ohgtzx)]ohgtzmg}ox)]ox)]ohgtz[)]oxdtzmg}oxdtzmgtzmgtzmgtzmgtzmgtzmgtzmg}oxdtzm{]oxdtzmgtzx)]ox)]omg}ox)]ox)]ox)rzmgtzm{]ox)]ox)rzmgtpx)]omgtzm{]omgtzmgtzmgtzmgtzmgtzmgtzmgtpx)]ymgtz[)]omgtzmgtpx)]ox)rzm{]ox)]ox)]ymgtzmgtz[)]ox)]omgtzm{]oxdtzmgtz[)]ymgtzmgtzmgtzmgtzmgtzmgtpx)]ohgtzmgtpx)rzmgtzmg}ox)]ohgtz[)]ox)]ymox)mgtzmgtzmgtzmgtzmgtzx)]omgtzmgtzx)rzmgtzmgtzmgtzmgtzx)]ox)]ox)rzmgtzmgtpmgtzmgtzmgtzmgtzmgtzx)rzmgt)]oxzmgtzmgtzmgtzmgtzmgtpx)rzmgtzmg}ohgtzmgtzmgtzmgtzx)]ox)]ox)rzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz]ox)]gtzmgtzmgtzmgtzhgtzmgtzmgtzmgtzm{rzmgtzmgtzmgtzm{]ox)]ox)rzmgtzmgx)]oxzmgtzmgtzmgtzmgtzmgtzmgtz]ox)]ox)mgtzmgtzmgtzm{]omgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[)]ymgtzmgtzmgtz]{v)]oxzmgtzmgtzmgtzmgtzmgtz]ox)]ox)]oxzmgtzmgtzmgtz[dtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmoxpxlx)]otzmgtzmgtzmgtzmox)]ox)]ox)]ox)]gtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgt)]{]o]ox)]gtzmgt)]ox)]ox)]ox)]ox)x)]m]ox)mgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtz[ox)x)v)]ox)]ox)]ox)]ox)]ox)]ox)x)]ox)v)]otzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgx)]{]o]ox)]ox)]o}ox)]ox)]o]{]ox)]ox)]oxox)ngtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgt)]ox)x)v)]ox)]ox)x)]ox)]ox)]ox)]ox)]ox)v)]oxzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmoxpx)]o]ox)]ox)xl}ox)]ox)]ox)]ox)]ox)z(]ox)]otzmgtzmgtzmgtzmgtzmgtzmgtzbgtzmgtzmgtzmgtzmgtzmgtzmgtzmgx)])]oxlx)]ox)]{]ox)]ox)]ox)]ox)]ox)]oxox)]ox)ngtzmgtzmgtzmgtzmgtzmgtzmoeymgtzmgtzmgtzmgtzmgtzmgtzmgt)]o}ox)]o]ox)]ox)x)]ox)]ox)]mw)]ogt]ox)](]ox)]oxzmgtzmgtzmgtzmgtzmgtzmgtd[atzmgtzmgtzmgtzmgtzmgtzmgtz]oxpx)]oxlx)]ox)]oxpx)]ox)]oxtzmgtzmx)]oxlx)]ox)]otzmgtzmgtzmgtzmgtzmgtzmoqdmgtzmgtzmgtzmgtzmgtzmgtz[ox)x)]ox)]o]ox)]ox)]o}ox)]ox)]ohtzmgtzox)]o]ox)]ox)ngtzmgtzmgtzmgtzmgtzmgtdtjqzmgtzmgtzmgtzmgtzmgtzmox)]{]ox)]ox)v)]ox)]ox)]o}ox)]mx)]mgtzmg)]ox)v)]ox)]oxzmgtzmgtzmgtzmgtzmgtzmomgbgtzmgtzmgtzmgtzmgtzmgt)]o}ox)]ox)]ox)v)]ox)]ox)]{]ogtzox)zmgtzmx)]oxox)]ox)]otzmgtzmgtzmgtzmgtzmgtdtjqzmgtzmgtzmgtzmgtzmgtz]oxpx)]ox)]ox)]ox)zm]ox)]ox)]o)mgt]ohtzmg)]ox)]o]ox)]ox)ngtzmgtzmgtzmgtzmgtzmomgbgtzmgtzmgtzmgtzmgtz[ox)x)]ox)]oxy]ox)]oxt](]ox)]ox)]wzmgt]ogtzmx)]ox)](]ox)]oxzmgtzmgtzmgtzmgtzmgtdtzeymgtzmgtzmgtzmgtz[ox)])]ox)]ox)]cr)]ox)]owtz(]ox)]ox)gtzmg)zmg)]oxlxpx)v)]ox)]otzmgtzmgtzmgtzmgtz[ymgtatzmgtzmgtzmgtzmox)])]ox)]ox)]oxleox)]oxtzmhtzm]ox)]oxngtzmwtzoht]m]ox)xox)]ox)ngtzmgtzmgtzmgtzmgtdtzmcmgtzmgtzmgtzmgt)]o}ox)]ox)]ox)]oxi[ox)]ogt]mgtzmwox)]oxngtzmw)zmgtv)]ox)]ox)]ox)]gtzmgtzmgtzmgtz[ymgtjqzmgtzmgtzmgtz[ox)x)]ox)]ox)]ox)]cty]ox)zmg)zmgtzm]lx)]o)mgtzmgtzmwox)]ox)]ox)]ox)]ox)mgtzmgtzm{ggtzmgbgtzmgtzmgtzmgx)]{]ox)]ox)]ox)]ohlmcr)]ohtzmhtzmgt]oxox)]wzmgtzmhtzm]wv)]ox)]ox)]ox)]ox)]gtzmgtx)ymgtzeymgtzmgtzmgtz]oxpx)]ox)]ox)]ohtzmrzeox)]mgtzogtzmg)zm]ox)gtzmg)]ogtzmglx)]ox)]ox)]ox)]ox)ngtzl)ggtzmgtatzmgtzmgtz[ox)])]ox)]ox)]oxtzmgtzctj[oxtzmg)zmgtzmgtzm]wzmgtzmwtzmgtzm]ox)]oxngtzm]ox)]oxzmtzmrzmgtzmcmgtzmgtzmgx)]o}ox)]ox)]ox)]mgtzmglmgr)]ogtzmwtzmgtzmgtzmgtzmgtzmgtzmgtz(]ox)]o)mgtzmgtzogd)mgtfcrzmgtqzm]gtzmgt)]ox)x)]ox)]ox)]ohtzmgtzmrzemxtzmgtzogtzmgtzmgtzmgtzmgtzmgtzmgtv)]ox)ntzmgtzmw)]mgtzmbtfgtzmcgtz(]ox)]gx)]{]ox)]ox)]ox)zmgtzmglmgtjymgtzmgt]mgtzmgtzmgtzmgtzmgtzmgtzmglx)]ox)gtzmgtzmx)zmgtzmrzmgtjymgtv)]ox)]oxpx)]ox)]ox)]mgtzmgtzmrzmgbtzmhtzoxtzmgtzmhtzmgtzm]wxngtzmgtzm]ox)]o)mgtzmgtzogtzmgtfgtzmgtqzmglx)]ox)])]ox)]ox)]oxtzmgtzmgtfgtzemg)]ow)]ohtzmgtzmgtv){w)]opxngtzmgtz(]ox)]wzmgtzmg)(mgtzmrzmgtzmcgtzmglx)]o}ox)]ox)]ox)]mgtzmgtzmrzmgtjymx)zox)]mgtzmgtzmn}}}{})]opx)gtzmgtz(]ox)g)zmgtzwgtzmglmgtzmgtzemgtzmgtzmx)]ox)]ox)]ohtzmgtzmg)egtzmgbtzog)]ox)zmgtzmgl)}ox)]ox)]oxxngtzmgtv)]o)oxtzmgtzmgtzmtzmgtzmgtjymgtzmgt]ox)]ox)]ox)zmgtzmgtzmrzmgtzemgtzmw)]mhtzmgtz({x)]ox)]ox)]op)mgtzmglx)nt]mgtzmgtzmglmgtzmgtzmgtqzmgtzmw)]ox)]ox)]ohtzmgtzmg)mgtzmgtjymgtzmgtzogtzmglx]]w)]ox)]np)]ntzmgtzmwo)mgtzmgtzggtzcrzmgtzmgtzmgbtzmgtzox)]ox)]ox)zmgtzmgtzgtzmgtzmcbtzmgtzmg)zmgtzmnpx]npx)]o)){wxngtzmgtzmgtzmgtzmgtzmwymgtzmgtzmgtzmcgtzmg)]ox)]ox)]oht]mgtzmwymgtzmgtzemriemgtzmwtzmgtv)]w)]ox)]opx]ctzmgtzmw)]mgtfcrqzmgtfgtzmgtzmgtzmgtzemgtzmx)]ox)]ox)zmx)zmgtngtzmgtzmgtje[opymgtzogtzmc}}}{x}]ox)]opxfgtzmg)]ox)zmbx)dbtzmrimgtzmgtzmgtjegtjymgt]ox)]ox)]ohtzogtzmrymgtzmgtzmgrq)]btzmgt]mgtj[ox)fcriecry]oxymgtzox)]ohle[oxhmgtndtzmgtzmgtzmgtiecgtzmw)]ox)]ox)]ogtzmglegtzmgtzmgtzecbpemgtzmwtzmgr)drihczmgc]iyfgtzmgt]ox)]mwiydrqzm)yegrymgtzegtzmcgtzmgtzoh)]ox)]ox)]mgtfcrzmgtzmgtzmgtje[btzmgtzmhtzmcjecbdg{bufcbrzmgtzmgt]ohtzmbpemwzggtjmgrzmgriegtjemgtzmgtzmx)]ox)zmhtzmrimgtzmgtzmgtzmcriydgtzmgt]mgtzmui{oo))[xlqectzmgtzmgtzmglydgtncrzmgtzmctjmgtjmgriymgtzmgtzox)]ohtzmgtfctzmgtzmgtzmgtqfmbpymgtzmg)zmgteej}]o})][zarecszmgtzmgtzmbpygrimgtzmgtzegrzmgtimcbtzmgtzmg)]ox)]mgtzmrymgtzmgtzmgtzmgrqzc{qzmgtzmhtzeeseto}h}opgfenctetzmgtzmglydwiegtzmgtzmgtjmgtzmgtzemgtzmgtzmx)]oxtzmglegtzmgtzmgtjegtjecblydgtzmgtzojmkjej{}}}}}jbrskmgjgtzmgtzmbpymrymgtzmgtzmgtzmgtzmgtqzmgtzmgt]ox)]ogtzcrimgrymgtzmcrzmgtiecwqhmgtzmg)br(msicz}}}xiiumcr(msmgtzmglydgtzmrymgtzmgtzmgtzmgtzmcbtzmgtzmg)]ox)zmgtfmwiectzmgtimgtzmgriyc{qzmgtzsyectzericrieecrsjmgvje(mgtzmbpymgtzcrzmgtzmgtzmgtzmgtzecgtzmgtzmg)]ohtzmgtzcrjmgtjectzmgtzmcrqf[btzmgegvjmgtecriecriumgfz[jtiuzmglydgtzmgtfctzmgtzmgtzmcrzmgtqzmgtzmgtzmx)]mgtzm)iegtyegtymgtzmgtjecwqhmgtfrz[ffzmgjecriekgtzuetzlgrgtzmbpymgtzmtiecrzmgtzmgtiecrzmcbtzmgtzmgt]oxtzmgtfcrzmcrymgtzmgtzmcriymbpymgmgvxuetzmgtidgtzmgtsmgv(mcnglydgtzmg)gctjegtimgtzmcryegtjemgtzmgtzmw)]ogtzmwiegtzecrzmgtzmgtjecgtf[btbrzugtsmgtzmcnymgtzmkqzmgtje(mbpymgtzmrymgtyecrymgtjmgtzmgrjymgtzmgtzox)zmgtzmrimgtjmgtzmgtzmgrqzmglydymgtzekszmgtjubtzmgtjbgtzugtilydgtzmgtfctzmcrzmctzmgrzmgrjmgrqzmgtzmgt]ohtzmgtzcrimctzmgtzmgtzecgtzmbpatjngtiectzmgrgmgtzmcfimgtzmcrbpymgtzmrzmgtjmgtzegtjegtzegrzmcbtzmgtzmgt]mgtzmwiectzmgtzmgtzmgriemgtzcymgtzmcfcmgtze(qzmgtzekqymgtze(dgtzmglmgtzmgtzmgtjmgrzmgtyegtzemgtzmgtzmhtzmgtzmrimgtzmgrzmgtzectiymglatzmgtiuiqzmgtjubtzmgtiratzmgjipymgtzctzmgtzmgtzmgtiegtzmgrzmgtiymgtzmgt]mgtzmglectzmgtzmctzmgrzmgtiymgmgtiecfmbgtzmgrgmgtzmcfmecrymcdgtzmwymgtzmgtzmgtzmgrymgtzegtzecgtzmgtzmhtzmgtzmrimgtzmgtzegtjegtzmgrqzqze{}pesfymgjje(qyeftjuur}}}rjmymgtzmrzmgtzmgtzmgtzmcrzmgtzmgrqzmgtzmgt]mgtzmgtfcrymgtzmgtjecrymgtzec]ocr})}}ywatjkgtidgtjkgrc[}}}}dr]ox)]oxdtzmgtzmgtzmgtzmgtzmgtjegto)mgtzmhtzmgtzmrimgtzmctzmgtzegtzmgrqvph[}}z}dpcmgjzmcnymgjzekq}[}{pe{ohtzmglegtzmgtzmgtzmgtzmgtzecrzmontzmgt]mgtzmglectzegtymgtzmgtzmgtiecx)]ozp{tp[jqjkgtjubtzmssibg}}pgrx)zmgtzcrimcrzmgtzmgtzmgtzmgrimgtz[mgtzmhtzmgtzmrimgtjegtzmgtzmgtzmcri[ox)b}}mcphbctzmgrgmgtzecfy}}tze{oxtzmwimctzmcriegtzmgtzmgtjegtzmgtrzmgt]mgtzmgtfcrymgtzmgtzmgtzmgtiecry]oxdgty)]eiectze(qzmgtiueqymgrx)]mglegtzmgtzmgriecriecriectzmgtzmggtzmhtzmgtzm]oecrymgtzmgtzmgtjecriecr)]ohe{ox)jqiecridcriecfqiyqi[]ohtzctzmgtzmgtzmgtzmgtzmgtzmgtzmgtzymgt]mgtzm]oxpxiecriegtzmgtzmcriegtjecr)]ox)]ohqiqiecriecrijacrtzox)zmwzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmgdtzmhtzm]o}ox)]criecriegtzmgtjectzmgtiecx)]ox)]arqiecriecricraeox)]mgt]crzmgtzmgtzmgtzmgtzmgtzmgtzmgtzmmgt]mwoxpx)]ox)ectiecrymgtzmcrzmgtzmgri[ox)]ohiec]iecriecroecqi[ohtzmx)fctzmgtzmgtzmgtzmgtzmgtzmgtzmgtrzmhtv)x)]ox)]gtzmgtzmgtzmgtzmgtzmgtzmcry]ox)]arihcriecriec]ohar)zmg)]oxlegtzmgtzmgtzmgtzmgtzmgtzmgtzmcgt](]{]ox)]oxymgtzmgtzmgtzmgtzmgtzmgtiecx)]ohiu)riecriecriecraaoxtzox)]oxiecrzmgtzmgtzmgtzmgtzmgtzmgryy(]{]ox)]ox)fgtzmgtzmgtzmgtzmgtzmgtzecry]ox)]ariecriaaaaecriecby]ox)]ox)]oriecrzmgtzmgtzmgtzmgtzmgtjeoxo}ox)]ox)]orzmgtzmgtzmgtzmgtzmgtzmgri[ox)]oxdecriecq)]ohiecriudq)]ox)]ox)]oxiecrymgtzmgtzmgtzmgtiecr)]ox)]ox)]ox)fctzmgtzmgtzmgtzmgtzmgtiecx)]ox)]arox)riaox)]arie(]odox)]ox)]ox)]oglecriecriegtzmcriecry]ox)]ox)]ox)]oxlectzmgtzmgtzmgtzmgtzecrq]ox)]oxdu)]ohcq)]ox)bcrix)na[ox)]ox)]ox)zmgtzmriecriecriecbt]ox)]ox)]ox)]ox)]oxiegtzmgtzmgtzmgtzecriemg)]ox)]arox)]aaox)]ohaec]oxdq)]ox)]ox)]ohtzmgtzmgtfcriemgtzmgtzox)]ox)]ox)]ox)]otimgtzmgtzmgtjecriecgtzox)]oxde(]ohcq)]ox)]oqie(]oaox)]ox)]ox)]ogtzmgtzmwiecrqzmgtzmgt]ox)]ox)]ox)]ox)]griecriecriecriecbtzmw)]ox)]oqiu)raaox)]ox)]ariecby]ox)]ox)]ox)]ohtzmgtzcvkvcgtzmgtzmw)]ox)]ox)]ox)]ox)]ogtfcriecriecbtzmgt]ox)]ox)bcriecq)]ox)]ox)bcrieax)]ox)]ox)]ox)]ohtzmwiukvkymgtzmgtzox)]ox)]ox)]ox)]oxtzmgtzmgtvkvkzmgtzmx)]ox)]ohiecraaox)]ox)]oxdecriaox)]ox)]ox)]ox)]ogtfcvkvkrqzmgtzmg)]ox)]ox)]ox)]ox)]mgtzmgtzmgtzmgtzmx)]ox)]ox)]ariecq)]ox)]ox)]ohiecby]ox)]ox)]ox)]ox)]mgtzkvkzmgtzmgtzox)]ox)]ox)]ox)]ox)zmgtzmgtzmgtzmg)]ox)]ox)]ohaecriacri[ox)]criearieaq)]ox)]ox)]ox)]ox)]mgtzkgtzmgtzmw)]ox)]ox)]ox)]ox)]ox)]ox)]ohtzmgtzox)]ox)]ox)faqieaax)]r)]ox)f[ohecriacx)]ox)]ox)]ox)]ox)zmgtzmgtzmg)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ormkbaae[op[ox)]oxly]qiecbigcx)]ox)]ox)]ox)]oxtzmgtzmg)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxlethngtzq)dx)]ox)]oxqdaraaskngox)]ox)]ox)]ox)]ox)zmgt]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]czmgtzmgc{y]ox)]ox)]obpaaqmgv(m[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxletzmgtrqhox)]ox)]ox)]c{ietzmktzy]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oriecriecr)]ox)]ox)]ox)fcrigtzmgdx)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)fcriecri[ox)]ox)]ox)]oxlecriecri[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxqhcriecx)]ox)]ox)]ox)]oxlecriecr)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxle[ox)]{y]ox)]ox)]ox)]ox)]oxiecri[ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)][ox)]oxhox)]ox)]ox)]ox)]ox)]obx)]{y]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxq)]ox)]r)]ox)]ox)]ox)]ox)]ox)]cox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxle[ox)]op[ox)]ox)]ox)]ox)]ox)]ox)f[ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)fcox)]ox)dx)]ox)]ox)]ox)]ox)]ox)]oxly]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)zdbx)]ox)]{y]ox)]ox)]ox)]ox)]ox)]ox)]oxq)]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]orq)]ox)]oxhox)]ox)]ox)]ox)]ox)]ox)]ox)]obx)]ox)]ry]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]ox)]oxiy]ox)]ox)]r)]ox)]ox)]ox)]ox)]ox)]ox)]ox)zdox)]ox)]ry]ox)]ox)]ox)]ox)]ox)]a"
@@ -27,7 +25,7 @@ function menu_update()
 		screen_layout:update()
 		slomo=slomo_btn.var
 		ui_bool=ui_btn.var
-	elseif btnp(0) or btnp(1) or btnp(2) or btnp(3) or btnp(❎) or btnp(🅾️) or stat(34)==1 then
+	elseif btnp(❎) or btnp(🅾️) or stat(34)==1 then
 	 pressed_screen = true
 	end
 end
@@ -85,134 +83,29 @@ function _draw()
  drw()
 end
 
---new player implementation for multiplayer/ replays etc
-function new_player()
-	local p={}
-	p.maxspeed = 4
-	p.turnspeed = p.maxspeed/2
-	p.n = 64
-	p.speed = 0
-	p.dx = 0
-	p.dy = 0
-	p.angle = 0.75
-	--p.friction = 0.991
-	p.friction = 0.995
-	p.acc = 0.02
-	p.strtx = 128/2+4-1
-	p.strty = 0
-	p.turning = false
-	p.x = p.strtx
-	p.y = p.strty
-	p.crash = false
-	p.jvel  = 0
-	p.jumping=false
-	p.inshadow=false
-	p.height = 0
-	p.width = 6
-	p.trail={}
-	p.deaths=0
-	p.tunneling=false
-	p.draw=function(this)
-		if (p.tunneling) return
-			--set_p_pal()
-			if this.inshadow and not this.jumping then
-				--set_dark_pal()
-			end
-			if this.crash then
-				spr(79,this.x,this.y-cy)
-				pal()
-				return
-			end
-			if this.angle > 0.75 then
-				s_flip = false
-			else
-				s_flip = true
-			end
-			abs_angle = abs(this.angle - 0.75)
-			jofs=0
-			if this.jumping then
-				jofs=7
-			elseif pdir==➡️ then
-				if s_flip then
-					jofs=21
-				else
-					jofs=16
-				end
-			elseif pdir==⬅️ then
-			if s_flip then
-				jofs=16
-			else
-				jofs=21
-			end
-		end
-
-		if abs_angle < 0.01 then
-			spr(64+jofs,this.x,p.y-cy-this.height,1,1,s_flip)
-		   elseif abs_angle < 0.10 then
-			spr(65+jofs,this.x,p.y-cy-this.height,1,1,s_flip)
-		   elseif abs_angle < 0.16 then
-			   spr(66+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
-		   elseif abs_angle < 0.25 then
-			   spr(67+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
-		   elseif abs_angle < 0.30 then
-			   spr(68+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
-		   elseif abs_angle < 0.45 then
-			   spr(69+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
-		   else
-			   spr(70+jofs,this.x,this.y-cy-this.height,1,1,s_flip)
-		   end
-		   pal()
-		   --shadow when jumping
-		   if this.jumping then
-			draw_shadow()
-		   end
-		   --speed particles
-		   if this.speed>=this.maxspeed*0.95 then
-			   speed_particles(this.x,this.y-cy)
-		   end
-	end
-	return p
-end
-
---stores player replay
-function new_replay()
-	local o={}
-	o.store=function(this, x, y, t)
-		add(this,{x,y,t})
-	end
-	o.draw=function(this, t)
-		for elem in this do
-			if elem.t>t then
-				circ(elem.x,elem.y,10,7)
-			end
-		end
-	end
-	return o
-end
-
 function reset_player()
- p.x = p.strtx
- p.y = p.strty
- p.crash = false
- p.jumping = false
- p.height =0
- p.trail={}
- p.n = 64
-	p.speed = 0.2
-	p.dx = 0
-	p.dy = 0
-	p.angle = 0.75
-	p.deaths+=1
+ p_x = p_strtx
+ p_y = p_strty
+ p_crash  =false
+ p_jumping=false
+ p_height =0
+ p_trail={}
+ p_n = 64
+	p_speed = 0.2
+	p_dx = 0
+	p_dy = 0
+	p_angle = 0.75
+	p_deaths+=1
 	init_signs()
 	res_time=30
 	
 	--jumping starting state
-	p.jumping=true
+	p_jumping=true
  shake=0.07
- p.height=40
- p.landangle=p.angle
- p.trick=false
- p.jvel=0
+ p_height=40
+ p_landangle=p_angle
+ p_trick=false
+ p_jvel=0
  
  --time
  tf=1
@@ -222,12 +115,35 @@ end
 function start_game()
 	clock=0
 	mouse_enabled=true
-	--init player
-	p=new_player()
+	p_maxspeed = 4
+	p_turnspeed = p_maxspeed/2
+	p_n = 64
+	p_speed = 0
+	p_dx = 0
+	p_dy = 0
+	p_angle = 0.75
+	--p_friction = 0.991
+	p_friction = 0.995
+	p_acc = 0.02
+	p_strtx = 128/2+4-1
+	p_strty = 0
+	p_turning = false
+	--p_strty = 7.7*(8*64)
+	p_x = p_strtx
+	p_y = p_strty
+	p_crash = false
+	p_jvel  = 0
+	p_jumping=false
+	p_inshadow=false
+	p_height = 0
+	p_width = 6
+	p_trail={}
+	p_deaths=0
+	p_tunneling=false
 	score = 0
 	--camera
 	cx = 0
-	cstrty = p.strty-100
+	cstrty = p_strty-100
 	cy = cstrty
 	cv = 0
 	ca = 0.1
@@ -237,12 +153,12 @@ function start_game()
 	t=0
 	
 	--jumping starting state
-	p.jumping=true
+	p_jumping=true
 	shake=0.07
-	p.height=100
-	p.landangle=p.angle
-	p.trick=false
-	p.jvel=0
+	p_height=100
+	p_landangle=p_angle
+	p_trick=false
+	p_jvel=0
 
 	init_music()
 	reading=false--for textboxes
@@ -251,7 +167,6 @@ function start_game()
 	init_particles()
 	tf=1--time factor
 	_set_fps(60)
-	replay=new_replay()
 	upd=upd_game
 	drw=draw_game
 end
@@ -272,17 +187,17 @@ function draw_game()
 	doshake()
 	draw_shadows()
 	draw_tombs()
-	draw_trail(p.trail)
+	draw_trail(p_trail)
 	draw_particles()
-	if not p.jumping then
-		p:draw()
+	if not p_jumping then
+	 draw_player()
 	end
 	draw_w()
-	if p.jumping then
-		p:draw()
+	if p_jumping then
+	 draw_player()
 	end
 	camera()--reset camera
-	if tf<1 and not p.crash then
+	if tf<1 and not p_crash then
 		spr(50,tri_x,tri_y-cy)--danger obstacle
 	end
 	--ui
@@ -299,8 +214,6 @@ function draw_game()
 		end
 	 --print(stat(1),0,16)--cpu perf
 	end
-	if (wr_replay!=nil) wr_replay:draw()
-		
 	move_camera()
 end
 
@@ -388,24 +301,24 @@ function set_dark_pal()
 end
 
 function draw_player()
-	if (p.tunneling) return
+	if (p_tunneling) return
 	set_p_pal()
-	if p.inshadow and not p.jumping then
+	if p_inshadow and not p_jumping then
 		--set_dark_pal()
 	end
-	if p.crash then
-		spr(79,p.x,p.y-cy)
+	if p_crash then
+		spr(79,p_x,p_y-cy)
 		pal()
 		return
  end
- if p.angle > 0.75 then
+ if p_angle > 0.75 then
   s_flip = false
  else
   s_flip = true
  end
- abs_angle = abs(p.angle - 0.75)
+ abs_angle = abs(p_angle - 0.75)
  jofs=0
- if p.jumping then
+ if p_jumping then
   jofs=7
  elseif pdir==➡️ then
   if s_flip then
@@ -422,64 +335,64 @@ function draw_player()
  end
  
  if abs_angle < 0.01 then
-  spr(64+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+  spr(64+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  elseif abs_angle < 0.10 then
-  spr(65+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+  spr(65+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  elseif abs_angle < 0.16 then
- 	spr(66+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+ 	spr(66+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  elseif abs_angle < 0.25 then
- 	spr(67+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+ 	spr(67+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  elseif abs_angle < 0.30 then
- 	spr(68+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+ 	spr(68+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  elseif abs_angle < 0.45 then
- 	spr(69+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+ 	spr(69+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  else
- 	spr(70+jofs,p.x,p.y-cy-p.height,1,1,s_flip)
+ 	spr(70+jofs,p_x,p_y-cy-p_height,1,1,s_flip)
  end
  pal()
  --shadow when jumping
- if p.jumping then
+ if p_jumping then
   draw_shadow()
  end
  --speed particles
- if p.speed>=p.maxspeed*0.95 then
- 	speed_particles(p.x,p.y-cy)
+ if p_speed>=p_maxspeed*0.95 then
+ 	speed_particles(p_x,p_y-cy)
  end
 end
 
 --recolors shadow based on pixels under
 function draw_shadow()
 	--get pixel color
- local color=pget(p.x,p.y-cy)
+ p=pget(p_x,p_y-cy)
  _y=0--shadow offset
- if color==7 then--white
+ if p==7 then--white
   pal(6,6)
- elseif color==11 then--lime
+ elseif p==11 then--lime
   --3=dark green
   pal(6,3)
   _y=16
- elseif color==3 then--dark green
+ elseif p==3 then--dark green
   --1=dark blue
   pal(6,1)
   _y=4
- elseif color==8 then--red
+ elseif p==8 then--red
   --2=purple
   pal(6,2)
  end
- spr(95,p.x,p.y-cy-_y)
+ spr(95,p_x,p_y-cy-_y)
  pal()
 end
 
 function draw_trail(trail)
  --draw to player
  if #trail==0 then return end
- if not (p.jumping or p.tunneling) then
+ if not (p_jumping or p_tunneling) then
 	 --trail towards player
 	 ppos=trail[#trail]
 	 line(ppos.x+2,ppos.y-cy+7,
-	      p.x   +2,p.y   -cy+5,6)
+	      p_x   +2,p_y   -cy+5,6)
 	 line(ppos.x+5,ppos.y-cy+7,
-	      p.x   +5,p.y   -cy+5,6)
+	      p_x   +5,p_y   -cy+5,6)
  end
  --draw trail array
  for i=2,#trail do
@@ -498,7 +411,7 @@ end
 
 function draw_deaths(x,y)
  spr(31,x,y)
- print(pad(""..p.deaths,3),x+7,y+2,1)
+ print(pad(""..p_deaths,3),x+7,y+2,1)
 end
 
 function draw_time(t,x,y,n)
@@ -571,16 +484,16 @@ end
 --draws position of player on side
 --of the screen
 function draw_position()
- x1,y1=1,0
- x2,y2=127-x1,y1
+	x1,y1=1,0
+	x2,y2=127-x1,y1
  line(x1,y1,x2,y2,6)-- bg line
- local perc=(p.y/limy)/8
- x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
+ p=(p_y/limy)/8
+ x,y=(x2-x1)*p+x1,(y2-y1)*p+y1
  line(x1,y1,x,y,15)
  circfill(x,y,0,1)  -- curr pos
- local perc=(p.strty/limy)/8
- x,y=(x2-x1)*perc+x1,(y2-y1)*perc+y1
- if perc>0.1 then
+ p=(p_strty/limy)/8
+ x,y=(x2-x1)*p+x1,(y2-y1)*p+y1
+ if p>0.1 then
  	line(x1,y1,x,y,11)  -- checkpoint line
  end
 end
@@ -604,7 +517,7 @@ end
 --draws shadows of trees
 function draw_shadows()
 	--iterate through all tiles on screen
-	p.inshadow=false--reset on each frame
+	p_inshadow=false--reset on each frame
 	for i=0,15 do
 		for j=0,15 do
 			if cy+j*8>0 then--todo check ouofbounds
@@ -618,11 +531,11 @@ function draw_shadows()
 					local shh=16
 					sspr(96,46,16,16,shx-4,shy)
 					--check if player is in shadow
-					local spx=p.x%128
-					local spy=p.y-cy
+					local spx=p_x%128
+					local spy=p_y-cy
 					if spx>shx and spy>shy and
 								spx<shx+shw and spy<shy+shh then
-						p.inshadow=true
+						p_inshadow=true
 					end
 				-- small object
 				elseif fget(tile,2) then
@@ -633,11 +546,11 @@ function draw_shadows()
 					local shh=16
 					sspr(80,56,16,8,shx,shy+8)
 					--check if player is in shadow
-					local spx=p.x%128
-					local spy=p.y-cy
+					local spx=p_x%128
+					local spy=p_y-cy
 					if spx>shx and spy>shy and
 								spx<shx+shw and spy<shy+shh then
-						p.inshadow=true
+						p_inshadow=true
 					end
 				--tunnel shadow
 				elseif tile==110 or tile==111 or tile==126 or tile==127 then
@@ -663,10 +576,10 @@ end
 t=0
 res_time=0--respawn timer
 function update_game()
-	if p.crash then
-		p.speed *= 0.9
-		if p.speed<0.2 then
-		 add(tombs,{x=p.x,y=p.y})
+	if p_crash then
+		p_speed *= 0.9
+		if p_speed<0.2 then
+		 add(tombs,{x=p_x,y=p_y})
 		 reset_player()
 		end
 	else
@@ -677,9 +590,6 @@ function update_game()
 	else
 		res_time-=1	
 	end
-	if t%30==0 then
-		replay:store(p.x,p.y,t)
-	end
 	
 	t+=1
 	clock+=1*tf
@@ -689,9 +599,9 @@ k  = 8
 ts = 0.008 --turn speed
 maxangle=0.20
 function input()
- p.turning = false
+ p_turning = false
  pdir=nil
- if p.jumping or p.tunneling then return end
+ if p_jumping or p_tunneling then return end
  --button input
  if mouse_enabled then
   _x=stat(32)
@@ -711,111 +621,111 @@ function input()
  btnr=btnr or btn(➡️)
  
 	if btnl then
-	 if p.angle > 0.75-maxangle then
-	  p.angle -= ts*tf
-	  p.turning=true
+	 if p_angle > 0.75-maxangle then
+	  p_angle -= ts*tf
+	  p_turning=true
 	 end
 	 pdir=⬅️
 	elseif btnr then
-	 if p.angle < 0.75+maxangle then
-	  p.angle += ts*tf
-	  p.turning=true
+	 if p_angle < 0.75+maxangle then
+	  p_angle += ts*tf
+	  p_turning=true
 	 end
 	 pdir=➡️
 	elseif btn(⬇️) then
-	 if p.angle < 0.75 then
-			p.angle += ts*tf
-			p.turning=true
-		elseif p.angle > 0.75 then
-			p.angle -= ts*tf
-			p.turning=true
+	 if p_angle < 0.75 then
+			p_angle += ts*tf
+			p_turning=true
+		elseif p_angle > 0.75 then
+			p_angle -= ts*tf
+			p_turning=true
 		end
 	elseif btn(⬆️) then
-	 --p.angle=lerp(p.angle%1,0.25,0.1)
+	 --p_angle=lerp(p_angle%1,0.25,0.1)
 	end
 	--boost
 	if btnp(❎) and shake==0 then
-		p.speed*=1.5
-		shake+=0.1*p.speed/p.maxspeed
+		p_speed*=1.5
+		shake+=0.1*p_speed/p_maxspeed
 	end
 end
 
 function move_player()
  --momentum
- if abs(p.speed) > 0 then
- 	p.speed = p.speed * max(p.friction*sin(p.angle),0.991)
- 	--p.speed += 0.1
+ if abs(p_speed) > 0 then
+ 	p_speed = p_speed * max(p_friction*sin(p_angle),0.991)
+ 	--p_speed += 0.1
  else
-  p.speed = 0
+  p_speed = 0
  end
- if p.speed < p.maxspeed then
-  p.speed = p.speed + p.acc*sin(p.angle)
+ if p_speed < p_maxspeed then
+  p_speed = p_speed+p_acc*sin(p_angle)
  else
   --travelling too fast
-  p.speed=lerp(p.speed,p.maxspeed,0.9)
+  p_speed=lerp(p_speed,p_maxspeed,0.9)
  end
  --update velocity direction
- if not p.jumping then
-		p.dx = p.speed * cos(p.angle)
-		p.dy = p.speed * sin(p.angle)
+ if not p_jumping then
+		p_dx = p_speed * cos(p_angle)
+		p_dy = p_speed * sin(p_angle)
 	end
  --trail
- if not (p.jumping or p.tunneling) then
+ if not (p_jumping or p_tunneling) then
   if t%3==0 then
 		 pos={}
-		 pos.x=p.x
-		 pos.y=p.y
-		 add(p.trail,pos)
+		 pos.x=p_x
+		 pos.y=p_y
+		 add(p_trail,pos)
   end
  end
  --update position
  --player hits wall bounce
- if not (p.x>0-2 and p.x+6<128) then
-  p.dx*=-1
-  p.landangle=atan2(p.dx,p.dy)
+ if not (p_x>0-2 and p_x+6<128) then
+  p_dx*=-1
+  p_landangle=atan2(p_dx,p_dy)
   sfx(7)
-  shake+=0.1*p.speed/p.maxspeed
-  p.angle=p.angle-2*(p.angle-0.75)
+  shake+=0.1*p_speed/p_maxspeed
+  p_angle=p_angle-2*(p_angle-0.75)
   --max = 0.9 and 0.6
-  if p.angle<0.6 then--what does this do?
-  	p.angle=0.6
-  elseif p.angle>0.9 then
-  	p.angle=0.9
+  if p_angle<0.6 then--what does this do?
+  	p_angle=0.6
+  elseif p_angle>0.9 then
+  	p_angle=0.9
   end
  end
  --move player
- p.x+=p.dx*tf
- p.y+=p.dy*tf
+ p_x+=p_dx*tf
+ p_y+=p_dy*tf
  
  if (slomo) slow_mo_check()
 
  --height update
- if p.jumping then
+ if p_jumping then
  	_a=0.1--acc due to gravity
-  p.height+=p.jvel*tf
-  p.jvel-=_a*tf
+  p_height+=p_jvel*tf
+  p_jvel-=_a*tf
   --trick
-  if p.trick then
-  	p.angle=(p.angle+p.trickspeed*tf)%1
+  if p_trick then
+  	p_angle=(p_angle+p_trickspeed*tf)%1
   end
   
   --landing
-  if p.height<0 then
-   shake+=0.2*p.speed/p.maxspeed
-   p.jumping=false
-   p.height=0
-   --p.speed=sqrt(p.jvel^2+p.speed^2)
-   p.jvel=0
-   p.angle=p.landangle
-   if p.trick then
+  if p_height<0 then
+   shake+=0.2*p_speed/p_maxspeed
+   p_jumping=false
+   p_height=0
+   --p_speed=sqrt(p_jvel^2+p_speed^2)
+   p_jvel=0
+   p_angle=p_landangle
+   if p_trick then
    	shake+=0.05
-   	p.speed*=1.4
-   	trick_particles(p.x,p.y-cy)
+   	p_speed*=1.4
+   	trick_particles(p_x,p_y-cy)
    end
-   p.trick=false
-   --p.speed*=1.1
-   p.trail={}
-   landing_particles(p.x,p.y-cy)
+   p_trick=false
+   --p_speed*=1.1
+   p_trail={}
+   landing_particles(p_x,p_y-cy)
    sfx(9)
    shake+=0.1
   end
@@ -830,14 +740,14 @@ function slow_mo_check()
 	--search depth
 	iter=20
 	--future positions
-	local x=p.x
-	local y=p.y
+	local x=p_x
+	local y=p_y
 	for i=1,iter do
 		--increment check
-		x+=p.dx
-		y+=p.dy
+		x+=p_dx
+		y+=p_dy
 		--out of bounds or jumping
-		if x>127 or x<1 or p.jumping or p.tunneling then 
+		if x>127 or x<1 or p_jumping or p_tunneling then 
 			break 
 		end
 		--jump check (no slomo)
@@ -885,14 +795,14 @@ end
 --player collision logic
 bv=2--block velocity
 function collision_check()
- if p.crash==true then return end
+ if p_crash==true then return end
  prev_tile=tile--used to ensure trigger on rising edge
- mx=flr((p.x+4)/8)+flr((p.y+4)/limy)*16
- my=flr((p.y+4)/8)%64
+ mx=flr((p_x+4)/8)+flr((p_y+4)/limy)*16
+ my=flr((p_y+4)/8)%64
  --previous map x for player
  --previous map y for player
- pmx=flr((p.x+4-p.dx)/8)+flr((p.y+4-p.dy)/limy)*16
- pmy=flr((p.y+4-p.dy)/8)%64
+ pmx=flr((p_x+4-p_dx)/8)+flr((p_y+4-p_dy)/limy)*16
+ pmy=flr((p_y+4-p_dy)/8)%64
  tile=mget(mx,my)
  --new tile check
  if pmx==mx and pmy==my then
@@ -901,55 +811,55 @@ function collision_check()
 
  --tunnel (this is first as no collision should happen when we are underground)
  if prev_tile==110 or prev_tile==111 then
-		p.tunneling = true
+		p_tunneling = true
  	--ensure player goes straight down
-		p.angle=0.75
-		p.dx=0
-		p.dy=cos(p.angle)*p.speed
+		p_angle=0.75
+		p_dx=0
+		p_dy=cos(p_angle)*p_speed
 		shake=0.2
 		sfx(12)
-		into_tunnel_particles(p.x,p.y-cy)
- elseif p.tunneling and (tile==126 or tile==127) then
-		p.tunneling = false	
-		p.trail={{x=p.x,y=p.y-3}}--reset trail
+		into_tunnel_particles(p_x,p_y-cy)
+ elseif p_tunneling and (tile==126 or tile==127) then
+		p_tunneling = false	
+		p_trail={{x=p_x,y=p_y-3}}--reset trail
  	sfx(13)
  	shake=0.2
- 	from_tunnel_particles(p.x,p.y-cy)
+ 	from_tunnel_particles(p_x,p_y-cy)
  end
- if (p.tunneling) return
+ if (p_tunneling) return
  
  --signs
  sign_collision()
   
  --jumping block
  if tile==112 or tile==113 then
-  p.jumping=true
+  p_jumping=true
   shake=0.07
-  p.height=0
-  p.landangle=p.angle
+  p_height=0
+  p_landangle=p_angle
   --if we perform a jump trick
   if pdir!=nil then
-   p.trick=true
+   p_trick=true
    _arr={0.025,0.05,0.1}--rotation speed LUT
-   p.trickspeed=_arr[ceil(p.speed/p.maxspeed*3)]
-   --p.trickspeed=_arr[ceil(rnd(3))]
+   p_trickspeed=_arr[ceil(p_speed/p_maxspeed*3)]
+   --p_trickspeed=_arr[ceil(rnd(3))]
    if pdir==⬅️ then
-   	p.trickspeed=-p.trickspeed
+   	p_trickspeed=-p_trickspeed
    end
   else
-  	p.trick=false
+  	p_trick=false
   end
   local angle=1/8
-  local norm_speed=sqrt(p.dx^2+p.dy^2)
-  p.jvel=2+abs(sin(angle)*norm_speed)/10
+  local norm_speed=sqrt(p_dx^2+p_dy^2)
+  p_jvel=2+abs(sin(angle)*norm_speed)/10
   --more accurate jump calc
   --local angle=1/8
-  --local norm_speed=sqrt(p.dx^2+p.dy^2)
-  --p.jvel=abs(sin(angle)*norm_speed)
+  --local norm_speed=sqrt(p_dx^2+p_dy^2)
+  --p_jvel=abs(sin(angle)*norm_speed)
   --local factorspeed=(cos(angle)*norm_speed)/norm_speed
-  --p.dx*=factorspeed
-  --p.dy*=factorspeed
-  --p.speed=norm_speed
+  --p_dx*=factorspeed
+  --p_dy*=factorspeed
+  --p_speed=norm_speed
   sfx(10)
   return
  end
@@ -959,25 +869,25 @@ function collision_check()
  	--remove gift from map
  	mset(mx,my,1)
  	--play animation
- 	trick_particles(p.x,p.y-cy)
+ 	trick_particles(p_x,p_y-cy)
  	sfx(5)
  	--show popup saying new unlock
  end
  
  --checkpoint
  if tile==12 or tile==13 then
-  if p.strty!=flr(p.y/8)*8+4 then
+  if p_strty!=flr(p_y/8)*8+4 then
 	  shake=0.2
 	  sfx(0)
-	  checkpoint_particles(p.x,p.y-cy)
+	  checkpoint_particles(p_x,p_y-cy)
    my_music()
-   p.strtx = (mx*8+4)%128
-   if p.strtx>90 then
-   	p.strtx=90
-   elseif p.strtx<20 then
-    p.strtx=20
+   p_strtx = (mx*8+4)%128
+   if p_strtx>90 then
+   	p_strtx=90
+   elseif p_strtx<20 then
+    p_strtx=20
    end
-	  p.strty = flr(p.y/8)*8+4
+	  p_strty = flr(p_y/8)*8+4
   end
   
  --finish line/ goal
@@ -992,28 +902,28 @@ function collision_check()
  elseif not fget(tile,0) then
  	if fget(tile,6) then
  		--left check
- 		local x=(p.x+4)%8
+ 		local x=(p_x+4)%8
  		if x>6 then
  			crash()
 	 	end
  	elseif fget(tile,7) then
  	 --right check
-	 	local x=(p.x+4)%8
+	 	local x=(p_x+4)%8
  		if x<2 then
  			crash()
 	 	end
  	--small check
  	else
-			local x=(p.x+4)%8
+			local x=(p_x+4)%8
  		if x>2 and x<6 then
  		 crash()
 	 	else
 	 	 shake+=0.1
-	 		green_particles(p.x,p.y-cy)
+	 		green_particles(p_x,p_y-cy)
 	 	end
  	end
  	shake+=0.1
- 	green_particles(p.x,p.y-cy)
+ 	green_particles(p_x,p_y-cy)
  	sfx(11)
  end
 end
@@ -1021,8 +931,8 @@ end
 function crash()
 	shake+=0.5
  sfx(1)
- p.crash=true
- blood_particles(p.x,p.y-cy)
+ p_crash=true
+ blood_particles(p_x,p_y-cy)
 end
 -->8
 --win screen/crash screen
@@ -1031,7 +941,7 @@ function draw_win()
 	doshake()
 	draw_tombs()
 	draw_w()
-	draw_trail(p.trail)
+	draw_trail(p_trail)
 	draw_particles()
 	draw_player()
 	camera()--reset camera
@@ -1041,23 +951,21 @@ end
 
 function update_win()
  if reading then
-  win_particles(p.x,p.y-cy)
+  win_particles(p_x,p_y-cy)
   tb_update()
  else
 	 cofs=30
-	 p.angle=0.75
-	 if p.dy>0.05 then
-	  p.dy*=0.97
-	 elseif p.dy>0 then
-	  p.dy=0
-	  --if best_time==nil or curr_time<best_time then
-		if true then
-	  	tb_init(7,{"new personal best!\n\ndEATHS: "..p.deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
+	 p_angle=0.75
+	 if p_dy>0.05 then
+	  p_dy*=0.97
+	 elseif p_dy>0 then
+	  p_dy=0
+	  if best_time==nil or curr_time<best_time then
+	  	tb_init(7,{"new personal best!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
 	  	best_time=curr_time
 	  	dset(0,best_time)
-		dset(1,replay)
 	  else
-	  	tb_init(7,{"yOU WON!\n\ndEATHS: "..p.deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
+	  	tb_init(7,{"yOU WON!\n\ndEATHS: "..p_deaths.."\n\ntIME: "..secs.."."..msecs.." sECONDS\n\n","pRESS ❎ TO TRY AGAIN!"},{❎})
 	  end
 	  tb.x=10
 	  tb.w=127-tb.x*2
@@ -1065,12 +973,12 @@ function update_win()
 	  tb.col1=9
 	  tb.col2=0
 	  tb.col3=0
-	  tb.y=p.y-cy+16
+	  tb.y=p_y-cy+16
 	 else
   -- restart game
 		start_game()
 	 end
-	 p.y+=p.dy
+	 p_y+=p_dy
 	 t+=1
 	end
  update_particles()
@@ -1095,9 +1003,9 @@ end
 cofs=2
 function move_camera()
 	if res_time!=0 then
-		b  = p.y-p.height-30+p.dy*10
+		b  = p_y-p_height-30+p_dy*10
 	else
-		b  = p.y-p.height-cofs+p.dy*10
+		b  = p_y-p_height-cofs+p_dy*10
 	end
  cy = lerp(cy,b,0.06*tf)
 end
@@ -1126,8 +1034,8 @@ function update_particles()
 end
 
 function speed_particles(x,y)
- dx=p.dx
- dy=p.dy
+ dx=p_dx
+ dy=p_dy
  for i=1,3 do
   add_new_dust(
    x+4,y+4,rnd(0.5)-dx,rnd(2)-dy,
@@ -1137,7 +1045,7 @@ function speed_particles(x,y)
 end
 
 function green_particles(x,y)
- local speed=1*sqrt(p.dx^2+p.dy^2)
+ local speed=1*sqrt(p_dx^2+p_dy^2)
  for i=1,10 do
  	local angle=(rnd(1)+0.5)%1
  	local dx=cos(angle)*speed
@@ -1317,7 +1225,7 @@ function tb_update()
    tb.char=0
   else
    sfx(0)
-   checkpoint_particles(p.x,p.y-cy)
+   checkpoint_particles(p_x,p_y-cy)
    reading=false
   end
  end
@@ -1588,8 +1496,8 @@ __gfx__
 00e00e0000e00e00000e00000eeeee000e00e00000e00e0000e00e0000e00e0000e00e00000e00000eeeee000700e00000e00e0000e00e003300000000000000
 00003300000000330000003300000033003300000033000000330000003300000033000000330000000000000000000000000000000000003333333300000000
 0009ff00000009ff000009ff000000ff00ff000000ff900000ff000000ff940000ff000000ff0000000000030000000000000000000000003333333300000000
-0099ff00000999ff000999ff004999ff00990ee000ff990000ff900000ff900049ff900000990ee0000000030000000000000000000000003333333100666600
-099999900049911000491110000099904999e000099999900099940004911100000949004999e000000000330000000000000000000000003533331306666660
+0099ff00000999ff000999ff004999ff00990ee000ff990000ff900000ff900049ff900000990ee0000000030000000000066066000060603333333100666600
+099999900049911000491110000099904999e000099999900099940004911100000949004999e000000000330000000000000690000606963533331306666660
 041111400e011140e0011040000999000094100e041111400e111000e011e000009990000049100e000000330000000000000000000000005333331306666660
 0010e1000e01e0000e110e00000111e0009911e0001e01000e10e0000e100e0000111ee0009911e0000001333000000000000000000000005553313300666600
 0e00e00000e00e0000e00e000001100000700e00000e00e000e00e0000e00e000011000000e00e00000001333000000000000000000000001000013300000000
@@ -1828,7 +1736,7 @@ __map__
 010101010101010101010101010101013c3d3c3d01010101010120010101686901010101010101010101010101010101383818193838382701012001010127380101010120200101010101016a6b1819010101202001010101010101200101011819181918191819010101010101010101010101010101011a1b0a0b18190809
 010101010101010101010101010101012c2d01010101010101200101010178790101010101010101010101010101010111080908090809010101200108095a5b0809010120010101010108097a7b08090101010120010101010101012001010108090809010101010101202001010101010101010101010101011a1b0a0b1819
 010101010101010101010101010101013c3d2901010101012020010101012c2d0101010101010101010101010101010127181918191819010101200118196a6b181901012001010108091819080918192801010120200101010101012001012818191819010101010101200111010a0b0101010101010101010110111a1b0809
-340101010101010101010101010101262c2d0101010101012001010101013c3d0101010101010101010101010101010111010101010101010101200108097a7b08090101200101011819080918190809380101010120010101010101200101380a0b0101010101202001010111111a1b01010101010101010110101001111819
+260101010101010101010101010101012c2d0101010101012001010101013c3d0101010101010101010101010101010111010101010101010101200108097a7b08090101200101011819080918190809380101010120010101010101200101380a0b0101010101202001010111111a1b01010101010101010110101001111819
 360101010101010101010101010101263c3d0101010101200101010101012c2d01010101010101010101010101010101010101010101010101200101181908091819010120202001010118190809181928012a010120000101010101202a01281a1b01010120200101110a0b01110a0b01010101010101010111011011100101
 010101010101010101010101010126362c2d010101012001010101012c2d3c3d29010101010101010101010101010101010101010101012020010108092818190809010101010120200101011819080938013a010101010101010101203a01380a0b01012001012a02031a1b0a0b1a1b01010101010101010101010101010101
 010101010101010101010101012636013c3d01010120200101012c2d3c3d2c2d606160616061606160616061606160610101010101012001010809181938080918190809010101012020200101011819080921606160612121606160612102031a1b01012001013a12130a0b1a1b020337010101010101010101010101010101

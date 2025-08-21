@@ -36,18 +36,18 @@ function _init()
 	local obj=pos_tile(start_tile,0,0,1)
 	map_tiles[4][4]=obj--start tile
 	--game states
-	round_state=1
+	round_states={"",""}
 	current_p=1
 	players=4--n of players
+	
 end
 
 --base tiles
 --tile ids,connections,rotation
-function new_tile(sprites, cons, edges)
+function new_tile(sprites,cons)
 	tile={
 		sprites=sprites,--sprites
 		cons=cons,--connections west,north,east,south
-		edges=edges,
 		draw=function(this,x,y,r)
 			rectfill(x,y+6,x+15,y+15,11)
 			spr(this.sprites[r],x  ,y)
@@ -67,47 +67,15 @@ function pos_tile(tile,x,y,r)
 		y=y,
 		r=r,
 		--w,n,e,s,center
-		meeple=nil,
-		meeple_c=nil,--color
+		meeples={nil,nil,nil,nil,nil},
 		draw=function(this)
-			local x=this.x
-			local y=this.y
-			this.tile:draw(x,y,this.r)
-			if this.meeple!=nil then
-				--local part=this.meeple
-				if this.meeple==1 then
-					draw_meeple(x,y+tile_height/2)
-				elseif this.meeple==2 then
-					draw_meeple(x+tile_width/2,y)
-				elseif this.meeple==3 then
-					draw_meeple(x+tile_width,y+tile_height/2)
-				elseif this.meeple==4 then
-					draw_meeple(x+tile_width/2,y+tile_height)
-				elseif this.meeple==5 then
-					draw_meeple(x+tile_width/2,y+tile_height/2)
-				end
-			end
+			this.tile:draw(this.x,this.y,this.r)
 		end,
 		rotate=function(this)
 			if this.r<4 then
 				this.r+=1
 			else
 				this.r=1
-			end
-		end,
-		rotate_meeple=function(this)
-			if this.meeple==nil then
-				this.meeple=1
-			elseif this.meeple<5 then
-				this.meeple+=1
-			else
-				this.meeple=nil--no meeple
-			end
-			if this.meeple!=nil and this.meeple!=5 then
-				local cons=this:get_connections()
-				if cons[this.meeple]=="grass" then
-					this:rotate_meeple()
-				end
 			end
 		end,
 		get_connections=function(this)
@@ -162,7 +130,7 @@ road="road"
 --create custom tiles
 function init_tiles()
 	tiles={
-	new_tile({0,2,4,6}, {grass,grass,city,city}, {nil, nil, 3, 4}),--for every corner we store connecting edges
+	new_tile({0,2,4,6}, {grass,grass,city,city}),
 	new_tile({8,10,12,14}, {grass,grass,city,grass}),
 	new_tile({36,38,40,42}, {road,grass,grass,road}),
 	new_tile({44,46,44,46}, {city,grass,city,grass}),
@@ -223,15 +191,6 @@ end
 -->8
 --draw
 function _draw()
-	if round_state==1 then
-		draw_state_tile()
-	elseif round_state==2 then
-		draw_state_meeple()
-	end
-end
-
---tile place view
-function draw_state_tile()
 	cls(1)
 	rectfill(map_x+32,map_y+tile_height*1,128,128,0)--ui bottom black rectangle
 	--draw_grid()
@@ -242,84 +201,6 @@ function draw_state_tile()
 	draw_dragging_tile()
 	draw_selected_ui()
 	m:draw()
-end
-
---meeple place view
-function draw_state_meeple()
-	cls(1)
-	rectfill(map_x+32,map_y+tile_height*1,128,128,0)--ui bottom black rectangle
-	draw_tile_map()
-	--higlight tile
-	local pos=x_y_to_mx_my(m.x-map_x,m.y-map_y)
-	local x=(pos[1]*tile_width)+map_x
-	local y=(pos[2]*tile_height)+map_y
-	rect(x,y, x+tile_width, y+tile_height,6)--highlight square
-	--meeple placement highlight
-	local part=tile_part_sel()
-	?part,8,8,7
-	if part==1 then
-		--draw_meeple(x,y+tile_height/2)
-	elseif part==2 then
-		--draw_meeple(x+tile_width/2,y)
-	elseif part==3 then
-		--draw_meeple(x+tile_width,y+tile_height/2)
-	elseif part==4 then
-		--draw_meeple(x+tile_width/2,y+tile_height)
-	elseif part==5 then
-		--draw_meeple(x+tile_width/2,y+tile_height/2)
-	end
-	--draw
-	draw_selected_ui()
-	print("place meeples",0,0,7)
-	m:draw()
-end
-
---draws meeple offset
-function draw_meeple(x,y)
-	spr(195,x-3,y-8)
-end
-
-function draw_tile_meeple(x,y,part)
-	if part==1 then
-		draw_meeple(x,y+tile_height/2)
-	elseif part==2 then
-		draw_meeple(x+tile_width/2,y)
-	elseif part==3 then
-		draw_meeple(x+tile_width,y+tile_height/2)
-	elseif part==4 then
-		draw_meeple(x+tile_width/2,y+tile_height)
-	elseif part==5 then
-		draw_meeple(x+tile_width/2,y+tile_height/2)
-	end
-end
-
---where the mouse is placed on tile
---used for meeple placement
-function tile_part_sel()
-	local pos=x_y_to_mx_my(m.x-map_x,m.y-map_y)
-	local x=(pos[1]*tile_width)+map_x
-	local y=(pos[2]*tile_height)+map_y
-	--distances
-	local dw=abs(x-m.x)
-	local dn=abs(y-m.y)
-	local de=abs(x+tile_width-m.x)
-	local ds=abs(y+tile_height-m.y)
-	local x0=x+tile_width/2
-	local y0=y+tile_height/2
-	local dcentre=sqrt((x0-m.x)^2+(y0-m.y)^2)
-	--find value to return: 1,2,3,4,5
-	local min_distance = min_table({dw,dn,de,ds,dcentre})
-	if min_distance == dcentre then
-  return 5  -- center of the tile
- elseif min_distance == dw then
-  return 1  -- north edge of the tile
- elseif min_distance == dn then
-  return 2  -- east edge of the tile
- elseif min_distance == de then
-  return 3  -- south edge of the tile
- else
-  return 4  -- west edge of the tile
- end
 end
 
 function draw_dragging_tile()
@@ -380,9 +261,6 @@ function draw_tile_map()
 				local tile=obj.tile
 				local yoffs=16-tile_height
 				tile:draw(x,y-yoffs,obj.r)
-				if obj.meeple!=nil then
-					draw_tile_meeple(x,y,obj.meeple)
-				end
 			end
 		end
 	end
@@ -402,14 +280,6 @@ end
 -->8
 --update
 function _update()
-	if round_state==1 then
-		update_state_tile()
-	elseif round_state==2 then
-		update_state_meeple()
-	end
-end
-
-function update_state_tile()
 	m:update()
 	if stat(34)==1 then
 		if m.lclick then
@@ -440,21 +310,6 @@ function update_state_tile()
 		elseif drag_tile!=nil then
 			add(tiles_in_hand,drag_tile)
 			drag_tile=nil
-		end
-	end
-end
-
-function update_state_meeple()
-	m:update()
-	if stat(34)==1 then
-		if m.lclick then
-			--place meeple
-			--find tile
-			check_click_rotate()
-			check_click_apply()
-		else
-			map_x+=m.dx
-			map_y+=m.dy
 		end
 	end
 end
@@ -509,19 +364,13 @@ function check_click_rotate()
 					local y=j*tile_height+map_y+16
 					if m.x>x and m.x<x+8 and
 								m.y>y and m.y<y+8 then
-						if round_state==1 then
-							last_tile:rotate()
-						elseif round_state==2 then
-							last_tile:rotate_meeple()
-						end
+						last_tile:rotate()
 					end
 				end
 			end
 		end
 	end
 end
-
-
 
 --apply placement
 function check_click_apply()
@@ -533,25 +382,11 @@ function check_click_apply()
 					local y=j*tile_height+map_y+16
 					if m.x>x and m.x<x+8 and
 								m.y>y and m.y<y+8 then
-						if round_state==1 then
-							--finish_placement()
-							finish_round()
-						elseif round_state==2 then
-							last_tile=nil
-							finish_round()
-						end
+						finish_placement()
 					end
 				end
 			end
 		end
-	end
-end
-
-function finish_round()
-	if round_state==1 then
-		round_state=2
-	elseif round_state==2 then
-		round_state=1
 	end
 end
 
@@ -609,17 +444,6 @@ function pickup_new_tile()
 end
 
 
--->8
---util
-function min_table(numbers)
- local min_value = numbers[1]  -- initialize min_value with the first element of the table
- for i = 2, #numbers do
-  if numbers[i] < min_value then
-      min_value = numbers[i]
-  end
- end
- return min_value
-end
 __gfx__
 00000000000001c001c000000000000000000000000001c00c1000000000000000000000000dc0000000000000000000000dc000000000000000000000000000
 00000000000011cc11cc00000000000000000000000011cccc110000000000000000000000ddcc00000000000000000000ddcc00000000000000000000000000
@@ -717,14 +541,14 @@ dddd00000dd66770000dd0448800000007766dd03000dddd0000000dd00000008888886776888888
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-01110000111111111111111100000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17771000117117771111111100000000001710000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17711000177711171111111700010000017771000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-17171000717171171111117100171000171717100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-01111000117111171711171101777100011711000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00000000117111171171711100171000017171000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00000000117777771117111101717100017171000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-00000000111111111111111100333000003330000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+01110000111111111111111100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+17771000117117771111111100171000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+17711000177711171111111701777100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+17171000717171171111117117171710000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+01111000117111171711171101171100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000117111171171711101717100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000117777771117111101717100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000111111111111111100111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 17100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

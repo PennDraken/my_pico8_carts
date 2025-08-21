@@ -25,7 +25,7 @@ function _init()
 		local p=new_p(x,y,fx/m,fy/m,r,m,flr(rnd(15))+1)
 		add(_planets,p)
 	end
-	
+	t=0
 end
 
 function new_p(x,y,vx,vy,r,m,c)
@@ -44,6 +44,7 @@ end
 -->8
 function _draw()
 	cls()
+	camera(c.x-64,c.y-64)
 	rect(c.x-64,c.y-64,c.x+63,c.y+63,7)
 	local tp=_planets[1]
 	for p in all(_planets) do
@@ -56,6 +57,7 @@ function _draw()
 	end
 	
 	--move camera
+	--[[
 	local dx=tp.x-c.x
 	local dy=tp.y-c.y
 	if abs(dx+dy)>1 then
@@ -67,8 +69,8 @@ function _draw()
 		c.x=tp.x
 		c.y=tp.y
 	end
+	--]]
 	
-	camera(c.x-64,c.y-64)
 end
 -->8
 function _update()
@@ -121,6 +123,22 @@ function _update()
 	for p in all(_planets) do
 		move_p(p)
 	end
+	--[[
+	local size_table={0.1,0.1,0.1,0.1,0.1,0.2,0.3,0.4,0.5,0.5,0.5}
+	if t%10000==0 then
+		local r=10
+		local m=3.14*r^2--r+1 because r=0
+		local speed=3
+		local fx=rnd(speed)-speed/2
+		local fy=rnd(speed)-speed/2
+		local w=128
+		local x=flr(rnd(w))+c.x-64
+		local y=flr(rnd(w))+c.y-64
+		local p=new_p(x,y,fx/m,fy/m,r,m,flr(rnd(15))+1)
+		--add(_planets,p)
+	end
+	--]]
+	t+=1
 end
 
 function move_p(p)
@@ -157,7 +175,7 @@ function get_f(p1,p2)
 	--local r=sqrt(dx^2+dy^2)
 	local r2=dx^2+dy^2
 	--overlap
-	if r2<(p1.r+p2.r)^2 then
+	if r2<(p1.r+p2.r)^2 and dx+dy<sqrt(32767) then
 		return "overlap"
 	end
 	--gravity calculation
