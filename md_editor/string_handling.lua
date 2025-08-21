@@ -91,18 +91,6 @@ function cursor_index_to_position_in_list_of_strings(list_of_strings, cursor_ind
   return row_i, index_in_row
 end
 
-function test_cursor_index_to_position_in_list_of_strings(cursor_index)
-  local text_rows = {
-    "This is the first line",-- 1->23
-    "",-- 24
-    "This is the seconds line",-- 25->
-    "# Whatever",
-    " "
-  }
-  local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
-  print(text_rows[row_i][index_in_row])
-end
-
 function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   for row_i=1,#glyph_rows do
     local glyph_row = glyph_rows[row_i]
@@ -116,8 +104,10 @@ function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
 end
 
 function draw_cursor(number_of_spaces, x, y, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x, y-1, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x, y+1, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x-1, y-1, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x-1, y+1, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y-1, cursorc)
+  print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y+1, cursorc)
 end
 
 function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
