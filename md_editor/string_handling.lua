@@ -1,16 +1,5 @@
 function get_first_word(string)
-  --gets first word in string (note no spaces allowed)
-  local nstring = ""
-  local word_end_i
-  for i=1,#string do
-    if sub(string, i, i) !=' ' then
-      nstring = nstring..sub(string, i, i)
-    else
-      word_end_i = i + 1
-      break
-    end
-  end
-  return nstring, word_end_i
+  return split(string, " ")[1]
 end
 
 function centered_print(text, x, y, c)
@@ -23,10 +12,10 @@ function reverse_case(str)
   for i=1, #str do
     local c = sub(str, i, i)
     local code = ord(c)
-    if code >= 65 and code <= 90 then
+    if in_bounds(code, 65, 90) then
       -- A-Z ->  a-z
       result = result .. chr(code + 32)
-    elseif code >= 97 and code <= 122 then
+    elseif in_bounds(code, 97, 122) then
       -- a-z -> A-Z
       result = result .. chr(code - 32)
     else
