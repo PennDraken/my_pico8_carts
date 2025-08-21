@@ -1,7 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
---#include debugger.lua
 #include extract_links.lua
 #include util.lua
 #include themes.lua

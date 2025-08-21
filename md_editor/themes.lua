@@ -1,10 +1,7 @@
 function toggle_theme()
-  theme_i += 1
-  if theme_i > #themes then
-    theme_i = 1
-  end
+  theme_i = (theme_i % #themes) + 1
   theme = themes[theme_i]
-  draw_text_editor() -- TODO think if this should be included here?
+  draw_text_editor() -- TODO theme can be toggled in other views
   menu:draw()
 end
 
