@@ -27,20 +27,7 @@ function reverse_case(str)
 end
 
 function string_to_text_rows(str)
---splits a string with line breaks into a list of strings
-  local rows = {}
-  for line in all(split(str, "\n", false)) do
-    add(rows, line)
-  end
-  return rows
-end
-
-function split_string_with_character(str, char)
-  local rows = {}
-  for line in all(split(str, char, true)) do
-    add(rows, ""..line)--Ensures numbers are still cast as strings. Note that 1. will be cast to 1 (NOT GOOD)
-  end
-  return rows
+  return split(str, "\n", false)
 end
 
 function string_list_to_string(list_of_strings)
@@ -76,13 +63,7 @@ function string_to_list_of_words_with_index(str, start_index)
 end
 
 function space_pad_symbol(symbol, space_count)
-  --Returns a string with spaces and a square marker at index
-  local string = ""
-  for i=1,space_count do
-    string = string.." "
-  end
-  string = string..symbol
-  return string
+  return "\*"..space_count.." "..symbol
 end
 
 function del_char(string, index)
