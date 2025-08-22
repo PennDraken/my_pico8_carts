@@ -141,17 +141,18 @@ function open_menu()
     -- Save currently open note
     save_note(text_rows)
     menu = new_menu("Settings")
-    menu:add_option("Close", close_menu)
     menu:add_option("New Note", new_note)
-    for note in all(notes.nodes) do
-        menu:add_option(note.name, function()
-            note:func()  -- calls with 'this' set to 'note'
-        end)
-    end
+    menu:add_option("Close", close_menu)
+    -- for note in all(notes.nodes) do
+    --     menu:add_option(note.name, function()
+    --         note:func()  -- calls with 'this' set to 'note'
+    --     end)
+    -- end
     menu:add_option("Graph View", open_graph_view)
     menu:add_option("Toggle Theme", function()
         toggle_theme(menu.last_draw_function)
     end)
+    menu:add_option("Import From Clipboard", import_notes)
     -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw

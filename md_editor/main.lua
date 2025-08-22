@@ -69,7 +69,6 @@ function _init()
 end
 
 function update_text_editor()
-  import_notes()
   disable_pause_on_enter()
   -- cursor control
   if btnp(0) then
