@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 43
+version 42
 __lua__
 #include extract_links.lua
 #include util.lua
@@ -9,6 +9,7 @@ __lua__
 #include settings_menu.lua
 #include math_renderer.lua
 #include graph.lua
+#include import_export.lua
 #include main.lua
 
 __gfx__

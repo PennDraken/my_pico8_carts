@@ -32,6 +32,7 @@ function _init()
   theme_i = 4--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
+  theme = themes[theme_i]
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   notes = new_graph_manager()
   text_rows = {
@@ -52,11 +53,6 @@ function _init()
   }
   save_note(text_rows)
   last_node = notes.nodes[1]
-  -- text_rows = {""}
-  user_string = stat(4)
-  if user_string!="" then
-    --text_rows = string_to_text_rows(user_string)
-  end
   t = 0     --timer for blinking animation
   cursor_index = 100 -- Stores cursor position (index is index of char in original array)
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
@@ -73,6 +69,7 @@ function _init()
 end
 
 function update_text_editor()
+  import_notes()
   disable_pause_on_enter()
   -- cursor control
   if btnp(0) then

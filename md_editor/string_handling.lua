@@ -33,7 +33,7 @@ end
 function string_list_to_string(list_of_strings)
   local new_string = ""
   for string in all(list_of_strings) do
-    new_string = new_string..string
+    new_string = new_string..string.."\n"
   end
   return new_string
 end

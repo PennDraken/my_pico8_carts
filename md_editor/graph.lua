@@ -196,29 +196,6 @@ function new_node(name, nodes, data)
 end
 
 -- TEST INIT
-function random_graph(g, node_count, max_links_per_node)
-    -- create nodes
-    local names = {"Apple", "Banana", "Orange", "Peanuts", "Spagetti", "Lava", "Frederich Nietzche", "Ice Coffee", "Tea", "Stars", "Love Island", "Drain Gang", "Node Graph", "Markdown"}
-    for i,name in ipairs(names) do
-        names[i] = reverse_case(name)
-    end
-    for i=1,node_count do
-        local name = names[i] -- A, B, C...
-        add(g.nodes, new_node(name))
-    end
-    -- create random links
-    for n in all(g.nodes) do
-        local link_count = flr(rnd(max_links_per_node))+1
-        local links = {}
-        for j=1,link_count do
-            local other = g.nodes[flr(rnd(#g.nodes))+1]
-            if other != n and not in_list(links, other) then
-                add(links, other)
-            end
-        end
-        g:update_links(n, links)
-    end
-end
 
 function init_mouse()
     poke(0x5F2D, 1) -- Mouse enabled
@@ -326,7 +303,7 @@ end
 function update_graph()
     disable_pause_on_enter()
     local key = stat(31)
-    if key == "\t" then open_menu() end
+    if (key == "\t") open_menu()
     graph:update_nodes()
     mouse:update()
 end

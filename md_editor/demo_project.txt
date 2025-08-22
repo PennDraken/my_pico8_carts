@@ -1,0 +1,58 @@
+ウウウExample Document
+Welcome to my document.
+Here is a back reference to [[Markdown]].
+
+ウウウProgramming Languages
+A short list of languages:
+- [[Lua]]
+- [[Python]]
+- [[C++]]
+
+ウウウLua
+Lua is a lightweight scripting language.
+- Simple syntax
+- Often embedded in applications
+See also [[Programming Languages]].
+
+ウウウPython
+Python is an interpreted language.
+- Easy to read
+- Wide ecosystem
+See also [[Programming Languages]].
+
+ウウウC++
+C++ is a compiled language.
+- Supports object-oriented programming
+- Often used in systems and game development
+See also [[Programming Languages]].
+
+ウウウMath Examples
+Some math-style notes:
+- Equation: .5a^2+3b=7
+- Fraction: {x+1}/{y-2}
+- Polynomial: x^4 - 2x^2 + 1
+
+ウウウTodo
+- [ ] Learn the basics
+- [ ] Write some notes
+- [ ] Link them with [[Example Document]]
+- [ ] Test math expressions
+
+ウウウMarkdown
+## Introduction
+### What is it?
+*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.
+This is a link to another document: [[Example Document]].
+
+## Facts
+- Created in 2004
+- File format is .md
+- This is a list
+
+---
+.3x^2*y^3+x=5{3x^2+325}/{490}
+
+## Tutorial
+1. Open editor
+2. Write with keyboard
+3. Enjoy!
