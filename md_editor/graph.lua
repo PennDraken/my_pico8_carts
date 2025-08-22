@@ -152,7 +152,7 @@ function new_node(name, nodes, data)
     local node = {}
     node.name = name
     node.data = data
-    node.r = 3
+    node.r = 4
     node.x  = rnd(32)+32
     node.y  = rnd(32)+32
     node.dx = 0
@@ -301,24 +301,24 @@ function init_graph()
 end
 
 function draw_graph()
-    cls(0)
-    -- draw node names and their connections for debugging
+    cls(theme.bgc)
     local y = 0
     for n1 in all(graph.nodes) do
         for n2 in all(n1.nodes) do
-            line(n1.x, n1.y, n2.x, n2.y, 5)
+            line(n1.x, n1.y, n2.x, n2.y, theme.pc)
         end
     end
     for n in all(graph.nodes) do
         if n.data then
-            circfill(n.x, n.y, n.r, 5)
+            circfill(n.x, n.y, n.r, theme.pc)
         else
-            circfill(n.x, n.y, n.r, 0)
-            circ(n.x, n.y, n.r, 5)
+            circfill(n.x, n.y, n.r, theme.bgc)
+            circ(n.x, n.y, n.r, theme.pc)
         end
     end
     for n in all(graph.nodes) do
-        centered_print(n.name, n.x, n.y, 7)
+        local name = reverse_case(n.name)
+        centered_print(name, n.x, n.y - n.r * 2, theme.pc)
     end
     mouse:draw()
 end

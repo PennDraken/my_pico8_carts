@@ -21,12 +21,13 @@ function new_menu(title)
     menu.draw = function(this)
         rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.pc)
         rectfill(this.x+1, this.y+1, this.x + this.width-1, this.y + this.height-1, theme.bgc)
-        centered_print(this.title, 64, this.y + 3, theme.boldc)
+        centered_print(reverse_case(this.title), 64, this.y + 3, theme.boldc)
         for i,option in ipairs(this.options) do
+            local text = reverse_case(option.text)
             if i == this.option_index then
-                print("> "..option.text, this.x + 4, this.y + i * 8, theme.boldc)
+                print("> "..text, this.x + 4, this.y + i * 8, theme.boldc)
             else
-                print(option.text, this.x + 4, this.y + i * 8, theme.pc)
+                print(text, this.x + 4, this.y + i * 8, theme.pc)
             end
         end
     end
@@ -128,13 +129,7 @@ function save_note(new_text_rows)
 end
 -------------------------------------------------------------------------------------------------------------
 function init_menu()
-    local menu = new_menu("sETTTINGS")
-    menu:add_option("cLOSE", close_menu)
-    menu:add_option("nEW nOTE", new_note)
-    menu:add_option("gRAPH vIEW", open_graph_view)
-    menu:add_option("tOGGLE tHEME", toggle_theme)
-    menu:add_option("tOGGLE fONTS (tODO)")
-    return menu
+    return new_menu("Settings")
 end
 
 function close_menu()
@@ -145,18 +140,19 @@ end
 function open_menu()
     -- Save currently open note
     save_note(text_rows)
-    menu = new_menu("sETTTINGS")
-    menu:add_option("cLOSE", close_menu)
-    menu:add_option("nEW nOTE", new_note)
+    menu = new_menu("Settings")
+    menu:add_option("Close", close_menu)
+    menu:add_option("New Note", new_note)
     for note in all(notes.nodes) do
         menu:add_option(note.name, function()
             note:func()  -- calls with 'this' set to 'note'
         end)
     end
-    menu:add_option("gRAPH vIEW", open_graph_view)
-    menu:add_option("tOGGLE tHEME", toggle_theme)
-    menu:add_option("tOGGLE fONTS (tODO)")
-
+    menu:add_option("Graph View", open_graph_view)
+    menu:add_option("Toggle Theme", function()
+        toggle_theme(menu.last_draw_function)
+    end)
+    -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw
     _update60 = update_menu

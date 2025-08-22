@@ -104,7 +104,7 @@ function update_text_editor()
   local text_row = text_rows[row_i]
   -- get key input
   local key = stat(31)
-  if (key) t = 0
+  if (key != "") t = 0
   if key == chr(8) then --TODO backspace at start of line
     if cursor_index != 1 then
       -- backspace
@@ -127,7 +127,7 @@ function update_text_editor()
   elseif key >= "○" and key <= "▥" then
     -- add character that is capital case (note this is automatically emoji instead of capital cases)
     sfx(rnd({0,1,2}))
-    local code = ord(key) -- TODO need to get all keys (not just last key) active to get capital case to work
+    local code = ord(key)
     key = chr(code-63)
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1

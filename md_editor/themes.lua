@@ -1,7 +1,7 @@
-function toggle_theme()
+function toggle_theme(draw_func)
   theme_i = (theme_i % #themes) + 1
   theme = themes[theme_i]
-  draw_text_editor() -- TODO theme can be toggled in other views
+  draw_func()
   menu:draw()
 end
 
