@@ -13,13 +13,10 @@ function reverse_case(str)
     local c = sub(str, i, i)
     local code = ord(c)
     if in_bounds(code, 65, 90) then
-      -- A-Z ->  a-z
       result = result .. chr(code + 32)
     elseif in_bounds(code, 97, 122) then
-      -- a-z -> A-Z
       result = result .. chr(code - 32)
     else
-      -- Symbols
       result = result .. c
     end
   end
@@ -54,7 +51,6 @@ function string_to_list_of_words_with_index(str, start_index)
     while i <= len and sub(str, i, i) ~= " " do
       i = i + 1
     end
-
     local word = sub(str, start_i, i - 1)
     add(words, word)
     add(indexes, start_i + start_index - 1)
@@ -81,12 +77,10 @@ function insert_char(string, char, index)
 end
 
 function cursor_index_to_position_in_list_of_strings(list_of_strings, cursor_index)
-  -- Takes in a scalar index and returns position in list of strings
-  -- Returns: Index of row, index of character in row
   local row_i        = 1
   local index_in_row = 1
   for curr_i=1,cursor_index-1 do
-    local row_length = #list_of_strings[row_i] + 1--List of strings does not include newline symbol
+    local row_length = #list_of_strings[row_i] + 1--Newline comp.
     if index_in_row < row_length then
       index_in_row += 1
     else
@@ -114,7 +108,7 @@ function draw_cursor(number_of_spaces, x, y, cursorc)
 end
 
 function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
-  -- This function is used to keep track of last cursor index position (useful for moving up and down along different line lengths)
+  -- Used to track last cursor position (useful for moving up and down along different line lengths)
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
   if glyph_row_i == #glyph_rows then -- No more lines to jump to
     local last_glyph_row = glyph_rows[#glyph_rows]
@@ -129,9 +123,24 @@ function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
 end
 
 function x_y_to_cursor_index(x, y, glyph_rows)
-  for glyph in all(glyph_rows) do
-
+  for glyph_row in all(glyph_rows) do
+    local glyph_y = glyph_row[1].y
+    local glyph_height = glyph_row[1].char_height
+    if y >= glyph_y and y <= glyph_y + glyph_height then
+      local found_glyph = glyph_row[1]
+      for i=2,#glyph_row do
+        local curr_glyph = glyph_row[i]
+        if x >= curr_glyph.x then
+          found_glyph = curr_glyph
+        end
+      end
+      if found_glyph then
+        local dx = x - found_glyph.x
+        return found_glyph.index_in_text_rows + flr(dx / found_glyph.char_width)
+      end
+    end
   end
+  return cursor_index
 end
 
 function jump_cursor_down(cursor_index, glyph_rows, real_cursor_index_in_row)

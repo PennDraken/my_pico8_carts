@@ -247,14 +247,10 @@ function init_mouse()
     mouse.draw = function(this)
         local function outline_spr(n, x, y, c)
             pal(7, 1)
-            spr(n, x-1, y-1)
-            spr(n, x+1, y-1)
-            spr(n, x-1, y+1)
-            spr(n, x+1, y+1)
-            spr(n, x, y-1)
-            spr(n, x, y+1)
-            spr(n, x-1, y)
-            spr(n, x+1, y)
+            local offsets = { {-1,-1},{1,-1},{-1,1},{1,1},{0,-1},{0,1},{-1,0},{1,0} }
+            for _, d in ipairs(offsets) do
+                spr(n, x + d[1], y + d[2])
+            end
             pal()
             spr(n, x, y)
         end

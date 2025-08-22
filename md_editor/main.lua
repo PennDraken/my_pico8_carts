@@ -44,7 +44,6 @@ function _init()
     "## Facts",
     "- Created in 2004",
     "- File format is .md",
-    "- This is a list",
     "---",
     ".3x^2*y^3+x=5{3x^2+325}/{490}",
     "## Tutorial",
@@ -73,6 +72,10 @@ function update_text_editor()
   mouse:update()
   disable_pause_on_enter()
   -- cursor control
+  if mouse.left_held_time == 1 then
+    cursor_index = x_y_to_cursor_index(mouse.x, mouse.y, glyph_rows)
+    t=0
+  end
   if btnp(0) then
     cursor_index = max(cursor_index - 1, 1)
     local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
@@ -188,6 +191,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
       print("▮", 0, y, theme.cursorc)
     end
     local glyph = new_glyph(
+      0,
+      y,
       4,
       6,
       text_index,
@@ -214,6 +219,8 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index,
   end
   print("\14"..text_row, x, y, color) -- <-- TEXT RENDERING
   local glyph = new_glyph(
+    x,
+    y,
     char_width,
     char_height,
     text_index,
@@ -311,6 +318,15 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       c = theme.cursivec
     end
     -- Render to screen
+    local glyph = new_glyph(
+      x,
+      y,
+      char_width,
+      char_height,
+      word_i,
+      word_i,
+      #word
+    )
     x = print("\14"..cleaned_word, x, y, c)
     -- Adding trailing spaces to x
     if i < #words then
@@ -320,13 +336,6 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       x += number_spaces * char_width
     end
 
-    local glyph = new_glyph(
-      char_width,
-      char_height,
-      word_i,
-      word_i,
-      #word
-    )
     add(glyph_row, glyph)
   end
   add(glyph_rows, glyph_row)
@@ -335,7 +344,7 @@ end
 
 function render_horisontal_line(text_index, x, y, cursor_index, theme)
   regular()
-  local char_width, char_height = 4, 6
+  local char_width, char_height = 4, 7
   if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
     line(0, y + 2, 128, y + 2, theme.linec)
   else
@@ -347,6 +356,8 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
     print(text_row, x, y, theme.linec)
   end
   local glyph = new_glyph(
+    x,
+    y,
     char_width,
     char_height,
     text_index,

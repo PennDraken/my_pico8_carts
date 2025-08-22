@@ -1,22 +1,10 @@
 function render_math(text_row, start_text_index, math_fonts, x, y, cursor_index, theme)
     if in_bounds(cursor_index, start_text_index, start_text_index + #text_row) then
         local number_of_spaces = cursor_index - start_text_index
-        print("\14"..space_pad_symbol("▮", number_of_spaces), x, y, theme.cursorc)
+        draw_cursor(number_of_spaces, x, y, theme.cursorc)
         print(text_row, x, y, theme.pc)
     else
-        -- Draw math
-        -- local equation = {
-        --     math_regular("3X"),
-        --     math_exponed("2"),
-        --     math_regular("*Y"),
-        --     math_exponed("3"),
-        --     math_regular("+X=5"),
-        --     math_frac({math_regular("3X"),math_exponed("2"),math_regular("+325")},{math_regular("490")})
-        -- }
         local equation = string_to_equation(sub(text_row, 2))
-
-        -- Calculate height of equation
-
         -- Draw equation
         for seg in all(equation) do
             x = seg:draw(x, y + 2)
@@ -24,11 +12,13 @@ function render_math(text_row, start_text_index, math_fonts, x, y, cursor_index,
     end
 
     local glyph = new_glyph(
-      4,
-      6,
-      start_text_index,
-      start_text_index,
-      #text_row
+        x,
+        y,
+        4,
+        6,
+        start_text_index,
+        start_text_index,
+        #text_row
     )
     return {{glyph}}, 0, y + 10
 end
