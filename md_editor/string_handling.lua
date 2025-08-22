@@ -63,7 +63,13 @@ function string_to_list_of_words_with_index(str, start_index)
 end
 
 function space_pad_symbol(symbol, space_count)
-  return "\*"..space_count.." "..symbol
+  --Returns a string with spaces and a square marker at index
+  local string = ""
+  for i=1,space_count do
+    string = string.." "
+  end
+  string = string..symbol
+  return string
 end
 
 function del_char(string, index)
@@ -104,10 +110,7 @@ function cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)
 end
 
 function draw_cursor(number_of_spaces, x, y, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x-1, y-1, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x-1, y+1, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y-1, cursorc)
-  print("\14"..space_pad_symbol("▮", number_of_spaces), x+1, y+1, cursorc)
+  rectfill(x + number_of_spaces * char_width - 1, y - 1, x + (number_of_spaces + 1) * char_width - 1, y + char_height - 1, cursorc)
 end
 
 function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)

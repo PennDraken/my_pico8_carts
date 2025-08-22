@@ -210,10 +210,7 @@ function render_heading(text_row, font_function, text_index, x, y, cursor_index,
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     text_row = sub(text_row, indexes[2])
   elseif is_marker_visible() then
-    -- Cursor is inside text
-    local highligh_index = cursor_index - text_index
-    local highlight_x = print("\14"..sub(text_row, 1, highligh_index), 0, y)
-    rectfill(highlight_x, y, highlight_x + char_width - 1, y + char_height, cursor_color)
+    draw_cursor(cursor_index - text_index, x, y, cursor_color)
   end
   print("\14"..text_row, x, y, color) -- <-- TEXT RENDERING
   local glyph = new_glyph(
