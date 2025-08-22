@@ -152,6 +152,7 @@ function open_menu()
     menu:add_option("Toggle Theme", function()
         toggle_theme(menu.last_draw_function)
     end)
+    menu:add_option("Export Project", export_notes)
     menu:add_option("Import From Clipboard", import_notes)
     -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
@@ -167,3 +168,4 @@ end
 function draw_menu()
     menu:update()
 end
+

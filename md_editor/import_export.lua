@@ -1,13 +1,10 @@
-function export_notes(graph)
+function export_notes()
     local combined_text = ""
-    for node in all(graph.nodes) do
+    for node in all(notes.nodes) do
         local string = string_list_to_string(node.data)
         combined_text = combined_text.."ウウウ"..string
     end
     printh(combined_text, '@clip')
-    cls()
-    ?combined_text
-    stop()
 end
 
 function import_notes()
@@ -30,7 +27,7 @@ function import_notes()
         add(notes.nodes, node)
     end
     text_rows = notes.nodes[1].data
-    open_menu() -- To link nodes
+    open_menu() -- Links nodes
     open_graph_view()
 end
 

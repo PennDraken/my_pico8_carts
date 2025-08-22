@@ -77,7 +77,7 @@ function update_text_editor()
     cursor_index_in_row = index_in_row
     t = 0
   elseif btnp(1) then
-    cursor_index = min(cursor_index + 1, #string_list_to_string(text_rows)+1) -- TODO use actual length instead
+    cursor_index = min(cursor_index + 1, #string_list_to_string(text_rows)) -- TODO use actual length instead
     local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
     cursor_index_in_row = index_in_row
     t = 0
