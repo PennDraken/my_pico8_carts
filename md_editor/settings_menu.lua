@@ -157,6 +157,15 @@ function open_menu()
     -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw
+    if _update60 == update_text_editor then
+        menu:add_option("Create Link", function()
+            local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+            local text_row = text_rows[row_i]
+            text_rows[row_i] = sub(text_row, 1, index_in_row - 1).."[[]]"..sub(text_row, index_in_row - 1)
+            cursor_index += 4
+            close_menu()
+        end)
+    end
     _update60 = update_menu
     _draw     = draw_menu
 end
