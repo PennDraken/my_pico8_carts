@@ -18,22 +18,39 @@ function new_menu(title)
         add(this.options, {text = text, func = func})
     end
 
+    menu.get_option_rect = function(this, index)
+        local option = this.options[index]
+        return this.x, this.y + index * 8, this.width - 4 * 2, 8
+    end
+
     menu.draw = function(this)
         rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.pc)
         rectfill(this.x+1, this.y+1, this.x + this.width-1, this.y + this.height-1, theme.bgc)
         centered_print(reverse_case(this.title), 64, this.y + 3, theme.boldc)
         for i,option in ipairs(this.options) do
             local text = reverse_case(option.text)
+            local x, y, w, h = this:get_option_rect(i)
             if i == this.option_index then
-                print("> "..text, this.x + 4, this.y + i * 8, theme.boldc)
+                print("> "..text, x + 4, y, theme.boldc)
             else
-                print(text, this.x + 4, this.y + i * 8, theme.pc)
+                print(text, x + 4, y, theme.pc)
             end
         end
     end
 
     menu.update = function(this)
         disable_pause_on_enter()
+        for i=1,#this.options do
+            local x, y, w, h = this:get_option_rect(i)
+            if in_bounds(mouse.y, y, y + h) then
+                if mouse.left_held_time == 1 then
+                    this.options[i]:func()
+                else
+                    this.option_index = i
+                end
+            end
+        end
+
         if btnp(2) then
             this.option_index = this.option_index - 1
             if this.option_index <= 0 then
@@ -138,6 +155,7 @@ function close_menu()
 end
 
 function open_menu()
+    mouse = init_mouse()
     -- Save currently open note
     save_note(text_rows)
     menu = new_menu("Settings")
@@ -171,10 +189,13 @@ function open_menu()
 end
 
 function update_menu()
-    menu:draw()
+    menu:update()
+    mouse:update()
+
 end
 
 function draw_menu()
-    menu:update()
+    menu:draw()
+    mouse:draw()
 end
 

@@ -128,6 +128,12 @@ function cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
   return index_in_row
 end
 
+function x_y_to_cursor_index(x, y, glyph_rows)
+  for glyph in all(glyph_rows) do
+
+  end
+end
+
 function jump_cursor_down(cursor_index, glyph_rows, real_cursor_index_in_row)
   -- First we find position of cursor in glyph_rows
   local glyph_row_i, glyph_index_in_row = cursor_index_to_position_in_glyphs(glyph_rows, cursor_index)

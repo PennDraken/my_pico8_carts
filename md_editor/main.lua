@@ -66,9 +66,11 @@ function _init()
   -- Set draw and update methods
   load_text_editor()
   menu = init_menu()
+  mouse = init_mouse()
 end
 
 function update_text_editor()
+  mouse:update()
   disable_pause_on_enter()
   -- cursor control
   if btnp(0) then
@@ -147,6 +149,8 @@ function draw_text_editor()
   cls(theme.bgc)
   camera(-1,-1)
   glyph_rows = render_text(text_rows, cursor_index, theme)
+  camera(0, 0)
+  mouse:draw()
 end
 
 function render_text(text_rows, cursor_index, theme)

@@ -210,13 +210,14 @@ function init_mouse()
     mouse.right_held_time = 0
     mouse.object_hovered  = nil
     mouse.object_selected = nil
+    mouse.is_moving = false
 
     mouse.update = function(this)
         this.dx = stat(32) - this.x
         this.dy = stat(33) - this.y
         this.x = stat(32)
         this.y = stat(33)
-        local is_moving = abs(this.dx) > 0.1 and abs(this.dy) > 0.1
+        this.is_moving = abs(this.dx) > 0.1 and abs(this.dy) > 0.1
 
         if this.left_click and (stat(34) & 0b001)!=1 and not is_moving and this.object_selected and this.left_held_time < 5 then
             -- Mouse release on node (using previously set left click boolean)
@@ -231,7 +232,7 @@ function init_mouse()
             this.left_held_time = 0
         end
 
-        if this.left_click and this.object_hovered and not this.object_selected then
+        if this.left_click and this.left_held_time < 2 and this.object_hovered and not this.object_selected then
             this.object_selected = this.object_hovered
         elseif this.left_click and this.object_selected then
             this.object_selected.x += this.dx
@@ -272,7 +273,6 @@ end
 
 -- GAME LOOP ----------------------------------------------------------------------------------
 function init_graph()
-    mouse = init_mouse()
     graph = notes
     -- random_graph(graph, 10, 4)
 end
