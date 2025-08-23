@@ -255,13 +255,13 @@ function init_mouse()
             spr(n, x, y)
         end
         if this.left_click and not this.object_hovered then
-            outline_spr(0, this.x, this.y, 0)
+            outline_spr(0, this.x-1, this.y, 0)
         elseif this.left_click and this.object_hovered then
-            outline_spr(2, this.x, this.y, 0)
+            outline_spr(2, this.x-1, this.y, 0)
         elseif not this.left_click and this.object_hovered then
-            outline_spr(1, this.x, this.y, 0)
+            outline_spr(1, this.x-1, this.y, 0)
         else
-            outline_spr(0, this.x, this.y, 0)
+            outline_spr(0, this.x-1, this.y, 0)
         end
     end
     return mouse

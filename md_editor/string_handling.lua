@@ -7,15 +7,12 @@ function centered_print(text, x, y, c)
 end
 
 function reverse_case(str)
-  -- used to make text more pretty and readable
   local result = ""
-  for i=1, #str do
-    local c = sub(str, i, i)
+  for i=1,#str do
+    local c = str[i]
     local code = ord(c)
-    if in_bounds(code, 65, 90) then
-      result = result .. chr(code + 32)
-    elseif in_bounds(code, 97, 122) then
-      result = result .. chr(code - 32)
+    if in_bounds(code, 65, 90) or in_bounds(code, 97, 122) then
+      result = result .. chr(code ^^ 1 << 5)
     else
       result = result .. c
     end
@@ -136,7 +133,8 @@ function x_y_to_cursor_index(x, y, glyph_rows)
       end
       if found_glyph then
         local dx = x - found_glyph.x
-        return found_glyph.index_in_text_rows + flr(dx / found_glyph.char_width)
+        local max_index = glyph_row[#glyph_row].index_in_text_rows + glyph_row[#glyph_row].glyph_length
+        return min(found_glyph.index_in_text_rows + flr(dx / found_glyph.char_width), max_index)
       end
     end
   end

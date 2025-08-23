@@ -45,7 +45,7 @@ function _init()
     "- Created in 2004",
     "- File format is .md",
     "---",
-    ".3x^2*y^3+x=5{3x^2+325}/{490}",
+    -- ".3x^2*y^3+x=5{3x^2+325}/{490}",
     "## Tutorial",
     "2. Write with keyboard",
     "3. Enjoy!"
@@ -54,6 +54,7 @@ function _init()
   last_node = notes.nodes[1]
   t = 0     --timer for blinking animation
   cursor_index = 100 -- Stores cursor position (index is index of char in original array)
+  cursor_index_2 = nil
   cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
   -- DEFAULT FONTS
   header_font       = header_font_3
