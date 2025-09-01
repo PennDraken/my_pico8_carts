@@ -208,8 +208,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   end
 end
 
-function render_heading(text_row, font_function, text_index, x, y, cursor_index, color, cursor_color)
-  local char_width, char_height = font_function()
+function render_heading(text_row, font, text_index, x, y, cursor_index, color, cursor_color)
+  char_width, char_height = font:load()
   local glyph_length = #text_row
   -- We want to preview markdown when cursor is not on row
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
@@ -236,7 +236,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   -- This function includes word wrapping
   local screen_width = 128
   local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
-  local word_formatting_functions = {}
+  local font_per_word = {}
   local cleaned_words = {}
   local is_bold    = false
   local is_cursive = false
@@ -259,12 +259,13 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     end
     --Store data
     if is_bold then
-      add(word_formatting_functions, regular_bold)
+      add(font_per_word, regular_bold)
     elseif is_cursive then
-      add(word_formatting_functions, regular_italic)
+      add(font_per_word, regular_italic)
     else
-      add(word_formatting_functions, regular)
+      add(font_per_word, regular)
     end
+    if not (regular_bold.load or regular_italic.load or regular.load) then stop() end
     --Word postfix
     add(cleaned_words, {word=tostr(word), index="TODO", is_bold=is_bold, is_cursive=is_cursive})
     if sub(word, -2)=="**" then
@@ -283,13 +284,14 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   local glyph_rows = {}
   local glyph_row  = {}
   --Draws all words to screen
-  local formatting_func = word_formatting_functions[1]
-  char_width, char_height = formatting_func()
+  local curr_font = font_per_word[1]
+  if curr_font.load then end
+  char_width, char_height = curr_font:load()
   for i,word in ipairs(words) do
     -- Update formatting (font style)
-    if formatting_func != word_formatting_functions[i] then
-      formatting_func = word_formatting_functions[i]
-      char_width, char_height = formatting_func()
+    if curr_font != font_per_word[i] then
+      curr_font = font_per_word[i]
+      char_width, char_height = curr_font:load()
     end
     local cleaned_word = cleaned_words[i].word
     local next_x = x + char_width * #cleaned_word --TODO This is not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
@@ -344,7 +346,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
 end
 
 function render_horisontal_line(text_index, x, y, cursor_index, theme)
-  regular()
+  regular:load()
   local char_width, char_height = 4, 7
   if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
     line(0, y + 2, 128, y + 2, theme.linec)
