@@ -5,6 +5,7 @@ __lua__
 #include util.lua
 #include themes.lua
 #include fonts.lua
+#include font_data.lua
 #include string_handling.lua
 #include settings_menu.lua
 #include math_renderer.lua
