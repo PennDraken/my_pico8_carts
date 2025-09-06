@@ -24,6 +24,8 @@ function new_menu(title)
     end
 
     menu.draw = function(this)
+        -- this.last_draw_function()
+        this.height = #this.options * 8 + 8
         rectfill(this.x, this.y, this.x + this.width, this.y + this.height, theme.pc)
         rectfill(this.x+1, this.y+1, this.x + this.width-1, this.y + this.height-1, theme.bgc)
         centered_print(reverse_case(this.title), 64, this.y + 3, theme.boldc)
