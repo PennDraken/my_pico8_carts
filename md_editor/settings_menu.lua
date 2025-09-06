@@ -160,6 +160,7 @@ function open_menu()
     mouse = init_mouse()
     -- Save currently open note
     save_note(text_rows)
+    export_notes()
     menu = new_menu("Settings")
     menu:add_option("New Note", new_note)
     menu:add_option("Close", close_menu)
@@ -172,8 +173,8 @@ function open_menu()
     menu:add_option("Toggle Theme", function()
         toggle_theme(menu.last_draw_function)
     end)
-    menu:add_option("Export Project", export_notes)
-    menu:add_option("Import From Clipboard", import_notes)
+    -- menu:add_option("Export", export_notes)
+    -- menu:add_option("Import", import_notes)
     -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw

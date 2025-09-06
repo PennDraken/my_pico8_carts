@@ -67,6 +67,7 @@ function _init()
   load_text_editor()
   menu = init_menu()
   mouse = init_mouse()
+  import_notes()
 end
 
 function update_text_editor()

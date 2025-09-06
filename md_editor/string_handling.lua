@@ -55,6 +55,20 @@ function string_to_list_of_words_with_index(str, start_index)
   return words, indexes
 end
 
+function replace(string,string_to_replace,replacement_string,...)
+  local a,i='',1
+  while string[i] do
+  if sub(string,i,i+#string_to_replace-1)~=string_to_replace then
+  a..=string[i]
+  i+=1
+  else
+  a..=replacement_string or ''
+  i+=#string_to_replace
+  end
+  end
+  return ... and replace(a,...) or a
+end
+
 function space_pad_symbol(symbol, space_count)
   --Returns a string with spaces and a square marker at index
   local string = ""
