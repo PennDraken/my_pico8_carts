@@ -213,7 +213,6 @@ end
 function update_menu()
     menu:update()
     mouse:update()
-
 end
 
 function draw_menu()
