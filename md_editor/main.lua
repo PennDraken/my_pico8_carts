@@ -107,7 +107,7 @@ function update_text_editor()
   local text_row = text_rows[row_i]
   -- get key input
   local key = stat(31)
-  if (key != "") t = 0
+  if (key != "") t = 0 mouse.enabled = false
   if key == chr(8) then --TODO backspace at start of line
     if cursor_index != 1 then
       -- backspace
