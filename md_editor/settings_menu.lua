@@ -179,15 +179,35 @@ function open_menu()
     menu.last_draw_function   = _draw
     if _update60 == update_text_editor then
         menu:add_option("Create Link", function()
-            local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
-            local text_row = text_rows[row_i]
-            text_rows[row_i] = sub(text_row, 1, index_in_row - 1).."[[]]"..sub(text_row, index_in_row - 1)
-            cursor_index += 4
-            close_menu()
+            open_insert_link_menu()
         end)
     end
     _update60 = update_menu
     _draw     = draw_menu
+end
+
+function open_insert_link_menu()
+    -- Create new menu with note options
+    mouse = init_mouse()
+    local last_upd = menu.last_update_function
+    local last_drw = menu.last_draw_function
+    menu = new_menu("Choose note to insert")
+    menu.last_update_function = last_upd
+    menu.last_draw_function = last_drw
+    for note in all(notes.nodes) do
+        menu:add_option(note.name, function()
+            insert_link(note.name)
+        end)
+    end
+end
+
+function insert_link(note_name)
+    local row_i, index_in_row = cursor_index_to_position_in_list_of_strings(text_rows, cursor_index)
+    local text_row = text_rows[row_i]
+    local string_to_insert = "[["..note_name.."]]"
+    text_rows[row_i] = sub(text_row, 1, index_in_row - 1)..string_to_insert..sub(text_row, index_in_row - 1)
+    cursor_index += #string_to_insert
+    close_menu()
 end
 
 function update_menu()

@@ -67,7 +67,6 @@ function _init()
   load_text_editor()
   menu = init_menu()
   mouse = init_mouse()
-  mouse.cursors = {16,17,18}
 end
 
 function update_text_editor()
@@ -150,6 +149,7 @@ end
 
 ---RENDER----------------------------------------------------------
 function draw_text_editor()
+  mouse.cursors = {16,17,18}
   theme = themes[theme_i]
   cls(theme.bgc)
   camera(-1,-1)
