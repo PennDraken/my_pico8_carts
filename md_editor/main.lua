@@ -27,7 +27,7 @@ end
 
 function _init()
   cls()
-  extcmd("set_title","Tiny Markdown Editor")
+  extcmd("set_title","Tiny Obsidian")
   --themes
   theme_i = 4--theme index
   --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
@@ -216,7 +216,7 @@ function render_heading(text_row, font, text_index, x, y, cursor_index, color, c
   -- We want to preview markdown when cursor is not on row
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) and not (mouse.enabled and mouse.y >= y and mouse.y <= y + char_height) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
-    text_row = sub(text_row, indexes[2])
+    if (text_index != 1) text_row = sub(text_row, indexes[2])
   elseif is_marker_visible() then
     draw_cursor(cursor_index - text_index, x, y, cursor_color)
   end
