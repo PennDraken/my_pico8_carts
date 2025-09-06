@@ -42,7 +42,7 @@ function new_menu(title)
         disable_pause_on_enter()
         for i=1,#this.options do
             local x, y, w, h = this:get_option_rect(i)
-            if in_bounds(mouse.y, y, y + h) then
+            if in_bounds(mouse.y, y, y + h) and mouse.enabled then
                 if mouse.left_held_time == 1 then
                     this.options[i]:func()
                 else
