@@ -31,7 +31,7 @@ function new_menu(title)
             local text = reverse_case(option.text)
             local x, y, w, h = this:get_option_rect(i)
             if i == this.option_index then
-                print("> "..text, x + 4, y, theme.boldc)
+                print("> "..text, x + 4, y, theme.boldc)    
             else
                 print(text, x + 4, y, theme.pc)
             end
@@ -40,15 +40,14 @@ function new_menu(title)
 
     menu.update = function(this)
         disable_pause_on_enter()
-        mouse.object_hovered = nil
-        for i=1,#this.options do
-            local x, y, w, h = this:get_option_rect(i)
-            if mouse.enabled and in_bounds(mouse.y, y, y + h) and in_bounds(mouse.x, x, x + w) then
-                mouse.object_hovered = this.options[i]
-                if mouse.left_held_time == 1 then
-                    this.options[i]:func()
-                else
+        if not mouse.object_selected then
+            mouse.object_hovered = nil
+            for i=1,#this.options do
+                local x, y, w, h = this:get_option_rect(i)
+                if mouse.enabled and in_bounds(mouse.y, y, y + h) and in_bounds(mouse.x, x, x + w) then
+                    mouse.object_hovered = this.options[i]
                     this.option_index = i
+                    break
                 end
             end
         end
@@ -189,12 +188,12 @@ end
 
 function open_insert_link_menu()
     -- Create new menu with note options
-    mouse = init_mouse()
+    -- mouse = init_mouse()
     local last_upd = menu.last_update_function
     local last_drw = menu.last_draw_function
     menu = new_menu("Choose note to insert")
     menu.last_update_function = last_upd
-    menu.last_draw_function = last_drw
+    menu.last_draw_function   = last_drw
     for note in all(notes.nodes) do
         menu:add_option(note.name, function()
             insert_link(note.name)

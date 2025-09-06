@@ -16,10 +16,7 @@ function init_mouse()
     mouse.cursors = {0,1,2}
 
     mouse.update = function(this)
-        if btnp(0) or btnp(1) or btnp(2) or btnp(3) then
-            -- Key was pressed
-            this.enabled = false
-        end
+        if (btnp(0) or btnp(1) or btnp(2) or btnp(3)) this.enabled = false
         this.dx = stat(32) - this.x
         this.dy = stat(33) - this.y
         this.x = stat(32)
@@ -27,10 +24,9 @@ function init_mouse()
         this.is_moving = abs(this.dx) > 0.1 and abs(this.dy) > 0.1
         if (this.is_moving) this.enabled = true
 
-        if this.left_click and (stat(34) & 0b001)!=1 and not this.is_moving and this.object_selected and this.left_held_time < 5 then
+        if this.left_click and (stat(34) & 0b001)!=1 and not this.is_moving and this.object_selected and this.left_held_time < 10 then
             -- Mouse release on node (using previously set left click boolean)
-            if this.object_selected.func then this.object_selected:func() end
-            return
+            if (this.object_selected.func) this.object_selected:func()
         end
 
         this.left_click = (stat(34) & 0b001)==1
@@ -42,11 +38,14 @@ function init_mouse()
 
         if this.left_click and this.left_held_time < 2 and this.object_hovered and not this.object_selected then
             this.object_selected = this.object_hovered
-        elseif this.left_click and this.object_selected and this.object_hovered.draggable then
-            this.object_selected.x += this.dx
-            this.object_selected.y += this.dy
-            this.object_selected.dx = this.dx
-            this.object_selected.dy = this.dy
+            -- stop()
+        elseif this.left_click and this.object_selected then
+            if (this.object_hovered.draggable) then
+                this.object_selected.x += this.dx
+                this.object_selected.y += this.dy
+                this.object_selected.dx = this.dx
+                this.object_selected.dy = this.dy
+            end
         else
             this.object_selected = nil
         end
