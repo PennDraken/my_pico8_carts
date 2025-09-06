@@ -20,7 +20,7 @@ function new_menu(title)
 
     menu.get_option_rect = function(this, index)
         local option = this.options[index]
-        return this.x, this.y + index * 8, this.width - 4 * 2, 8
+        return this.x, this.y + index * 8, this.width, 8
     end
 
     menu.draw = function(this)
@@ -40,9 +40,11 @@ function new_menu(title)
 
     menu.update = function(this)
         disable_pause_on_enter()
+        mouse.object_hovered = nil
         for i=1,#this.options do
             local x, y, w, h = this:get_option_rect(i)
-            if in_bounds(mouse.y, y, y + h) and mouse.enabled then
+            if mouse.enabled and in_bounds(mouse.y, y, y + h) and in_bounds(mouse.x, x, x + w) then
+                mouse.object_hovered = this.options[i]
                 if mouse.left_held_time == 1 then
                     this.options[i]:func()
                 else

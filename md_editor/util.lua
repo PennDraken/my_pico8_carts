@@ -25,6 +25,7 @@ end
 
 function load_text_editor()
   mouse = init_mouse()
+  mouse.cursors = {16,17,18}
   _draw = draw_text_editor
   _update60 = update_text_editor
 end

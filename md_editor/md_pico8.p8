@@ -9,6 +9,7 @@ __lua__
 #include string_handling.lua
 #include settings_menu.lua
 #include math_renderer.lua
+#include mouse.lua
 #include graph.lua
 #include import_export.lua
 #include main.lua
