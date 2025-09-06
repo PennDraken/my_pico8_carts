@@ -28,4 +28,5 @@ function load_text_editor()
   mouse.cursors = {16,17,18}
   _draw = draw_text_editor
   _update60 = update_text_editor
+  cam = {x = 0, y = 0}
 end

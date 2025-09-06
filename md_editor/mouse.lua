@@ -9,6 +9,8 @@ function init_mouse()
     mouse.left_held_time = 0
     mouse.right_click = false
     mouse.right_held_time = 0
+    mouse.scrollup = false
+    mouse.scrolldown = false
     mouse.object_hovered  = nil
     mouse.object_selected = nil
     mouse.is_moving = false
@@ -22,6 +24,10 @@ function init_mouse()
         this.x = stat(32)
         this.y = stat(33)
         this.is_moving = abs(this.dx) > 0.1 and abs(this.dy) > 0.1
+
+        this.scrollup   = stat(36)==1
+        this.scrolldown = stat(36)==-1
+
         if (this.is_moving) this.enabled = true
 
         if this.left_click and (stat(34) & 0b001)!=1 and not this.is_moving and this.object_selected and this.left_held_time < 10 then

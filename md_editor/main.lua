@@ -68,6 +68,7 @@ function _init()
   menu = init_menu()
   mouse = init_mouse()
   import_notes()
+  cam = {x = 0, y = 0}
 end
 
 function update_text_editor()
@@ -78,6 +79,11 @@ function update_text_editor()
     cursor_index = x_y_to_cursor_index(mouse.x, mouse.y, glyph_rows)
     t=0
   end
+  local scroll_amount = 4
+  if (mouse.scrollup) cam.y   += scroll_amount
+  if (mouse.scrolldown) cam.y -= scroll_amount
+  cam.y = min(0, cam.y)
+
   if btnp(0) then
     cursor_index = max(cursor_index - 1, 1)
     local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
@@ -163,7 +169,7 @@ function render_text(text_rows, cursor_index, theme)
   local glyph_rows = {} -- Stores how text is rendered on screen
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
-  local y = 0
+  local y = cam.y
   local par_pad = 1
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
