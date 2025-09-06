@@ -212,7 +212,7 @@ function render_heading(text_row, font, text_index, x, y, cursor_index, color, c
   char_width, char_height = font:load()
   local glyph_length = #text_row
   -- We want to preview markdown when cursor is not on row
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) and not (mouse.y >= y and mouse.y <= y + char_height) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     text_row = sub(text_row, indexes[2])
   elseif is_marker_visible() then

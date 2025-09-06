@@ -133,8 +133,8 @@ function x_y_to_cursor_index(x, y, glyph_rows)
       end
       if found_glyph then
         local dx = x - found_glyph.x
-        local max_index = glyph_row[#glyph_row].index_in_text_rows + glyph_row[#glyph_row].glyph_length
-        return min(found_glyph.index_in_text_rows + flr(dx / found_glyph.char_width), max_index)
+        local max_index = glyph_row[#glyph_row].index_in_text_rows_edit + glyph_row[#glyph_row].glyph_length
+        return min(found_glyph.index_in_text_rows_edit + flr(dx / found_glyph.char_width), max_index)
       end
     end
   end
