@@ -144,6 +144,16 @@ function save_note(new_text_rows)
             last_node = this
         end
     end
+    -- Remove all notes that are empty
+    local nodes_to_delete = {}
+    for n in all(notes.nodes) do
+        if n.name == "" then
+            add(nodes_to_delete, n)
+        end
+    end
+    for n in all(nodes_to_delete) do
+        del(notes.nodes, n)
+    end
 end
 -------------------------------------------------------------------------------------------------------------
 function init_menu()
