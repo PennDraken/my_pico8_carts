@@ -64,17 +64,22 @@ function _init()
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
   -- Set draw and update methods
+  init_toolbar()
   load_text_editor()
   menu = init_menu()
   mouse = init_mouse()
   import_notes()
   cam = {x = 0, y = 0}
+  coroutines = {}
 end
 
 function update_text_editor()
   mouse:update()
+  toolbar:update()
+  toolbar.elems[4].text_field = text_rows[1]
+  for c in all(coroutines) do coresume(c) end
   disable_pause_on_enter()
-  -- cursor control
+  -- Cursor
   if mouse.left_held_time == 1 then
     cursor_index = x_y_to_cursor_index(mouse.x, mouse.y, glyph_rows)
     t=0
@@ -100,7 +105,7 @@ function update_text_editor()
     draw_text_editor()
     t = 0
   elseif btnp(3) then
-    --Hacky solution to compute nxt pos
+    --Hacky sol. to compute nxt pos
     local temp = cursor_index
     cursor_index = 0
     draw_text_editor()
@@ -162,6 +167,7 @@ function draw_text_editor()
   camera(-1,-1)
   glyph_rows = render_text(text_rows, cursor_index, theme)
   camera(0, 0)
+  toolbar:draw()
   mouse:draw()
 end
 
@@ -169,7 +175,7 @@ function render_text(text_rows, cursor_index, theme)
   local glyph_rows = {} -- Stores how text is rendered on screen
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
-  local y = cam.y
+  local y = cam.y + 8
   local par_pad = 1
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)

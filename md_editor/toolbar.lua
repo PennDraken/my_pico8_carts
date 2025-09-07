@@ -10,8 +10,9 @@ function new_toolbar(x, y, width)
         mouse.object_hovered = nil
         local x = this.x
         local y = this.y
-        circfill(this.x, this.y + 4, 4, this.bgc)
-        rectfill(this.x, this.y, this.x + this.width, this.y + 8, this.bgc)
+        circfill(this.x, this.y + 3, 3, this.bgc)
+        circfill(this.x, this.y + 4, 3, this.bgc)
+        rectfill(this.x, this.y, this.x + this.width, this.y + 7, this.bgc)
         for elem in all(this.elems) do
             if elem.x then
                 elem:draw(elem.x, y)
@@ -23,7 +24,6 @@ function new_toolbar(x, y, width)
     end
     toolbar.update = function(this)
         for elem in all(this.elems) do
-
         end
     end
     return toolbar
@@ -32,7 +32,7 @@ end
 function elem(width, height)
     local elem = {
         width = width,
-        height = height,
+        height = height
     }
     return elem
 end
@@ -68,7 +68,7 @@ function button(sprite_n, func)
     return o
 end
 
-function expand_toolbar()
+function init_toolbar()
     toolbar = new_toolbar(0, 0, 128)
     toolbar.elems = {
         button(37, function(this)
@@ -77,9 +77,9 @@ function expand_toolbar()
         ),
         button(32),
         button(35),
-        text(20, "Example Filename That Is Really Long", 7),
+        text(20, "Example Filename", 7),
         button(36),
-        button(33),
+        button(33, open_graph_view),
         button(34),
     }
 end
@@ -91,7 +91,7 @@ function anim_minimise_toolbar(this)
             toolbar.x += toolbar.movement_speed
             yield()
         end
-        -- toolbar.x = 120
+        toolbar.x = 120
     end)
     add(coroutines, c)
     this.func = function(this) anim_expand_toolbar(this) end
@@ -104,7 +104,7 @@ function anim_expand_toolbar(this)
             toolbar.x -= toolbar.movement_speed
             yield()
         end
-        -- toolbar.x = 0
+        toolbar.x = 0
     end)
     add(coroutines, c)
     this.func = function(this) anim_minimise_toolbar(this) end
