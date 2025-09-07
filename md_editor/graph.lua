@@ -196,10 +196,8 @@ function new_node(name, nodes, data)
     return node
 end
 
--- GAME LOOP ----------------------------------------------------------------------------------
 function init_graph()
     graph = notes
-    -- random_graph(graph, 10, 4)
 end
 
 function draw_graph()
@@ -234,6 +232,8 @@ function update_graph()
 end
 
 function open_graph_view()
+    save_note(text_rows)
+    export_notes()
     close_menu()
     init_graph()
     _draw = draw_graph

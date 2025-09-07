@@ -159,7 +159,6 @@ function update_text_editor()
   t += 1
 end
 
----RENDER----------------------------------------------------------
 function draw_text_editor()
   mouse.cursors = {16,17,18}
   theme = themes[theme_i]
@@ -168,6 +167,7 @@ function draw_text_editor()
   glyph_rows = render_text(text_rows, cursor_index, theme)
   camera(0, 0)
   toolbar:draw()
+  if (panel) panel:draw()
   mouse:draw()
 end
 
@@ -176,6 +176,8 @@ function render_text(text_rows, cursor_index, theme)
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
   local y = cam.y + 8
+  -- local yoffs = -flr(toolbar.x / 120 * 8) + 8
+  -- if (cam.y == 0) y += yoffs
   local par_pad = 1
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
@@ -363,7 +365,7 @@ function render_horisontal_line(text_index, x, y, cursor_index, theme)
   regular:load()
   local char_width, char_height = 4, 7
   if not (cursor_index >= text_index and cursor_index <= text_index + 3) then
-    line(0, y + 2, 128, y + 2, theme.linec)
+    line(0, y + 2, 125, y + 2, theme.linec)
   else
     local number_of_spaces = cursor_index - text_index
     if is_marker_visible() then

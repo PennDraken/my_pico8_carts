@@ -14,12 +14,10 @@ function new_toolbar(x, y, width)
         circfill(this.x, this.y + 4, 3, this.bgc)
         rectfill(this.x, this.y, this.x + this.width, this.y + 7, this.bgc)
         for elem in all(this.elems) do
-            if elem.x then
-                elem:draw(elem.x, y)
-            else
-                elem:draw(x, y)
-                x += elem.width
-            end
+            elem.x = x
+            elem.y = y
+            elem:draw(x, y)
+            x += elem.width
         end
     end
     toolbar.update = function(this)
@@ -76,8 +74,20 @@ function init_toolbar()
         end
         ),
         button(32),
-        button(35),
-        text(20, "Example Filename", 7),
+        button(35, function(this)
+            local options = {}
+            for note in all(notes.nodes) do
+                local option = {
+                    text_field = note.name,
+                    func       = function()
+                        note:func()
+                    end
+                }
+                add(options, option)
+            end
+            open_panel(this, options)
+        end),
+        text(20, "...", 7),
         button(36),
         button(33, open_graph_view),
         button(34),
@@ -108,4 +118,32 @@ function anim_expand_toolbar(this)
     end)
     add(coroutines, c)
     this.func = function(this) anim_minimise_toolbar(this) end
+end
+
+function open_panel(caller, options)
+    if panel then
+        if panel.caller == caller then
+            panel = nil
+            return
+        end
+    end
+    panel = {
+        caller = caller,
+        options = options,
+        draw = function(this)
+            local max_text_width = 0
+            for option in all(this.options) do
+                max_text_width = max(max_text_width, #option.text_field)
+            end
+            local width = max_text_width * 4
+            local x = this.caller.x
+            local y = this.caller.y + 8
+            for option in all(this.options) do
+                rectfill(x, y, x + width, y + 8, theme.bgc)
+                print(option.text_field, x + 1, y, theme.pc)
+                y += 8
+            end
+        end
+    }
+
 end

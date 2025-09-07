@@ -157,7 +157,7 @@ function save_note(new_text_rows)
         del(notes.nodes, n)
     end
 end
--------------------------------------------------------------------------------------------------------------
+
 function init_menu()
     return new_menu("Settings")
 end
@@ -169,24 +169,17 @@ end
 
 function open_menu()
     mouse = init_mouse()
+    mouse.cursors = {1,2,3}
     -- Save currently open note
     save_note(text_rows)
     export_notes()
     menu = new_menu("Settings")
     menu:add_option("New Note", new_note)
     menu:add_option("Close", close_menu)
-    -- for note in all(notes.nodes) do
-    --     menu:add_option(note.name, function()
-    --         note:func()  -- calls with 'this' set to 'note'
-    --     end)
-    -- end
     menu:add_option("Graph View", open_graph_view)
     menu:add_option("Toggle Theme", function()
         toggle_theme(menu.last_draw_function)
     end)
-    -- menu:add_option("Export", export_notes)
-    -- menu:add_option("Import", import_notes)
-    -- menu:add_option("Toggle Fonts (TODO)")
     menu.last_update_function = _update60
     menu.last_draw_function   = _draw
     if _update60 == update_text_editor then
@@ -200,7 +193,6 @@ end
 
 function open_insert_link_menu()
     -- Create new menu with note options
-    -- mouse = init_mouse()
     local last_upd = menu.last_update_function
     local last_drw = menu.last_draw_function
     menu = new_menu("Choose note to insert")
