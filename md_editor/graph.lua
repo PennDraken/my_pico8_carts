@@ -161,7 +161,6 @@ function new_node(name, nodes, data)
     if not nodes then nodes = {} end
     node.nodes = nodes
 
-    -- FUNCTIONS
     node.add_link = function(this, n)
         if not in_list(this.nodes, n) then
             add(this.nodes, n)
@@ -226,15 +225,12 @@ end
 function update_graph()
     disable_pause_on_enter()
     local key = stat(31)
-    if (key == "\t") open_menu()
+    -- if (key == "\t") open_menu()
     graph:update_nodes()
     mouse:update()
 end
 
 function open_graph_view()
-    save_note(text_rows)
-    export_notes()
-    close_menu()
     init_graph()
     _draw = draw_graph
     _update60 = update_graph

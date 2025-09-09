@@ -30,32 +30,16 @@ function _init()
   extcmd("set_title","Tiny Obsidian")
   --themes
   theme_i = 4--theme index
-  --bgc,h1c,h2c,h3c,pc,list1c,list2c,linec,cursorc
   themes = get_themes()
   theme = themes[theme_i]
   poke(0x5f2d, 1)  -- enable devkit keyboard input
   notes = new_graph_manager()
-  text_rows = {
-    "Markdown",
-    "## Introduction",
-    "### What is it?",
-    "*Markdown* is a lightweight **markup language** for creating formatted text using a plain-text editor.",
-    "[[Note2]]",
-    "## Facts",
-    "- Created in 2004",
-    "- File format is .md",
-    "---",
-    -- ".3x^2*y^3+x=5{3x^2+325}/{490}",
-    "## Tutorial",
-    "2. Write with keyboard",
-    "3. Enjoy!"
-  }
-  save_note(text_rows)
   last_node = notes.nodes[1]
+  import_notes()
   t = 0     --timer for blinking animation
-  cursor_index = 100 -- Stores cursor position (index is index of char in original array)
+  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
   cursor_index_2 = nil
-  cursor_index_in_row = 4 -- Stores cursor position in row (useful when jumping up and down)
+  cursor_index_in_row = 1 -- Stores cursor position in row (useful when jumping up and down)
   -- DEFAULT FONTS
   header_font       = header_font_3
   subheader_font    = header_font_2
@@ -68,7 +52,6 @@ function _init()
   load_text_editor()
   menu = init_menu()
   mouse = init_mouse()
-  import_notes()
   cam = {x = 0, y = 0}
   coroutines = {}
 end
@@ -134,12 +117,12 @@ function update_text_editor()
       cursor_index = max(1, cursor_index - 1)
     end
   elseif key >= " " and key <= "~" then
-    -- add character
+    -- Lower
     sfx(rnd({0,1,2}))
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1 
   elseif key >= "○" and key <= "▥" then
-    -- add character that is capital case (note this is automatically emoji instead of capital cases)
+    -- Capitals
     sfx(rnd({0,1,2}))
     local code = ord(key)
     key = chr(code-63)
@@ -149,11 +132,10 @@ function update_text_editor()
     -- new line (enter)
     sfx(3)
     text_rows[row_i] = sub(text_row, 1, index_in_row - 1)
-    --add a new line
     add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
     cursor_index += 1
   elseif key =="\t" then
-    --tab key
+    --tab
     open_menu()
   end
   t += 1

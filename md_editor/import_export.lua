@@ -9,7 +9,6 @@ function export_notes()
 end
 
 function import_notes()
-    -- #include project_data.p8l
     local string_list = split(project_string, "ウウウ", false)
     local text_row_list = {}
     for string in all(string_list) do
@@ -23,8 +22,9 @@ function import_notes()
         add(notes.nodes, node)
     end
     text_rows = notes.nodes[1].data
-    open_menu() -- Links nodes
-    open_graph_view()
+    last_node = notes.nodes[1]
+    -- open_menu() -- Links nodes
+    -- open_graph_view()
 end
 
 function import_notes_clip()
@@ -47,7 +47,7 @@ function import_notes_clip()
         add(notes.nodes, node)
     end
     text_rows = notes.nodes[1].data
-    open_menu() -- Links nodes
+    -- open_menu() -- Links nodes
     open_graph_view()
 end
 

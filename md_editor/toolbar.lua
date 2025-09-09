@@ -89,7 +89,11 @@ function init_toolbar()
         end),
         text(20, "...", 7),
         button(36),
-        button(33, open_graph_view),
+        button(33, function(this)
+            save_note(text_rows)
+            export_notes()
+            open_graph_view()
+        end),
         button(34),
     }
 end
