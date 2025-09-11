@@ -33,8 +33,6 @@ function _init()
   themes = get_themes()
   theme = themes[theme_i]
   poke(0x5f2d, 1)  -- enable devkit keyboard input
-  notes = new_graph_manager()
-  last_node = notes.nodes[1]
   import_notes()
   t = 0     --timer for blinking animation
   cursor_index = 1 -- Stores cursor position (index is index of char in original array)
@@ -50,21 +48,23 @@ function _init()
   -- Set draw and update methods
   init_toolbar()
   load_text_editor()
-  menu = init_menu()
   mouse = init_mouse()
   cam = {x = 0, y = 0}
   coroutines = {}
 end
 
 function update_text_editor()
+  -- mouse.object_hovered = nil
   mouse:update()
   toolbar:update()
   toolbar.elems[4].text_field = text_rows[1]
+  if (panel) panel:update()
   for c in all(coroutines) do coresume(c) end
   disable_pause_on_enter()
   -- Cursor
-  if mouse.left_held_time == 1 then
+  if mouse.left_held_time == 1 and not mouse.object_hovered then
     cursor_index = x_y_to_cursor_index(mouse.x, mouse.y, glyph_rows)
+    panel = nil
     t=0
   end
   local scroll_amount = 4
@@ -148,8 +148,8 @@ function draw_text_editor()
   camera(-1,-1)
   glyph_rows = render_text(text_rows, cursor_index, theme)
   camera(0, 0)
-  toolbar:draw()
-  if (panel) panel:draw()
+  if (mouse.enabled) toolbar:draw()
+  if (panel and mouse.enabled) panel:draw()
   mouse:draw()
 end
 
@@ -238,6 +238,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
   local cleaned_words = {}
   local is_bold    = false
   local is_cursive = false
+  local is_link    = false
   --Iterate through all words and store their formatting type and text index
   local temp_text_index = text_index
   for i=1,#words do
@@ -254,6 +255,11 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 2)
       end
+    elseif sub(word, 1, 2)=="[[" then
+      is_link = true
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
+        word = sub(word, 3)
+      end
     end
     --Store data
     if is_bold then
@@ -263,9 +269,8 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     else
       add(font_per_word, regular)
     end
-    if not (regular_bold.load or regular_italic.load or regular.load) then stop() end
     --Word postfix
-    add(cleaned_words, {word=tostr(word), index="TODO", is_bold=is_bold, is_cursive=is_cursive})
+    add(cleaned_words, {word=tostr(word), index="TODO", is_bold=is_bold, is_cursive=is_cursive, is_link=is_link})
     if sub(word, -2)=="**" then
       is_bold = false
       if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
@@ -275,6 +280,11 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       is_cursive = false
       if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
         word = sub(word, 1, -2)
+      end
+    elseif sub(word, -2)=="]]" then
+      is_link = false
+      if not in_bounds(cursor_index, word_i, word_i+#words[i]) then
+        word = sub(word, 1, -3)
       end
     end
     cleaned_words[i].word = word
@@ -317,6 +327,8 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       c = theme.boldc
     elseif cleaned_words[i].is_cursive then
       c = theme.cursivec
+    elseif cleaned_words[i].is_link then
+      c = theme.h1c
     end
     -- Render to screen
     local glyph = new_glyph(

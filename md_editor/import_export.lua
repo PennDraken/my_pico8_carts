@@ -21,10 +21,9 @@ function import_notes()
         local node = new_node(text_rows[1], nil, text_rows)
         add(notes.nodes, node)
     end
+    create_node_functions()
     text_rows = notes.nodes[1].data
     last_node = notes.nodes[1]
-    -- open_menu() -- Links nodes
-    -- open_graph_view()
 end
 
 function import_notes_clip()

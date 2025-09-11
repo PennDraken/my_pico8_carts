@@ -135,7 +135,7 @@ function new_graph_manager()
             end
         end
     end
-
+    
     return o
 end
 

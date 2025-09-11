@@ -73,32 +73,63 @@ function init_toolbar()
             anim_minimise_toolbar(this)
         end
         ),
-        button(32),
+        button(32, function(this)
+            save_note(text_rows)
+            export_notes()
+        end),
         button(35, function(this)
+            save_note(text_rows)
+            export_notes()
             local options = {}
             for note in all(notes.nodes) do
                 local option = {
                     text_field = note.name,
                     func       = function()
                         note:func()
+                        this.sprite_n = 35
+                        panel = nil
+                    end
+                }
+                add(options, option)
+            end
+            open_panel(this, options)
+            this.sprite_n = 35
+            if (panel) this.sprite_n = 51
+        end),
+        text(20, "...", 7),
+        button(36, function(this)
+            save_note(text_rows)
+            export_notes()
+            local options = {}
+            for note in all(notes.nodes) do
+                local option = {
+                    text_field = note.name,
+                    func       = function()
+                        insert_link(note.name)
+                        panel = nil
                     end
                 }
                 add(options, option)
             end
             open_panel(this, options)
         end),
-        text(20, "...", 7),
-        button(36),
         button(33, function(this)
             save_note(text_rows)
             export_notes()
             open_graph_view()
         end),
-        button(34),
+        button(34, function(this)
+            local options = {
+                {text_field = "Toggle Theme",
+                func = toggle_theme}
+            }
+            open_panel(this, options)
+        end),
     }
 end
 
 function anim_minimise_toolbar(this)
+    panel = nil
     this.sprite_n = 38
     local c = cocreate(function(this)
         while toolbar.x < 120 do
@@ -134,6 +165,7 @@ function open_panel(caller, options)
     panel = {
         caller = caller,
         options = options,
+        selected_i = nil,
         draw = function(this)
             local max_text_width = 0
             for option in all(this.options) do
@@ -142,12 +174,28 @@ function open_panel(caller, options)
             local width = max_text_width * 4
             local x = this.caller.x
             local y = this.caller.y + 8
-            for option in all(this.options) do
-                rectfill(x, y, x + width, y + 8, theme.bgc)
-                print(option.text_field, x + 1, y, theme.pc)
-                y += 8
+            if (x + width > 128) x = 128 - width
+            for i,option in ipairs(this.options) do
+                option.x = x
+                option.y = y
+                option.w = width
+                option.h = 8
+                c = theme.pc
+                if (this.selected_i == i) c = theme.linec mouse.object_hovered = option
+                rectfill(x, y, x + width, y + 8, c)
+                print(reverse_case(option.text_field), x + 1, y + 1, theme.bgc)
+                y += 7
+            end
+        end,
+        update = function(this)
+            this.selected_i = nil
+            for i,option in ipairs(this.options) do
+                if in_bounds(mouse.x, option.x, option.x + option.w) and in_bounds(mouse.y, option.y, option.y + option.h) then
+                    this.selected_i = i
+                    break
+                end
             end
         end
     }
-
+    panel:draw()
 end

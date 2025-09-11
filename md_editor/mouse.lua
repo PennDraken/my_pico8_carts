@@ -45,7 +45,6 @@ function init_mouse()
 
         if this.left_click and this.left_held_time < 2 and this.object_hovered and not this.object_selected then
             this.object_selected = this.object_hovered
-            -- stop()
         elseif this.left_click and this.object_selected then
             if (this.object_hovered.draggable) then
                 this.object_selected.x += this.dx
@@ -61,7 +60,7 @@ function init_mouse()
     mouse.draw = function(this)
         if (not this.enabled) return
         local function outline_spr(n, x, y, c)
-            pal(7, 1)
+            pal(7, theme.bgc)
             local offsets = { {-1,-1},{1,-1},{-1,1},{1,1},{0,-1},{0,1},{-1,0},{1,0} }
             for _, d in ipairs(offsets) do
                 spr(n, x + d[1], y + d[2])
