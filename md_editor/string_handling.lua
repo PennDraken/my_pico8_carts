@@ -25,9 +25,15 @@ function string_to_text_rows(str)
 end
 
 function string_list_to_string(list_of_strings)
-  local new_string = ""
-  for string in all(list_of_strings) do
-    new_string = new_string..string.."\n"
+  local new_string = list_of_strings[1]
+  for i,string in ipairs(list_of_strings) do
+    if i != 1 then 
+      if string == "\n" then
+        new_string = new_string..string
+      else
+        new_string = new_string.."\n"..string
+      end
+    end
   end
   return new_string
 end
