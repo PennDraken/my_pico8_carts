@@ -77,6 +77,13 @@ function init_mouse()
         else
             outline_spr(this.cursors[1], this.x, this.y, 0)
         end
+        if this.object_hovered and this.object_hovered.hover_text then
+            local width = #this.object_hovered.hover_text * 4
+            local x, y = this.x + 8, this.y + 8
+            if (x + width > 128) x = 128 - width
+            rectfill(x, y, x + width, y + 8, theme.bgc)
+            print(reverse_case(this.object_hovered.hover_text), x, y, theme.pc)
+        end
     end
     return mouse
 end

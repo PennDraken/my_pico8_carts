@@ -52,10 +52,11 @@ function text(max_chars, text_field, color)
     return o
 end
 
-function button(sprite_n, func)
+function button(sprite_n, hover_text, func)
     local o = elem(8, 8)
     o.sprite_n = sprite_n
     o.func = func
+    o.hover_text = hover_text
     o.draw = function(this, x, y)
         if in_bounds(mouse.x, x, x + 7) and in_bounds(mouse.y, y, y + 7) then
             spr(48, x, y)
@@ -69,15 +70,15 @@ end
 function init_toolbar()
     toolbar = new_toolbar(0, 0, 128)
     toolbar.elems = {
-        button(37, function(this)
+        button(37, "Minimise", function(this)
             anim_minimise_toolbar(this)
         end
         ),
-        button(32, function(this)
+        button(32, "Save Project", function(this)
             save_note(text_rows)
             export_notes()
         end),
-        button(35, function(this)
+        button(35, "Open Note", function(this)
             save_note(text_rows)
             export_notes()
             local options = {}
@@ -97,7 +98,7 @@ function init_toolbar()
             if (panel) this.sprite_n = 51
         end),
         text(20, "...", 7),
-        button(36, function(this)
+        button(36, "Add Link", function(this)
             save_note(text_rows)
             export_notes()
             local options = {}
@@ -113,12 +114,12 @@ function init_toolbar()
             end
             open_panel(this, options)
         end),
-        button(33, function(this)
+        button(33, "Graph View", function(this)
             save_note(text_rows)
             export_notes()
             open_graph_view()
         end),
-        button(34, function(this)
+        button(34, "Settings", function(this)
             local options = {
                 {text_field = "Toggle Theme",
                 func = toggle_theme}
