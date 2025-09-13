@@ -55,6 +55,7 @@ end
 
 function update_text_editor()
   -- mouse.object_hovered = nil
+  if (stat(120)) import_notes_file()
   mouse:update()
   toolbar:update()
   toolbar.elems[4].text_field = text_rows[1]
@@ -199,8 +200,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
       0
     )
     return {{glyph}}, 0, y + 6
-  elseif text_row[1]=="." then
-    return render_math(text_row, text_index, math_fonts, x, y, cursor_index, theme)
+  -- elseif text_row[1]=="." then
+  --   return render_math(text_row, text_index, math_fonts, x, y, cursor_index, theme)
   else 
     return render_body(text_row, text_index, x, y, cursor_index, theme)
   end

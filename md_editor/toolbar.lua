@@ -183,7 +183,7 @@ function open_panel(caller, options)
                 option.h = 8
                 c = theme.pc
                 if (this.selected_i == i) c = theme.linec mouse.object_hovered = option
-                rectfill(x, y, x + width, y + 8, c)
+                rectfill(x, y, x + width, y + 6, c)
                 print(reverse_case(option.text_field), x + 1, y + 1, theme.bgc)
                 y += 7
             end

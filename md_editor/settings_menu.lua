@@ -36,35 +36,37 @@ function save_note(new_text_rows)
     end
     -- Create new links
     for n1 in all(notes.nodes) do
-        local links = extract_links(string_list_to_string(n1.data))
-        local outgoing_nodes = {}
-        for link in all(links) do
-            local node = nil
-            -- Check if node already exists
-            for n2 in all(notes.nodes) do
-                if n2.name == link then
-                    node = n2
-                    break
+        if n1.data then
+            local links = extract_links(string_list_to_string(n1.data))
+            local outgoing_nodes = {}
+            for link in all(links) do
+                local node = nil
+                -- Check if node already exists
+                for n2 in all(notes.nodes) do
+                    if n2.name == link then
+                        node = n2
+                        break
+                    end
                 end
+                -- If not found, create new node
+                if not node then
+                    node = new_node(link, nil, nil)
+                    add(notes.nodes, node)
+                end
+                safe_add(outgoing_nodes, node)
             end
-            -- If not found, create new node
-            if not node then
-                node = new_node(link, nil, nil)
-                add(notes.nodes, node)
+            -- Set links bidirectionally
+            for n2 in all(outgoing_nodes) do
+                safe_add(n1.nodes, n2)
+                safe_add(n2.nodes, n1)
             end
-            safe_add(outgoing_nodes, node)
-        end
-        -- Set links bidirectionally
-        for n2 in all(outgoing_nodes) do
-            safe_add(n1.nodes, n2)
-            safe_add(n2.nodes, n1)
         end
     end
     create_node_functions()
     -- Remove all notes that are empty
     local nodes_to_delete = {}
     for n in all(notes.nodes) do
-        if n.name == "" then
+        if n.name == "" or n.name == " " then
             add(nodes_to_delete, n)
         end
     end
