@@ -6,8 +6,13 @@ function export_notes()
             combined_text = combined_text.."ウウウ"..string
         end
     end
-    printh(combined_text, '@clip')
-    printh('project_string = "'..replace(combined_text, "\n", "\\n")..'"',"project_data",1)
+    -- printh(combined_text, '@clip')
+    if project_title then
+        printh(project_title.."\n"..combined_text, project_title..".txt",1)
+    else
+        printh("first_project".."\n"..combined_text, "first_project.txt",1)
+        -- printh('project_string = "'..replace(combined_text, "\n", "\\n")..'"',"project_data",1)
+    end
 end
 
 function import_notes()
@@ -50,9 +55,16 @@ function import_notes_file()
     until(size == 0)
     --cls()
     print("\n"..full_string)
-    -- stop()
+    -- print("\n"..full_string)
+    for i=1,#full_string do
+        local char = full_string[i]
+        if char == "\n" then
+            project_title = sub(full_string, 1, i-1)
+            full_string = sub(full_string, i+1)
+            break
+        end
+    end
     project_string = full_string
-    ?project_string
     -- project_string = ""
     -- import_notes()
     _init()

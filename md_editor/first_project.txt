@@ -1,4 +1,4 @@
-demo_project
+first_project
 ウウウExample Document
 Welcome to my document.
 Here is a back reference to [[Markdown]].
@@ -21,7 +21,6 @@ Python is an interpreted language.
 - Wide ecosystem
 See also [[Programming Languages]].
 
-demo_project
 ウウウC++
 C++ is a compiled language.
 - Supports object-oriented programming
