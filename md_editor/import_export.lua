@@ -54,7 +54,6 @@ function import_notes_file()
         end
     until(size == 0)
     --cls()
-    print("\n"..full_string)
     -- print("\n"..full_string)
     for i=1,#full_string do
         local char = full_string[i]
