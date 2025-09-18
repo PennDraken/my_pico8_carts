@@ -30,7 +30,7 @@ function init_mouse()
 
         if (this.is_moving) this.enabled = true
 
-        if this.left_click and (stat(34) & 0b001)!=1 and not this.is_moving and this.object_selected and this.left_held_time < 10 then
+        if this.left_click and (stat(34) & 0b001)!=1 and not this.is_moving and this.object_selected and this.left_held_time < 15 then
             -- Mouse release on node (using previously set left click boolean)
             if (this.object_selected.func) this.object_selected:func()
             this.object_hovered = nil
