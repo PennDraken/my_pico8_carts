@@ -32,7 +32,7 @@ function _init()
   theme_i = 4--theme index
   themes = get_themes()
   theme = themes[theme_i]
-  poke(0x5f2d, 1)  -- enable devkit keyboard input
+  poke(0x5f2d, 1)  -- enable keyboard input
   import_notes()
   t = 0     --timer for blinking animation
   cursor_index = 1 -- Stores cursor position (index is index of char in original array)
@@ -54,8 +54,6 @@ function _init()
 end
 
 function update_text_editor()
-  -- mouse.object_hovered = nil
-  if (stat(120)) import_notes_file()
   mouse:update()
   toolbar:update()
   toolbar.elems[4].text_field = text_rows[1]

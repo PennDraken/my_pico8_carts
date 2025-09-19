@@ -13,25 +13,24 @@ function landing_page_button(text, x, y, padding, bg_color, fg_color, centered, 
     elem.centered = centered
     elem.func = func
     elem.draw = function(this)
-        local width  = 2 * this.padding + #this.text * 4
-        local height = 2 * this.padding + 6
+        local width  = 2 * this.padding + #this.text * 4 - 2
+        local height = 2 * this.padding + 6 - 2
         if (centered) this.x = this.px - width/2 this.y = this.py - height /2
         this.w = width
         this.h = height
-        local cadd = 0
-        if (mouse.object_hovered == this) cadd = 1
-        rectfill(this.x, this.y, this.x + this.w, this.y + this.h, this.bg_color + cadd)
+        rectfill(this.x, this.y, this.x + this.w, this.y + this.h, this.bg_color)
+        if (mouse.object_hovered == this) rect(this.x - 2, this.y - 2, this.x + this.w + 2, this.y + this.h + 2, this.bg_color)
         print(reverse_case(this.text), this.x + padding, this.y + padding, this.fg_color)
     end
     return elem
 end
 
 local landing_page_elems = {
-    landing_page_button("Create New Empty Project", 64, 32, 10, 1, 7, true, function(this)
+    landing_page_button("Create New Empty Project", 64, 64, 2, 1, 7, true, function(this)
 
     end),
-    landing_page_button("Open Project Folder", 64, 64, 10, 1, 7, true, function(this)
-        Folder()
+    landing_page_button("Open Project Folder", 64, 80, 2, 1, 7, true, function(this)
+        extcmd("folder")
     end),
 
 }
