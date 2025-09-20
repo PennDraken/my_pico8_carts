@@ -77,11 +77,18 @@ function init_toolbar()
         button(32, "Save Project", function(this)
             save_note(text_rows)
             export_notes()
+            print(".\^1..\^1...\^6\nsAVED PROJECT AS\n"..project_title..".TXT\^6\^6\^6", 0, 64, 7)
         end),
         button(35, "Open Note", function(this)
             save_note(text_rows)
-            export_notes()
-            local options = {}
+            -- export_notes()
+            local options = {
+                {text_field = " New Note",
+                func = function()
+                    new_note()
+                    panel = nil
+                end}
+            }
             for note in all(notes.nodes) do
                 local option = {
                     text_field = note.name,
@@ -100,7 +107,7 @@ function init_toolbar()
         text(20, "...", 7),
         button(36, "Add Link", function(this)
             save_note(text_rows)
-            export_notes()
+            -- export_notes()
             local options = {}
             for note in all(notes.nodes) do
                 local option = {
@@ -116,13 +123,17 @@ function init_toolbar()
         end),
         button(33, "Graph View", function(this)
             save_note(text_rows)
-            export_notes()
+            -- export_notes()
             open_graph_view()
         end),
         button(34, "Settings", function(this)
             local options = {
                 {text_field = "Toggle Theme",
-                func = toggle_theme}
+                func = toggle_theme},
+                {text_field = "Open Project Folder",
+                func = function()
+                    extcmd("folder")
+                end}
             }
             open_panel(this, options)
         end),

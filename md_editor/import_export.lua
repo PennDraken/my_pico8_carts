@@ -10,8 +10,8 @@ function export_notes()
     if project_title then
         printh(project_title.."\n"..combined_text, project_title..".txt",1)
     else
+        project_title = "first_project"
         printh("first_project".."\n"..combined_text, "first_project.txt",1)
-        -- printh('project_string = "'..replace(combined_text, "\n", "\\n")..'"',"project_data",1)
     end
 end
 
@@ -23,6 +23,10 @@ function import_notes()
             add(text_row_list, string_to_text_rows(string))
         end
     end
+    init_notes_from_text_rows(text_row_list)
+end
+
+function init_notes_from_text_rows(text_row_list)
     notes = new_graph_manager()
     for text_rows in all(text_row_list) do
         local node = new_node(text_rows[1], nil, text_rows)
@@ -65,6 +69,6 @@ function import_notes_file()
     end
     project_string = full_string
     -- project_string = ""
-    -- import_notes()
-    _init()
+    import_notes()
+    init_text_editor()
 end

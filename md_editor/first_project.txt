@@ -56,4 +56,8 @@ This is a link to another document: [[Example Document]].
 ## Tutorial
 1. Open editor
 2. Write with keyboard
-3. Enjoy!
+3. Enjoy!ウウウC
+## Usecases
+Low-level => Good for OS, and embedded systems.
+Memory management is done by the user.
+

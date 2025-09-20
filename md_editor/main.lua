@@ -17,35 +17,35 @@ function set_cursor_y(y)
 end
 
 function new_note()
-  -- Creates a new empty note (note this function is generally called from options menu)
-  text_rows = {""}
+  text_rows = {"Untitled"}
   cursor_index = 1
   load_text_editor()
-  last_node = nil -- We reset the last node status, will be set again by the save function
+  last_node = nil -- Will be set again by the save function
   save_note(text_rows)
 end
 
 function _init()
+  init_notes_from_text_rows({{"Brittle","**The tiny markdown note-taking tool**","","Drop file here to load project"}})
+  init_text_editor()
+end
+
+function init_text_editor()
   cls()
-  extcmd("set_title","Tiny Obsidian")
-  --themes
+  extcmd("set_title","brittle.md - Tiny Note-Taking Tool")
   theme_i = 4--theme index
   themes = get_themes()
   theme = themes[theme_i]
-  poke(0x5f2d, 1)  -- enable keyboard input
-  import_notes()
-  t = 0     --timer for blinking animation
-  cursor_index = 1 -- Stores cursor position (index is index of char in original array)
+  poke(0x5f2d, 1)  -- kb input
+  t = 0
+  cursor_index = 1
   cursor_index_2 = nil
-  cursor_index_in_row = 1 -- Stores cursor position in row (useful when jumping up and down)
-  -- DEFAULT FONTS
+  cursor_index_in_row = 1
   header_font       = header_font_3
   subheader_font    = header_font_2
   subsubheader_font = skinny_font
   regular = regular_1
   regular_bold = regular_bold_1
   regular_italic = regular_italic_1
-  -- Set draw and update methods
   init_toolbar()
   load_text_editor()
   mouse = init_mouse()
@@ -54,6 +54,7 @@ function _init()
 end
 
 function update_text_editor()
+  if (stat(120)) import_notes_file()
   mouse:update()
   toolbar:update()
   toolbar.elems[4].text_field = text_rows[1]
@@ -67,8 +68,10 @@ function update_text_editor()
     t=0
   end
   local scroll_amount = 4
-  if (mouse.scrollup) cam.y   += scroll_amount
-  if (mouse.scrolldown) cam.y -= scroll_amount
+  if not mouse.object_hovered then
+    if (mouse.scrollup) cam.y   += scroll_amount
+    if (mouse.scrolldown) cam.y -= scroll_amount
+  end
   cam.y = min(0, cam.y)
 
   if btnp(0) then
@@ -101,7 +104,7 @@ function update_text_editor()
   -- get key input
   local key = stat(31)
   if (key != "") t = 0 mouse.enabled = false
-  if key == chr(8) then --TODO backspace at start of line
+  if key == chr(8) then
     if cursor_index != 1 then
       -- backspace
       sfx(4)
@@ -128,14 +131,13 @@ function update_text_editor()
     text_rows[row_i] = insert_char(text_row, key, index_in_row - 1)
     cursor_index += 1
   elseif key == chr(13) then
-    -- new line (enter)
+    -- enter
     sfx(3)
     text_rows[row_i] = sub(text_row, 1, index_in_row - 1)
     add(text_rows, sub(text_row, index_in_row, #text_row), row_i + 1)
     cursor_index += 1
   elseif key =="\t" then
     --tab
-    open_menu()
   end
   t += 1
 end
@@ -157,8 +159,6 @@ function render_text(text_rows, cursor_index, theme)
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
   local y = cam.y + 8
-  -- local yoffs = -flr(toolbar.x / 120 * 8) + 8
-  -- if (cam.y == 0) y += yoffs
   local par_pad = 1
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
@@ -301,7 +301,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       char_width, char_height = curr_font:load()
     end
     local cleaned_word = cleaned_words[i].word
-    local next_x = x + char_width * #cleaned_word --TODO This is not correct because char_width varies for special characters. Perhaps print invisible text to canvas instead?
+    local next_x = x + char_width * #cleaned_word
     local word_i = indexes[i]
     if next_x > screen_width then
       -- Move to new line

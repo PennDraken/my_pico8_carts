@@ -1,7 +1,3 @@
-function set_visible_text(new_text_rows)
-    text_rows = new_text_rows
-end
-
 function save_note(new_text_rows)
     local name  = new_text_rows[1]
     local data  = new_text_rows
@@ -41,7 +37,7 @@ function save_note(new_text_rows)
             local outgoing_nodes = {}
             for link in all(links) do
                 local node = nil
-                -- Check if node already exists
+                -- If node exists
                 for n2 in all(notes.nodes) do
                     if n2.name == link then
                         node = n2
@@ -55,7 +51,7 @@ function save_note(new_text_rows)
                 end
                 safe_add(outgoing_nodes, node)
             end
-            -- Set links bidirectionally
+            -- Set bi-links
             for n2 in all(outgoing_nodes) do
                 safe_add(n1.nodes, n2)
                 safe_add(n2.nodes, n1)
@@ -63,7 +59,7 @@ function save_note(new_text_rows)
         end
     end
     create_node_functions()
-    -- Remove all notes that are empty
+    -- Remove empty notes
     local nodes_to_delete = {}
     for n in all(notes.nodes) do
         if n.name == "" or n.name == " " then
@@ -86,18 +82,6 @@ function create_node_functions()
             last_node = this
         end
     end
-end
-
-function init_menu()
-    return new_menu("Settings")
-end
-
-function close_menu()
-    _update60 = menu.last_update_function
-    _draw     = menu.last_draw_function
-end
-
-function open_menu()
 end
 
 function insert_link(note_name)
