@@ -1,7 +1,7 @@
 function save_note(new_text_rows)
     local name  = new_text_rows[1]
     local data  = new_text_rows
-    -- Create or update the last node
+    -- Create/ updatelast node
     if not last_node then
         last_node = new_node(name, nil, data)
         add(notes.nodes, last_node)
@@ -9,11 +9,11 @@ function save_note(new_text_rows)
         last_node.name = name
         last_node.data = data
     end
-    -- Clear all links
+    -- Clear links
     for n in all(notes.nodes) do
         n.nodes = {}
     end
-    -- Remove auto-notes
+    -- Rm empty
     local to_delete = {}
     for n in all(notes.nodes) do
         if n.data == nil then
@@ -44,7 +44,7 @@ function save_note(new_text_rows)
                         break
                     end
                 end
-                -- If not found, create new node
+                -- Not found, create new
                 if not node then
                     node = new_node(link, nil, nil)
                     add(notes.nodes, node)

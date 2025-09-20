@@ -6,7 +6,6 @@ function export_notes()
             combined_text = combined_text.."ウウウ"..string
         end
     end
-    -- printh(combined_text, '@clip')
     if project_title then
         printh(project_title.."\n"..combined_text, project_title..".txt",1)
     else
@@ -57,8 +56,6 @@ function import_notes_file()
             end
         end
     until(size == 0)
-    --cls()
-    -- print("\n"..full_string)
     for i=1,#full_string do
         local char = full_string[i]
         if char == "\n" then
@@ -68,7 +65,6 @@ function import_notes_file()
         end
     end
     project_string = full_string
-    -- project_string = ""
     import_notes()
     init_text_editor()
 end

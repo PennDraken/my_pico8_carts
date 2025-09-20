@@ -7,7 +7,7 @@ function in_bounds(val, start, stop)
 end
 
 function disable_pause_on_enter()
-  poke(24368,1) -- (needs to be done every frame)
+  poke(24368,1)
 end
 
 function is_marker_visible()

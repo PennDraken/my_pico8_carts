@@ -203,14 +203,14 @@ end
 function render_heading(text_row, font, text_index, x, y, cursor_index, color, cursor_color)
   char_width, char_height = font:load()
   local glyph_length = #text_row
-  -- We want to preview markdown when cursor is not on row
+  -- Preview markdown when not editing
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) and not (mouse.enabled and mouse.y >= y and mouse.y <= y + char_height) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     if (text_index != 1) text_row = sub(text_row, indexes[2])
   elseif is_marker_visible() then
     draw_cursor(cursor_index - text_index, x, y, cursor_color)
   end
-  print("\14"..text_row, x, y, color) -- <-- TEXT RENDERING
+  print("\14"..text_row, x, y, color)
   local glyph = new_glyph(
     x,
     y,

@@ -1,13 +1,11 @@
 function new_graph_manager()
     local o = {}
-    -- PARAMETERS
     o.edge_force   = 0.05
     o.repel_force  = 20
     o.center_force = 0.002
-    -- GRAPH DATA
+
     o.nodes = {}
 
-    -- FUNCTIONS
     o.get_node_index = function(this, node)
         for i,n in ipairs(this.nodes) do
             if n.name == node.name then
@@ -17,37 +15,6 @@ function new_graph_manager()
         return nil
     end
 
-    o.add_node = function(this, node, links)
-        local node_index = this:get_node_index(node)
-        if not node_index then
-            add(this.nodes, node)
-        else
-            this.nodes[node_index] = node
-        end
-        if links == nil then links = node.nodes end
-        this:update_links(node, links)
-    end
-
-    o.update_links = function(this, node, links)
-        if not links then links = {} end
-        local node_index = this:get_node_index(node)
-        if not node_index then return end
-        -- set the node’s links
-        this.nodes[node_index].nodes = {}
-        for l in all(links) do
-            this.nodes[node_index]:add_link(l)
-        end
-        -- ensure bidirectional connections
-        for node_to_update in all(this.nodes) do
-            if node_to_update != node then
-                if in_list(links, node_to_update) then
-                    node_to_update:add_link(node)
-                else
-                    node_to_update:delete_link(node)
-                end
-            end
-        end
-    end
 
     o.add_links = function(this, node, links)
         if not links then links = {} end
@@ -216,8 +183,7 @@ function draw_graph()
         end
     end
     for n in all(graph.nodes) do
-        local name = reverse_case(n.name)
-        centered_print(name, n.x, n.y - n.r * 2, theme.pc)
+        centered_print(reverse_case(n.name), n.x, n.y - n.r * 2, theme.pc)
     end
     mouse:draw()
 end
@@ -225,7 +191,6 @@ end
 function update_graph()
     disable_pause_on_enter()
     local key = stat(31)
-    -- if (key == "\t") open_menu()
     graph:update_nodes()
     mouse:update()
 end

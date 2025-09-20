@@ -1,5 +1,4 @@
 function extract_links(text_string)
-    -- string -> list of strings
     local links = {}
     for string in all(split(text_string, "[[", false)) do
         local string_list = split(string, "]]", false)
