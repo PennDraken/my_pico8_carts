@@ -27,7 +27,8 @@ end
 
 local landing_page_elems = {
     landing_page_button("Create New Empty Project", 64, 64, 2, 1, 7, true, function(this)
-
+        init_notes_from_text_rows({{"Untitled",""}})
+        init_text_editor()
     end),
     landing_page_button("Open Project Folder", 64, 80, 2, 1, 7, true, function(this)
         extcmd("folder")
@@ -36,3 +37,39 @@ local landing_page_elems = {
 }
 
 ui_elements = landing_page_elems
+
+function _init()
+	theme = get_themes()[1]
+	mouse = init_mouse()
+end
+
+function _update60()
+    if (stat(120)) import_notes_file() 
+	mouse.object_hovered = nil
+	for e in all(ui_elements) do
+		if in_bounds(mouse.x,e.x,e.x+e.w) and
+					in_bounds(mouse.y,e.y,e.y+e.h) then
+			mouse.object_hovered = e
+			break		
+		end
+	end
+	mouse:update()
+end
+
+function _draw()
+	cls(0)
+	sspr(72, 0, 8*3, 8, 
+		 64 - 8*3, 8,
+		 8*6, 8*2)
+	centered_print(reverse_case("by penndraken"), 64, 8*3, 1)
+	centered_print(reverse_case("The tiny markdown based"), 64, 6*6, 7)
+	centered_print(reverse_case("note-taker"), 64, 6*7, 7)
+
+	for e in all(ui_elements) do
+		e:draw()
+	end
+	centered_print(reverse_case("Load project by"), 64, 100, 6)
+	centered_print(reverse_case("dropping from explorer"), 64, 105, 6)
+
+	mouse:draw()
+end

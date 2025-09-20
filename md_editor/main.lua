@@ -24,11 +24,6 @@ function new_note()
   save_note(text_rows)
 end
 
-function _init()
-  init_notes_from_text_rows({{"Brittle","**The tiny markdown note-taking tool**","","Drop file here to load project"}})
-  init_text_editor()
-end
-
 function init_text_editor()
   cls()
   extcmd("set_title","brittle.md - Tiny Note-Taking Tool")
