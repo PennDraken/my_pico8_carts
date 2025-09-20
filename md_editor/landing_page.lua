@@ -27,6 +27,7 @@ end
 
 local landing_page_elems = {
     landing_page_button("Create New Empty Project", 64, 64, 2, 1, 7, true, function(this)
+        project_title = "first_project"
         init_notes_from_text_rows({{"Untitled",""}})
         init_text_editor()
     end),

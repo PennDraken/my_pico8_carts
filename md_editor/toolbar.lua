@@ -74,7 +74,7 @@ function init_toolbar()
             anim_minimise_toolbar(this)
         end
         ),
-        button(32, "Save Project", function(this)
+        button(32, "Save \""..project_title.."\"", function(this)
             save_note(text_rows)
             export_notes()
             print(".\^1..\^1...\^6\nsAVED PROJECT AS\n"..project_title..".TXT\^6\^6\^6", 0, 64, 7)

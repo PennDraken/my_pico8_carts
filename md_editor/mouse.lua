@@ -80,9 +80,9 @@ function init_mouse()
         if this.object_hovered and this.object_hovered.hover_text then
             local width = #this.object_hovered.hover_text * 4
             local x, y = this.x + 8, this.y + 8
-            if (x + width > 128) x = 128 - width
-            rectfill(x, y, x + width, y + 8, theme.bgc)
-            print(reverse_case(this.object_hovered.hover_text), x, y, theme.pc)
+            if (x + width > 128) x = 128 - width - 1
+            rectfill(x, y, x + width, y + 5, theme.bgc)
+            print(reverse_case(this.object_hovered.hover_text), x+1, y, theme.pc)
         end
     end
     return mouse
