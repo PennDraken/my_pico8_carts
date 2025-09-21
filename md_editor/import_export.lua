@@ -6,12 +6,8 @@ function export_notes()
             combined_text = combined_text.."ウウウ"..string
         end
     end
-    if project_title then
-        printh(project_title.."\n"..combined_text, project_title..".txt",1)
-    else
-        project_title = "first_project"
-        printh("first_project".."\n"..combined_text, "first_project.txt",1)
-    end
+    if (not project_title) project_title = "first_project"
+    printh(project_title.."\n"..combined_text, project_title..".txt",1)
 end
 
 function import_notes()

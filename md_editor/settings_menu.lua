@@ -69,6 +69,12 @@ function save_note(new_text_rows)
     for n in all(nodes_to_delete) do
         del(notes.nodes, n)
     end
+    if #notes.nodes == 0 then
+        -- Case when only 1 node exists
+        local node = new_node("Untitled", nil, nil)
+        add(notes.nodes, node)
+        create_node_functions()
+    end
 end
 
 function create_node_functions()

@@ -26,12 +26,9 @@ end
 
 function init_text_editor()
   cls()
-  extcmd("set_title","brittle.md - Tiny Note-Taking Tool")
   theme_i = 4--theme index
   themes = get_themes()
   theme = themes[theme_i]
-  poke(0x5f2d, 1)  -- kb input
-  t = 0
   cursor_index = 1
   cursor_index_2 = nil
   cursor_index_in_row = 1
@@ -52,8 +49,9 @@ function update_text_editor()
   if (stat(120)) import_notes_file()
   mouse:update()
   toolbar:update()
-  toolbar.elems[4].text_field = text_rows[1]
-  if (panel) panel:update()
+  toolbar.elems[4].text_field = project_title
+  toolbar.elems[5].text_field = text_rows[1]
+  if_exists_update(panel)
   for c in all(coroutines) do coresume(c) end
   disable_pause_on_enter()
   -- Cursor

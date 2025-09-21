@@ -75,6 +75,25 @@ function replace(string,string_to_replace,replacement_string,...)
   return ... and replace(a,...) or a
 end
 
+function sanitize_project_title(s)
+    local out = ""
+    for i=1,#s do
+        local c = sub(s,i,i)
+        if c >= "A" and c <= "Z" then
+            c = chr(ord(c)+32)
+        end
+        if c == " " then
+            c = "_"
+        end
+        if (c >= "a" and c <= "z") or
+           (c >= "0" and c <= "9") or
+           c == "_" then
+            out = out..c
+        end
+    end
+    return out
+end
+
 function space_pad_symbol(symbol, space_count)
   --Returns a string with spaces and a square marker at index
   local string = ""

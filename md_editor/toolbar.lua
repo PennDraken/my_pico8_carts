@@ -35,19 +35,27 @@ function elem(width, height)
     return elem
 end
 
-function text(max_chars, text_field, color)
+function text(max_chars, text_field, color, scrolling)
     local o = elem(max_chars * 4, 6)
     o.text_field = text_field
     o.max_chars = max_chars
     o.color = color
+    o.scrolling = scrolling
     o.draw = function(this, x, y)
         local text = this.text_field
         local scroll_speed = 0.1
-        if #this.text_field > this.max_chars then
-            local start_index = flr(t * scroll_speed % #this.text_field) + 1
-            text = sub(text, start_index, start_index + this.max_chars - 1)
+        if this.scrolling then
+            if #this.text_field > this.max_chars then
+                local start_index = flr(t * scroll_speed % #this.text_field) + 1
+                text = sub(text, start_index, start_index + this.max_chars - 1)
+            end
+            print(reverse_case(text), x, y + 1, this.color)
+        else
+            if #this.text_field > this.max_chars - 2 then
+                text = sub(text, 1, this.max_chars - 2)
+            end
+            print(reverse_case(text).."\^:4040404055400000", x, y + 1, this.color)
         end
-        print(reverse_case(text), x, y + 1, this.color)
     end
     return o
 end
@@ -104,7 +112,8 @@ function init_toolbar()
             this.sprite_n = 35
             if (panel) this.sprite_n = 51
         end),
-        text(20, "...", 7),
+        text(10, "title", 14, false),
+        text(10, "note", 7, true),
         button(36, "Add Link", function(this)
             save_note(text_rows)
             -- export_notes()
