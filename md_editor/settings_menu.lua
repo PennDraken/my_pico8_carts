@@ -1,6 +1,7 @@
 function save_note(new_text_rows)
     local name  = new_text_rows[1]
     local data  = new_text_rows
+    if (name == "" and #data > 1) name = "Untitled" new_text_rows[1] = name
     -- Create/ updatelast node
     if not last_node then
         last_node = new_node(name, nil, data)
