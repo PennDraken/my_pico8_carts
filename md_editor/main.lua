@@ -18,7 +18,7 @@ end
 
 function init_text_editor()
   cls()
-  theme_i = 4--theme index
+  theme_i = 1--theme index
   themes = get_themes()
   theme = themes[theme_i]
   cursor_index = 1
@@ -188,7 +188,7 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   elseif first_word=="-" and #text_row > 2 then
     return render_list_item(text_row, text_index, x, y, cursor_index, theme)
   else
-    return render_body(text_row, text_index, x, y, cursor_index, theme)
+    return render_body(text_row, text_index, x, y, cursor_index, theme, theme.pc)
   end
 end
 
@@ -239,7 +239,7 @@ function render_list_item(text_row, text_index, x, y, cursor_index, theme)
   local glyph_rows_start = {glyph}
   text_row = sub(text_row,3)
   text_index += 2
-  local glyph_rows, x, y = render_body(text_row, text_index, 8, y, cursor_index, theme)
+  local glyph_rows, x, y = render_body(text_row, text_index, 8, y, cursor_index, theme, theme.list2c)
   for g in all(glyph_rows[1]) do
     add(glyph_rows_start, g)
   end
@@ -247,7 +247,7 @@ function render_list_item(text_row, text_index, x, y, cursor_index, theme)
   return glyph_rows, x, y
 end
 
-function render_body(text_row, text_index, x, y, cursor_index, theme)
+function render_body(text_row, text_index, x, y, cursor_index, theme, paragraph_color)
   -- This function includes word wrapping
   local start_x = x
   local screen_width = 128
@@ -345,7 +345,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       local number_of_spaces = cursor_index - word_i
       draw_cursor(number_of_spaces, x, y, theme.cursorc)
     end
-    local c = theme.pc
+    local c = paragraph_color
     if cleaned_words[i].is_bold then
       c = theme.boldc
     elseif cleaned_words[i].is_cursive then
