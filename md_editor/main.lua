@@ -8,7 +8,7 @@ end
 
 function new_note()
   text_rows = {"Untitled"}
-  cursor_index = 12
+  cursor_index = 1
   load_text_editor()
   last_node = nil -- Will be set by save function
   save_note(text_rows)

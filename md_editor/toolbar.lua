@@ -91,7 +91,7 @@ function init_toolbar()
             save_note(text_rows)
             -- export_notes()
             local options = {
-                {text_field = " New Note",
+                {text_field = "+New Note",
                 func = function()
                     new_note()
                     panel = nil

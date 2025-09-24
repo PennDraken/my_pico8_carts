@@ -117,9 +117,6 @@ function _init()
     for e in all(ui_elements) do e.y = 128 end
     _draw = drw_landing
     _update60 = upd_landing
-    project_title = "direct"
-    init_notes_from_text_rows({{"Untitled","- This is a list with word wrapping","1. This is another"}})
-    init_text_editor()
 end
 
 function upd_landing()
@@ -139,15 +136,15 @@ end
 
 function drw_landing()
 	cls(0)
+    local yoffs = 2*sin(t*0.01)+2
 	sspr(72, 0, 8*3, 8, 
-		 64 - 8*3, 8,
+		 64 - 8*3, 8+yoffs,
 		 8*6, 8*2)
-	centered_print(reverse_case("by penndraken"), 64, 8*3, 1)
-	centered_print(reverse_case("The tiny markdown based"), 64, 6*6, 7)
-	centered_print(reverse_case("note-taker"), 64, 6*7, 7)
-	centered_print(reverse_case("Load project by"), 64, 100, 6)
-	centered_print(reverse_case("dropping from explorer"), 64, 105, 6)
-
+	centered_print(reverse_case("by penndraken"), 64, 8*3 + yoffs, 1)
+    centered_print(reverse_case(sub("The tiny markdown based", 1, t)), 64, 6*6, 7)
+    centered_print(reverse_case(sub("note-taker", 1, t)), 64, 6*7, 7)
+    centered_print(reverse_case(sub("Load project by", 1, t)), 64, 100, 6)
+    centered_print(reverse_case(sub("dropping from explorer", 1, t)), 64, 105, 6)
     draw_all(ui_elements)
     if (mouse.object_selected) mouse.object_selected:draw()
 	mouse:draw()
