@@ -8,14 +8,6 @@ function get_onscreen_y()
   return peek(0x5f27)
 end
 
-function set_cursor_x(x)
-  poke(0x5f26, x)
-end
-
-function set_cursor_y(y)
-  poke(0x5f27, y)
-end
-
 function new_note()
   text_rows = {"Untitled"}
   cursor_index = 1
@@ -73,7 +65,7 @@ function update_text_editor()
     cursor_index_in_row = index_in_row
     t = 0
   elseif btnp(1) then
-    cursor_index = min(cursor_index + 1, #string_list_to_string(text_rows)) -- TODO use actual length instead
+    cursor_index = min(cursor_index + 1, #string_list_to_string(text_rows)+1) -- TODO use actual length instead
     local index_in_row = cursor_index_to_index_in_visible_row(cursor_index, glyph_rows)
     cursor_index_in_row = index_in_row
     t = 0
@@ -177,7 +169,7 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   elseif first_word=="---" then
     return render_horisontal_line(text_index, x, y, cursor_index, theme)
   -- Empty line
-  elseif first_word=="" then
+  elseif first_word=="" and #text_row == 0 then
     if cursor_index==text_index and is_marker_visible() then
       print("▮", 0, y, theme.cursorc)
     end
@@ -193,7 +185,9 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
     return {{glyph}}, 0, y + 6
   -- elseif text_row[1]=="." then
   --   return render_math(text_row, text_index, math_fonts, x, y, cursor_index, theme)
-  else 
+  elseif first_word=="-" and #text_row > 2 then
+    return render_list_item(text_row, text_index, x, y, cursor_index, theme)
+  else
     return render_body(text_row, text_index, x, y, cursor_index, theme)
   end
 end
@@ -202,7 +196,8 @@ function render_heading(text_row, font, text_index, x, y, cursor_index, color, c
   char_width, char_height = font:load()
   local glyph_length = #text_row
   -- Preview markdown when not editing
-  if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) and not (mouse.enabled and mouse.y >= y and mouse.y <= y + char_height) then
+  local mouse_hover_row = not (mouse.enabled and mouse.y >= y and mouse.y <= y + char_height)
+  if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
     if (text_index != 1) text_row = sub(text_row, indexes[2])
   elseif is_marker_visible() then
@@ -222,10 +217,46 @@ function render_heading(text_row, font, text_index, x, y, cursor_index, color, c
   return glyph_rows, 0, get_onscreen_y()
 end
 
+function render_list_item(text_row, text_index, x, y, cursor_index, theme)
+  char_width, char_height = regular:load()
+  local glyph_length = 2 -- #text_row
+  if not in_bounds(cursor_index, text_index, text_index + 1) then
+    print("♥", x, y, theme.list1c)
+  else
+    draw_cursor(cursor_index-text_index, x, y, theme.cursorc)
+    print("-", x, y, theme.pc)
+  end
+  -- print(text_row, x, y, theme.pc)
+  local glyph = new_glyph(
+    x,
+    y,
+    char_width,
+    char_height,
+    text_index,
+    text_index,
+    glyph_length
+  )
+  local glyph_rows_start = {glyph}
+  text_row = sub(text_row,3)
+  text_index += 2
+  local glyph_rows, x, y = render_body(text_row, text_index, 8, y, cursor_index, theme)
+  for g in all(glyph_rows[1]) do
+    add(glyph_rows_start, g)
+  end
+  glyph_rows[1] = glyph_rows_start
+  return glyph_rows, x, y
+end
+
 function render_body(text_row, text_index, x, y, cursor_index, theme)
   -- This function includes word wrapping
+  local start_x = x
   local screen_width = 128
   local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
+  -- x += 4 * (indexes[1] - text_index)
+  local first_word = ""
+  for i=0,indexes[1] - text_index do first_word=first_word.." " end
+  add(words, first_word, 1)
+  add(indexes, text_index, 1)
   local font_per_word = {}
   local cleaned_words = {}
   local is_bold    = false
@@ -298,7 +329,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
     local word_i = indexes[i]
     if next_x > screen_width then
       -- Move to new line
-      x = 0
+      x = start_x
       y = y + char_height
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}

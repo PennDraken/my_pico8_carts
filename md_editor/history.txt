@@ -1,0 +1,10 @@
+history
+ウウウFamous people
+## List
+[[Albert Einstein]] is a famous person. He came up with [[Theory of relativity]] .
+This is **bold text** and this is *cursive* text.
+
+
+
+ウウウAlbert Einstein
+

@@ -13,7 +13,7 @@ function phys_update(this)
     local a = atan2(dx, dy)
     this.dx -= cos(a) * force
     this.dy -= sin(a) * force
-    local f = 0.9
+    local f = 0.8
     this.dx *= f
     this.dy *= f
     this.x += this.dx
@@ -103,7 +103,7 @@ function _init()
                 title_box,
                 landing_page_button("Confirm", 64, 80, padding, 3, 7, true, function(this)
                     project_title = title_box.text_content
-                    ui_elements = {}
+                        ui_elements = {}
                     init_notes_from_text_rows({{"Untitled",""}})
                     init_text_editor()
                 end)
@@ -117,6 +117,9 @@ function _init()
     for e in all(ui_elements) do e.y = 128 end
     _draw = drw_landing
     _update60 = upd_landing
+    project_title = "direct"
+    init_notes_from_text_rows({{"Untitled","- This is a list with word wrapping","   Testing spaces work at start"}})
+    init_text_editor()
 end
 
 function upd_landing()
