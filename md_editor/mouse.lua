@@ -60,7 +60,11 @@ function init_mouse()
     mouse.draw = function(this)
         if (not this.enabled) return
         local function outline_spr(n, x, y, c)
-            pal(7, theme.bgc)
+            if theme.bgc != 7 then
+                pal(7, theme.bgc)
+            else
+                pal(7, theme.h1c)
+            end
             local offsets = { {-1,-1},{1,-1},{-1,1},{1,1},{0,-1},{0,1},{-1,0},{1,0} }
             for _, d in ipairs(offsets) do
                 spr(n, x + d[1], y + d[2])
