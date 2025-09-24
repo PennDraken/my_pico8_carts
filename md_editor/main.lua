@@ -142,7 +142,7 @@ function render_text(text_rows, cursor_index, theme)
   local text_index = 1  -- Text index stores the corresponding char in text rows
   local x = 0
   local y = cam.y + 8
-  local par_pad = 1
+  local par_pad = 4
   for row_i, text_row in ipairs(text_rows) do
     text_row = reverse_case(text_row)
     local new_glyph_rows = nil
