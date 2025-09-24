@@ -118,15 +118,25 @@ function init_toolbar()
             save_note(text_rows)
             -- export_notes()
             local options = {}
+            local option = {
+                text_field = "[]",
+                func = function()
+                    insert_link("")
+                    panel = nil
+                end
+            }
+            add(options, option)
             for note in all(notes.nodes) do
-                local option = {
-                    text_field = note.name,
-                    func       = function()
-                        insert_link(note.name)
-                        panel = nil
-                    end
-                }
-                add(options, option)
+                if note != last_node then
+                    local option = {
+                        text_field = note.name,
+                        func       = function()
+                            insert_link(note.name)
+                            panel = nil
+                        end
+                    }
+                    add(options, option)
+                end
             end
             open_panel(this, options)
         end),
