@@ -370,8 +370,8 @@ function render_body(text_row, text_index, x, y, cursor_index, theme)
       local curr_char_index = word_i + #word
       local number_spaces   = next_char_index - curr_char_index
       x += number_spaces * char_width
+      glyph.glyph_length += number_spaces
     end
-
     add(glyph_row, glyph)
   end
   add(glyph_rows, glyph_row)

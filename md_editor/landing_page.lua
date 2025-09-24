@@ -118,7 +118,7 @@ function _init()
     _draw = drw_landing
     _update60 = upd_landing
     project_title = "direct"
-    init_notes_from_text_rows({{"Untitled","- This is a list with word wrapping","   Testing spaces work at start"}})
+    init_notes_from_text_rows({{"Untitled","- This is a list with word wrapping","   Testing   spaces work at start"}})
     init_text_editor()
 end
 
