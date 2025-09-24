@@ -1,5 +1,5 @@
 function get_first_word(string)
-  return split(string, " ")[1]
+  return split(string, " ", false)[1]
 end
 
 function centered_print(text, x, y, c)

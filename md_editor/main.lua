@@ -1,18 +1,16 @@
 function get_onscreen_x()
-  --looks at memory to find current cursor position
   return peek(0x5f26)
 end
 
 function get_onscreen_y()
-  --looks at memory to find current cursor position
   return peek(0x5f27)
 end
 
 function new_note()
   text_rows = {"Untitled"}
-  cursor_index = 1
+  cursor_index = 12
   load_text_editor()
-  last_node = nil -- Will be set again by the save function
+  last_node = nil -- Will be set by save function
   save_note(text_rows)
 end
 
@@ -187,6 +185,8 @@ function render_row(text_row, text_index, x, y, cursor_index, theme)
   --   return render_math(text_row, text_index, math_fonts, x, y, cursor_index, theme)
   elseif first_word=="-" and #text_row > 2 then
     return render_list_item(text_row, text_index, x, y, cursor_index, theme)
+  elseif #text_row >= #first_word + 2 and first_word[#first_word]=="." then
+    return render_list_item(text_row, text_index, x, y, cursor_index, theme)
   else
     return render_body(text_row, text_index, x, y, cursor_index, theme, theme.pc)
   end
@@ -195,7 +195,7 @@ end
 function render_heading(text_row, font, text_index, x, y, cursor_index, color, cursor_color)
   char_width, char_height = font:load()
   local glyph_length = #text_row
-  -- Preview markdown when not editing
+  -- Prview md
   local mouse_hover_row = not (mouse.enabled and mouse.y >= y and mouse.y <= y + char_height)
   if not (cursor_index >= text_index and cursor_index < text_index + #text_row + 1) then
     local words, indexes = string_to_list_of_words_with_index(text_row, 1)
@@ -219,14 +219,20 @@ end
 
 function render_list_item(text_row, text_index, x, y, cursor_index, theme)
   char_width, char_height = regular:load()
-  local glyph_length = 2 -- #text_row
-  if not in_bounds(cursor_index, text_index, text_index + 1) then
-    print("♥", x, y, theme.list1c)
+  local first_word = get_first_word(text_row)
+  local glyph_length = #first_word + 1 -- #text_row
+  local off_x = 16
+  if not in_bounds(cursor_index, text_index, text_index + glyph_length - 1) then
+    if text_row[1]=="-" then
+      print("♥", x + off_x - 8, y, theme.list1c)
+    else
+      print(first_word, off_x - #first_word*4, y, theme.list1c)
+    end
   else
-    draw_cursor(cursor_index-text_index, x, y, theme.cursorc)
-    print("-", x, y, theme.pc)
+    draw_cursor(cursor_index - text_index, x, y, theme.cursorc)
+    print(first_word, x, y, theme.pc)
   end
-  -- print(text_row, x, y, theme.pc)
+
   local glyph = new_glyph(
     x,
     y,
@@ -236,19 +242,18 @@ function render_list_item(text_row, text_index, x, y, cursor_index, theme)
     text_index,
     glyph_length
   )
-  text_row = sub(text_row,3)
-  text_index += 2
-  local glyph_rows, x, y = render_body(text_row, text_index, 8, y, cursor_index, theme, theme.list2c)
+
+  text_row = sub(text_row,glyph_length + 1)
+  text_index += glyph_length
+  local glyph_rows, x, y = render_body(text_row, text_index, off_x, y, cursor_index, theme, theme.list2c)
   add(glyph_rows[1], glyph, 1)
   return glyph_rows, x, y
 end
 
 function render_body(text_row, text_index, x, y, cursor_index, theme, paragraph_color)
-  -- This function includes word wrapping
   local start_x = x
   local screen_width = 128
   local words, indexes = string_to_list_of_words_with_index(text_row, text_index)
-  -- x += 4 * (indexes[1] - text_index)
   local first_word = ""
   for i=0,indexes[1] - text_index do first_word=first_word.." " end
   add(words, first_word, 1)
@@ -330,7 +335,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme, paragraph_
       add(glyph_rows, glyph_row)--Save previous glyph row
       glyph_row = {}
     end
-    -- TODO simplify this messy if statement
+    -- TODO simplify
     if in_bounds(cursor_index, word_i, word_i + #words[i]) and is_marker_visible() then
       local number_of_spaces = cursor_index - word_i
       draw_cursor(number_of_spaces, x, y, theme.cursorc)
@@ -349,7 +354,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme, paragraph_
     elseif cleaned_words[i].is_link then
       c = theme.h1c
     end
-    -- Render to screen
+    -- Render
     local glyph = new_glyph(
       x,
       y,
@@ -360,7 +365,7 @@ function render_body(text_row, text_index, x, y, cursor_index, theme, paragraph_
       #word
     )
     x = print("\14"..cleaned_word, x, y, c)
-    -- Adding trailing spaces to x
+    -- Add trailing spaces
     if i < #words then
       local next_char_index = indexes[i + 1]
       local curr_char_index = word_i + #word
