@@ -236,14 +236,10 @@ function render_list_item(text_row, text_index, x, y, cursor_index, theme)
     text_index,
     glyph_length
   )
-  local glyph_rows_start = {glyph}
   text_row = sub(text_row,3)
   text_index += 2
   local glyph_rows, x, y = render_body(text_row, text_index, 8, y, cursor_index, theme, theme.list2c)
-  for g in all(glyph_rows[1]) do
-    add(glyph_rows_start, g)
-  end
-  glyph_rows[1] = glyph_rows_start
+  add(glyph_rows[1], glyph, 1)
   return glyph_rows, x, y
 end
 
