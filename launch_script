@@ -1,0 +1,3 @@
+exec pico8
+exec $ide $project_path
+

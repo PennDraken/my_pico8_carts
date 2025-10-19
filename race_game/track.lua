@@ -9,16 +9,48 @@ function node(x,y,r)
     return o
 end
 
-function load_track1()
-    local track={}
-    add(track, node(-100,0,30))
-    add(track, node(200,0,20))
-    add(track, node(200,200,30))
-    add(track, node(120,500,10))
-    add(track, node(120,1000,5))
-    add(track, node(200,500,10))
-    add(track, node(120,500,10))
+function load_track_bad()
+    local track = {}
+    local r = 30
 
+    -- smooth S-curve
+    add(track, node(-120, 0, r))
+    add(track, node(-60, 20, r))
+    add(track, node(0, 60, r))
+    add(track, node(60, 120, r))
+    add(track, node(120, 160, r))
+    add(track, node(180, 180, r))
+    add(track, node(240, 160, r))
+    add(track, node(280, 120, r))
+    add(track, node(300, 60, r))
+    add(track, node(280, 0, r))
+    add(track, node(240, -40, r))
+    add(track, node(180, -60, r))
+    add(track, node(120, -40, r))
+    add(track, node(60, 0, r))
+    add(track, node(0, 40, r))
+    add(track, node(-60, 80, r))
+    add(track, node(-120, 100, r))
+
+    return track
+end
+
+function load_track1()
+    local track = {}
+    local r = 30
+    add(track, node(0, 0, r))
+    add(track, node(80, 0, r))
+    add(track, node(160, 20, r))
+    add(track, node(220, 80, r))
+    add(track, node(240, 160, r))
+    add(track, node(220, 240, r))
+    add(track, node(160, 300, r))
+    add(track, node(80, 320, r))
+    add(track, node(0, 300, r))
+    add(track, node(-60, 240, r))
+    add(track, node(-80, 160, r))
+    add(track, node(-60, 80, r))
+    add(track, node(0, 20, r))
     return track
 end
 
@@ -29,6 +61,19 @@ function load_track2()
     add(track, node(100,50,8))
     add(track, node(120,60,4))
     add(track, node(39,90,4))
+    return track
+end
+
+function load_track3()
+    local track={}
+    add(track, node(-100,0,30))
+    add(track, node(200,0,20))
+    add(track, node(200,200,30))
+    add(track, node(120,500,10))
+    add(track, node(120,1000,5))
+    add(track, node(200,500,10))
+    add(track, node(120,500,10))
+
     return track
 end
 

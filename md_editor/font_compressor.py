@@ -49,3 +49,4 @@ for font_name, font_data in fonts.items():
 with open("font_data.lua", "w") as f:
     f.write(file_string)
 print("Exported file!")
+
