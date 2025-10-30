@@ -42,7 +42,7 @@ function _draw()
     for p in all(particles_top) do
         p:draw()
     end
-    print( "sPEED: "..fmt2(abs(car.speed * 100)),7 )
+    print( "sPEED: "..fmt2(abs(car.speed * 10)),7 )
 end
 
 --draws a line based on camera position
